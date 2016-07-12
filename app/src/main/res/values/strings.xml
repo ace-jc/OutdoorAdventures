@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Outdoor Adventures</string>
+    <string name="MainMenu">Main Menu</string>
+    <string name="LocationPreferences">Location Preferences</string>
+    <string name="AboutApp">About App</string>
+
+    <string name="about_page_title">About Outdoor Adventures</string>
+    <string name="instructions">Instructions:</string>
+    <string name="step_one">
+    1. Edit Your Preferences in the Preferences Menu. These will be used to help filter your searches.
+    </string>
+    <string name="step_two">
+    2. Find places near you by clicking the Near Me button. This will use a search with a 50 mile radius around you. Enable Location Settings in order to use this feature.
+    </string>
+    <string name="step_three">
+    3. Find sites and activities in your state by clicking the State Search button. You will first be taken to the state selection screen and then the activity search screen.
+    </string>
+    <string name="step_four">
+    4. Each search will bring you to a results page with sites corresponding to your search criteria. You can edit your preferences from the Results screen by using the tab bar at the top of the screen. After editing your preferences, hit the Android back button to return to the Results screen.
+    </string>
+    <string name="step_five">
+    5. Look at specific locations based on your search by clicking on the name of the park in the Results screen.
+    </string>
+    <string name="step_six">
+    6. You can always return to the previous screen by hitting the Android back button on your phone.
+    </string>
+    <string name="step_seven">7. Have fun finding your next Outdoor Adventure!</string>
+</resources>
