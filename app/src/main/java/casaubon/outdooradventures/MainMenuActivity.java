@@ -102,7 +102,7 @@ public class MainMenuActivity extends AppCompatActivity {
     public void locationPreferencesCall(View view) {
         // starting activity to let user save preferences
         Log.d(TAG, "In locationPreferencesCall");
-//        startActivity(new Intent(this, LocationPreferencesCall.class));
+        startActivity(new Intent(this, LocationPreferences.class));
     }
 
     public void aboutCall(View view) {

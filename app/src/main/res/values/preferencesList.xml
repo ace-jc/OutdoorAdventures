@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="countries">
+        <item>Sewer Hookup</item>
+        <item>Water Hookup</item>
+        <item>Pull Through Driveway</item>
+        <item>Pets Allowed</item>
+        <item>Waterfront Sites</item>
+    </array>
+</resources>
