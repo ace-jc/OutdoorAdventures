@@ -1,6 +1,5 @@
 package casaubon.outdooradventures;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,9 +11,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ParkActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String TAG = "Outdoor Adventures";
+    private BuildUrl url;
+    private String tempPark;
+    private Map<String, String> activityMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +35,18 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+        activityMapCluster();
+        url = (BuildUrl) getIntent().getParcelableExtra("actualURL");
+        url = (BuildUrl) getIntent().getParcelableExtra("state");
+        url = (BuildUrl) getIntent().getParcelableExtra("parkActivity");
+        url = (BuildUrl) getIntent().getParcelableExtra("stateCreated");
+        url = (BuildUrl) getIntent().getParcelableExtra("parkCreated");
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         // An item was selected. You can retrieve the selected item using
         Log.d(TAG, "NUMBER IS: " + parent.getItemAtPosition(pos).toString());
-
+        tempPark = parent.getItemAtPosition(pos).toString();
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
@@ -66,9 +78,26 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void submitAPIcall(View view) {
-        Log.d(TAG, "In submitAPIcall");
+        url.addParkActivity(activityMap.get(tempPark));
+        url.buildURLFresh();
+        Log.d(TAG, "In submitAPIcall and URL is: " + url.checkActualURL());
         // TODO: setup the api call here!!!
-        Log.d(TAG, "In submitAPIcall");
-//        startActivity(new Intent(this, ParkActivity.class));
+    }
+
+    private void activityMapCluster() {
+        activityMap = new HashMap<String, String>();
+        activityMap.put("Biking","4001");
+        activityMap.put("Boating","4002");
+        activityMap.put("Equipment Rental","4003");
+        activityMap.put("Fishing","4004");
+        activityMap.put("Golf","4005");
+        activityMap.put("Hiking","4006");
+        activityMap.put("Horseback Riding","4007");
+        activityMap.put("Hunting","4008");
+        activityMap.put("Recreational Activities","4009");
+        activityMap.put("Scenic Trails","4010");
+        activityMap.put("Sports","4011");
+        activityMap.put("Beach/Water Activities","4012");
+        activityMap.put("Winter Activities","4013");
     }
 }

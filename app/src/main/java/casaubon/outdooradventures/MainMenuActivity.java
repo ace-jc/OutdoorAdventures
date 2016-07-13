@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 public class MainMenuActivity extends AppCompatActivity {
 
+    // private member variables
     private static final String TAG = "Outdoor Adventures";
     private BuildUrl url;
 
@@ -23,18 +24,10 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        url = new BuildUrl();
     }
-
-
-    public void addState(String input) {
-        url.addState(input);
-    }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        FragmentManager fm = getFragmentManager();
         switch (item.getItemId()) {
             case R.id.LocationPreferencesMenu:
                 startActivity(new Intent(this, AboutPage.class));
@@ -54,11 +47,18 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public void stateSearchCall(View view) {
         Log.d(TAG, "In stateSearchCall");
-        startActivity(new Intent(this, StateSearch.class));
+        url = new BuildUrl();
+        Intent i = new Intent(this, StateSearch.class);
+        i.putExtra("actualURL", url);
+        i.putExtra("state", url);
+        i.putExtra("parkActivity", url);
+        i.putExtra("stateCreated", url);
+        i.putExtra("parkCreated", url);
+        startActivity(i);
     }
 
     public void locationPreferencesCall(View view) {
-        Log.d(TAG, "In stateSearchCall");
+        Log.d(TAG, "In locationPreferencesCall");
 //        startActivity(new Intent(this, LocationPreferencesCall.class));
     }
 
