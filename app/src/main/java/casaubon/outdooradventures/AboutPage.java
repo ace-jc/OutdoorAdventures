@@ -1,10 +1,10 @@
 package casaubon.outdooradventures;
 
-import android.app.FragmentManager;
+//import android.app.FragmentManager;
+//import android.support.v7.widget.Toolbar;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -25,7 +25,7 @@ public class AboutPage extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        FragmentManager fm = getFragmentManager();
+//        FragmentManager fm = getFragmentManager();
         switch (item.getItemId()) {
             case R.id.MainMenu:
                 startActivity(new Intent(this, MainMenuActivity.class));

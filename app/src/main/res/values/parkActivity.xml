@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="parkActivity">
+        <item>Biking</item>
+        <item>Boating</item>
+        <item>Equipment Rental</item>
+        <item>Fishing</item>
+        <item>Golf</item>
+        <item>Hiking</item>
+        <item>Horseback Riding</item>
+        <item>Hunting</item>
+        <item>Recreational Activities</item>
+        <item>Scenic Trails</item>
+        <item>Sports</item>
+        <item>Beach/Water Activities</item>
+        <item>Winter Activities</item>
+    </string-array>
+</resources>

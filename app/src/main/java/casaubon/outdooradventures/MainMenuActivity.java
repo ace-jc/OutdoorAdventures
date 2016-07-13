@@ -15,6 +15,7 @@ import android.view.MenuItem;
 public class MainMenuActivity extends AppCompatActivity {
 
     private static final String TAG = "Outdoor Adventures";
+    private BuildUrl url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,12 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        url = new BuildUrl();
+    }
+
+
+    public void addState(String input) {
+        url.addState(input);
     }
 
 
@@ -47,7 +54,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public void stateSearchCall(View view) {
         Log.d(TAG, "In stateSearchCall");
-//        startActivity(new Intent(this, StateSearch.class));
+        startActivity(new Intent(this, StateSearch.class));
     }
 
     public void locationPreferencesCall(View view) {
