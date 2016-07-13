@@ -90,4 +90,14 @@
         android:paddingTop="16dp"
         android:text="@string/step_seven"
         android:textSize="15sp" />
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView" />
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView2" />
 </RelativeLayout>

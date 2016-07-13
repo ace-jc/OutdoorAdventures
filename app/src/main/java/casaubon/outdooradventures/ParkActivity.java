@@ -16,6 +16,7 @@ import java.util.Map;
 
 public class ParkActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    // private variables
     private static final String TAG = "Outdoor Adventures";
     private BuildUrl url;
     private String tempPark;
@@ -35,7 +36,9 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+        // creating Map with park activity data
         activityMapCluster();
+        // filling url object with data from previous activity
         url = (BuildUrl) getIntent().getParcelableExtra("actualURL");
         url = (BuildUrl) getIntent().getParcelableExtra("state");
         url = (BuildUrl) getIntent().getParcelableExtra("parkActivity");
@@ -44,12 +47,13 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        // An item was selected. You can retrieve the selected item using
         Log.d(TAG, "NUMBER IS: " + parent.getItemAtPosition(pos).toString());
+        // saving the current (temporary) park activity in variable
         tempPark = parent.getItemAtPosition(pos).toString();
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
+        // This method needs to exist :(
         // Another interface callback
     }
 
@@ -62,12 +66,13 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Will allow the user to jump to the following menu items
         switch (item.getItemId()) {
             case R.id.MainMenu:
                 startActivity(new Intent(this, MainMenuActivity.class));
                 return true;
             case R.id.LocationPreferencesMenu:
-                startActivity(new Intent(this, AboutPage.class));
+                startActivity(new Intent(this, AboutPage.class)); // TODO: Correct this!!!
                 return true;
             case R.id.AboutAppMenu:
                 startActivity(new Intent(this, AboutPage.class));
@@ -81,10 +86,11 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         url.addParkActivity(activityMap.get(tempPark));
         url.buildURLFresh();
         Log.d(TAG, "In submitAPIcall and URL is: " + url.checkActualURL());
-        // TODO: setup the api call here!!!
+        // TODO: setup the api call here!!! Call this: "url.checkActualURL()"
     }
 
     private void activityMapCluster() {
+        // instantiating a HashMap and filling with data
         activityMap = new HashMap<String, String>();
         activityMap.put("Biking","4001");
         activityMap.put("Boating","4002");

@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +33,9 @@ public class StateSearch extends AppCompatActivity implements AdapterView.OnItem
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+        // creating Map with park activity data
         stateMapCluster();
+        // filling url object with data from previous activity
         url = (BuildUrl) getIntent().getParcelableExtra("actualURL");
         url = (BuildUrl) getIntent().getParcelableExtra("state");
         url = (BuildUrl) getIntent().getParcelableExtra("parkActivity");
@@ -45,10 +46,12 @@ public class StateSearch extends AppCompatActivity implements AdapterView.OnItem
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         // An item was selected. You can retrieve the selected item using
         Log.d(TAG, "NUMBER IS: " + parent.getItemAtPosition(pos).toString());
+        // saving the current (temporary) park activity in variable
         tempState = parent.getItemAtPosition(pos).toString();
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
+        // This method needs to exist :(
         // Another interface callback
     }
 
@@ -61,6 +64,7 @@ public class StateSearch extends AppCompatActivity implements AdapterView.OnItem
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Will allow the user to jump to the following menu items
         switch (item.getItemId()) {
             case R.id.MainMenu:
                 startActivity(new Intent(this, MainMenuActivity.class));
@@ -78,9 +82,11 @@ public class StateSearch extends AppCompatActivity implements AdapterView.OnItem
 
     public void submitState(View view) {
         Log.d(TAG, "In submitState");
+        // creating a BuildURL object to add the state and pass to next activity
         url = new BuildUrl();
         url.addState(statesMap.get(tempState));
         Intent i = new Intent(this, ParkActivity.class);
+        // saving variables before starting next activity
         i.putExtra("actualURL", url);
         i.putExtra("state", url);
         i.putExtra("parkActivity", url);
@@ -90,6 +96,7 @@ public class StateSearch extends AppCompatActivity implements AdapterView.OnItem
     }
 
     private void stateMapCluster() {
+        // instantiating a HashMap and filling with data
         statesMap = new HashMap<String, String>();
         statesMap.put("Alabama","AL");
         statesMap.put("Alaska","AK");

@@ -27,13 +27,14 @@ public class BuildUrl implements Parcelable {
     public BuildUrl() {
         // only add initial url in construction
         actualURL = urlStart;
+        // initially do not have state or parkActivity fields filled
         stateCreated = 0;
         parkCreated = 0;
     }
 
 
     public void addState(String selectedState) {
-        // save state
+        // save US state
         state = selectedState;
         stateCreated = 1;
     }
@@ -44,11 +45,13 @@ public class BuildUrl implements Parcelable {
     }
 
     public void buildURLFresh() {
+        // building URL with information if it exists
         actualURL = urlStart;
         if(stateCreated == 1)
             actualURL += "pstate=" + state + "&";
         if(parkCreated == 1)
             actualURL += "amenity=" + parkActivity + "&";
+        // adding apikey to the end of the URL
         actualURL += apiKey;
     }
 
@@ -60,6 +63,7 @@ public class BuildUrl implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
+        // writing out when copying the object
         out.writeString(actualURL);
         out.writeString(state);
         out.writeString(parkActivity);
@@ -68,6 +72,7 @@ public class BuildUrl implements Parcelable {
     }
 
     private BuildUrl(Parcel in) {
+        // writing in when creating the object from another activity
         actualURL = in.readString();
         state = in.readString();
         parkActivity = in.readString();
@@ -76,6 +81,7 @@ public class BuildUrl implements Parcelable {
     }
 
     @Override
+    // This is what the internet said... :O
     public int describeContents() {
         return 0;
     }
@@ -89,7 +95,6 @@ public class BuildUrl implements Parcelable {
             return new BuildUrl(in);
         }
 
-        // We just need to copy this and change the type to match our class.
         @Override
         public BuildUrl[] newArray(int size) {
             return new BuildUrl[size];

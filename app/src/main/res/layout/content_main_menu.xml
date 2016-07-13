@@ -20,15 +20,13 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:gravity="center_vertical">
+        android:gravity="bottom">
 
         <GridLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:columnCount="2"
-            android:rowCount="2"
-            android:layout_centerHorizontal="true">
+            android:rowCount="2">
 
             <Button
                 android:id="@+id/NearMe"
@@ -72,5 +70,10 @@
                 android:onClick="aboutCall"/>
 
         </GridLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"></LinearLayout>
     </LinearLayout>
 </RelativeLayout>
