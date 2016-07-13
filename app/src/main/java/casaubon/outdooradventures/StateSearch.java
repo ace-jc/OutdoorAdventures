@@ -41,6 +41,8 @@ public class StateSearch extends AppCompatActivity implements AdapterView.OnItem
         url = (BuildUrl) getIntent().getParcelableExtra("parkActivity");
         url = (BuildUrl) getIntent().getParcelableExtra("stateCreated");
         url = (BuildUrl) getIntent().getParcelableExtra("parkCreated");
+        url = (BuildUrl) getIntent().getParcelableExtra("lati");
+        url = (BuildUrl) getIntent().getParcelableExtra("longi");
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -92,6 +94,8 @@ public class StateSearch extends AppCompatActivity implements AdapterView.OnItem
         i.putExtra("parkActivity", url);
         i.putExtra("stateCreated", url);
         i.putExtra("parkCreated", url);
+        i.putExtra("lati", url);
+        i.putExtra("longi", url);
         startActivity(i);
     }
 

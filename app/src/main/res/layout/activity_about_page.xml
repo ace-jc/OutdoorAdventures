@@ -10,94 +10,107 @@
     tools:context="casaubon.outdooradventures.MainMenuActivity"
     tools:showIn="@layout/activity_main_menu">
 
-
-    <TextView
-        android:id="@+id/about_title"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/about_page_title"
-        android:textSize="20sp" />
+        android:layout_height="match_parent"
+        android:id="@+id/aboutScrollView">
 
-    <TextView
-        android:id="@+id/instructions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/about_title"
-        android:paddingTop="16dp"
-        android:text="@string/instructions"
-        android:textSize="18sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/step1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/instructions"
-        android:paddingTop="16dp"
-        android:text="@string/step_one"
-        android:textSize="15sp" />
+            <TextView
+                android:id="@+id/about_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/about_page_title"
+                android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/step2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/step1"
-        android:paddingTop="16dp"
-        android:text="@string/step_two"
-        android:textSize="15sp" />
+            <TextView
+                android:id="@+id/instructions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/about_title"
+                android:paddingTop="16dp"
+                android:text="@string/instructions"
+                android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/step3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/step2"
-        android:paddingTop="16dp"
-        android:text="@string/step_three"
-        android:textSize="15sp" />
+            <TextView
+                android:id="@+id/step1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/instructions"
+                android:paddingTop="16dp"
+                android:text="@string/step_one"
+                android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/step4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/step3"
-        android:paddingTop="16dp"
-        android:text="@string/step_four"
-        android:textSize="15sp" />
+            <TextView
+                android:id="@+id/step2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/step1"
+                android:paddingTop="16dp"
+                android:text="@string/step_two"
+                android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/step5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/step4"
-        android:paddingTop="16dp"
-        android:text="@string/step_five"
-        android:textSize="15sp" />
+            <TextView
+                android:id="@+id/step3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/step2"
+                android:paddingTop="16dp"
+                android:text="@string/step_three"
+                android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/step6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/step5"
-        android:paddingTop="16dp"
-        android:text="@string/step_six"
-        android:textSize="15sp" />
+            <TextView
+                android:id="@+id/step4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/step3"
+                android:paddingTop="16dp"
+                android:text="@string/step_four"
+                android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/step7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/step6"
-        android:paddingTop="16dp"
-        android:text="@string/step_seven"
-        android:textSize="15sp" />
+            <TextView
+                android:id="@+id/step5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/step4"
+                android:paddingTop="16dp"
+                android:text="@string/step_five"
+                android:textSize="15sp" />
 
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView" />
+            <TextView
+                android:id="@+id/step6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/step5"
+                android:paddingTop="16dp"
+                android:text="@string/step_six"
+                android:textSize="15sp" />
 
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView2" />
+            <TextView
+                android:id="@+id/step7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/step6"
+                android:paddingTop="16dp"
+                android:text="@string/step_seven"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <!--<ScrollView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/scrollView" />-->
+
+    <!--<ScrollView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/scrollView2" />-->
+
 </RelativeLayout>

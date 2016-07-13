@@ -2,6 +2,7 @@ package casaubon.outdooradventures;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 /**
  * Created by j on 7/12/16.
@@ -23,6 +24,8 @@ public class BuildUrl implements Parcelable {
     private int parkCreated;
     private String state;
     private String parkActivity;
+    private String lati;
+    private String longi;
 
     public BuildUrl() {
         // only add initial url in construction
@@ -30,6 +33,8 @@ public class BuildUrl implements Parcelable {
         // initially do not have state or parkActivity fields filled
         stateCreated = 0;
         parkCreated = 0;
+        lati = "0";
+        longi = "0";
     }
 
 
@@ -39,6 +44,17 @@ public class BuildUrl implements Parcelable {
         stateCreated = 1;
     }
 
+
+    public void setLati(String inputLat) {
+        // setting latitude
+        lati = inputLat;
+    }
+
+
+    public void setLongi(String inputLongi) {
+        // setting longitude
+        longi = inputLongi;
+    }
 
     public String checkActualURL() {
         return this.actualURL;
@@ -51,14 +67,24 @@ public class BuildUrl implements Parcelable {
             actualURL += "pstate=" + state + "&";
         if(parkCreated == 1)
             actualURL += "amenity=" + parkActivity + "&";
+        if(stateCreated == 0) {
+            actualURL += "landmarkLat=" + lati + "&landmarkLong=" + longi + "&";
+            actualURL += "landmarkName=true&";
+        }
         // adding apikey to the end of the URL
         actualURL += apiKey;
     }
 
     public void addParkActivity(String selectedActivity) {
         // save park activity
-        parkActivity = selectedActivity;
-        parkCreated = 1;
+        if(selectedActivity.equals("0")) {
+            Log.d(TAG, "No Preference is O: output is:" + selectedActivity.equals("0"));
+            parkCreated = 0;
+        }
+        else {
+            parkActivity = selectedActivity;
+            parkCreated = 1;
+        }
     }
 
     @Override

@@ -44,6 +44,8 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         url = (BuildUrl) getIntent().getParcelableExtra("parkActivity");
         url = (BuildUrl) getIntent().getParcelableExtra("stateCreated");
         url = (BuildUrl) getIntent().getParcelableExtra("parkCreated");
+        url = (BuildUrl) getIntent().getParcelableExtra("lati");
+        url = (BuildUrl) getIntent().getParcelableExtra("longi");
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -72,7 +74,7 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
                 startActivity(new Intent(this, MainMenuActivity.class));
                 return true;
             case R.id.LocationPreferencesMenu:
-                startActivity(new Intent(this, AboutPage.class)); // TODO: Correct this!!!
+                startActivity(new Intent(this, AboutPage.class)); // TODO: Correct this!!! should be location pref not about page
                 return true;
             case R.id.AboutAppMenu:
                 startActivity(new Intent(this, AboutPage.class));
@@ -105,5 +107,6 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         activityMap.put("Sports","4011");
         activityMap.put("Beach/Water Activities","4012");
         activityMap.put("Winter Activities","4013");
+        activityMap.put("No Preference", "0");
     }
 }
