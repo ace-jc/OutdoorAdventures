@@ -89,6 +89,9 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         url.buildURLFresh();
         Log.d(TAG, "In submitAPIcall and URL is: " + url.checkActualURL());
         // TODO: setup the api call here!!! Call this: "url.checkActualURL()"
+
+        OutdoorCoreData coreData = new OutdoorCoreData(url.checkActualURL());
+        coreData.searchQuery(url.checkActualURL());
     }
 
     private void activityMapCluster() {

@@ -44,11 +44,11 @@ public class OutdoorCoreData {
                 try {
                     URL url = new URL(queryUrl);
                     HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                    conn.setReadTimeout(10000);
-                    conn.setConnectTimeout(15000);
+                    //conn.setReadTimeout(10000);
+                    //conn.setConnectTimeout(15000);
                     conn.setRequestMethod("GET");
                     conn.setDoInput(true);
-                    conn.connect();
+                    codnn.connect();
 
                     InputStream inputStream = conn.getInputStream();
                     XmlPullParserFactory xmlFactoryObject = XmlPullParserFactory.newInstance();
@@ -81,8 +81,8 @@ public class OutdoorCoreData {
                 try {
                     URL url = new URL(urlString);
                     HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                    conn.setReadTimeout(10000);
-                    conn.setConnectTimeout(15000);
+                    //conn.setReadTimeout(10000);
+                    //conn.setConnectTimeout(15000);
                     conn.setRequestMethod("GET");
                     conn.setDoInput(true);
                     conn.connect();
@@ -120,8 +120,11 @@ public class OutdoorCoreData {
     private static void parseXML(XmlPullParser parser) {
         int event;
         int id;
+        String idString;
         String parkName;
         String state;
+        String latString;
+        String lngtString;
         float lat;
         float lngt;
         boolean ampOutlet;
@@ -144,10 +147,13 @@ public class OutdoorCoreData {
                         break;
                     case XmlPullParser.END_TAG:
                         if (name.equals("result")) {
-                            id = Integer.parseInt(parser.getAttributeValue(null, "facilityID"));
+                            idString = parser.getAttributeValue(null, "facilityID");
+                            id = Integer.parseInt((idString.length() != 0) ? idString : "-1");
                             parkName = parser.getAttributeValue(null, "facilityName");
-                            lat = Float.parseFloat(parser.getAttributeValue(null, "latitude"));
-                            lngt = Float.parseFloat(parser.getAttributeValue(null, "longitude"));
+                            latString = parser.getAttributeValue(null, "latitude");
+                            lat = Float.parseFloat((latString.length() != 0) ? latString : "0");
+                            lngtString = parser.getAttributeValue(null, "longitude");
+                            lngt = Float.parseFloat((lngtString.length() != 0) ? lngtString : "0");
                             ampOutlet = trueFlag.equals(parser.getAttributeValue(null, "sitesWithAmps"));
                             petsAllowed = trueFlag.equals(parser.getAttributeValue(null, "sitesWithPetsAllowed"));
                             sewerHookup = trueFlag.equals(parser.getAttributeValue(null, "sitesWithSewerHookup"));
