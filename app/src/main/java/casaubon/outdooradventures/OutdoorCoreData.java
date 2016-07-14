@@ -102,6 +102,7 @@ public class OutdoorCoreData {
                         inputStream.close();
                     }
                     else {
+                        Log.d(TAG, "BAD URL");
                         //handle bad url here
                     }
                 }
