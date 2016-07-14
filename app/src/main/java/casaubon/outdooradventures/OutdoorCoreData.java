@@ -48,7 +48,7 @@ public class OutdoorCoreData {
                     //conn.setConnectTimeout(15000);
                     conn.setRequestMethod("GET");
                     conn.setDoInput(true);
-                    codnn.connect();
+                    conn.connect();
 
                     InputStream inputStream = conn.getInputStream();
                     XmlPullParserFactory xmlFactoryObject = XmlPullParserFactory.newInstance();
