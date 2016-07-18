@@ -32,7 +32,8 @@
         <activity
             android:name=".ParkActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".LocationPreferences"></activity>
+        <activity android:name=".LocationPreferences" />
+        <activity android:name=".ListResultActivity"></activity>
     </application>
 
 </manifest>

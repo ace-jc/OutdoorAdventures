@@ -38,36 +38,30 @@ public class OutdoorCoreData {
     // return: arraylist of parks
     public ArrayList<OutdoorDetails> searchQuery() {
         clearParkList();
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(queryUrl);
-                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                    //conn.setReadTimeout(10000);
-                    //conn.setConnectTimeout(15000);
-                    conn.setRequestMethod("GET");
-                    conn.setDoInput(true);
-                    conn.connect();
+        try {
+            URL url = new URL(queryUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            //conn.setReadTimeout(10000);
+            //conn.setConnectTimeout(15000);
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+            conn.connect();
 
-                    InputStream inputStream = conn.getInputStream();
-                    XmlPullParserFactory xmlFactoryObject = XmlPullParserFactory.newInstance();
-                    XmlPullParser mParser = xmlFactoryObject.newPullParser();
+            InputStream inputStream = conn.getInputStream();
+            XmlPullParserFactory xmlFactoryObject = XmlPullParserFactory.newInstance();
+            XmlPullParser mParser = xmlFactoryObject.newPullParser();
 
-                    mParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-                    mParser.setInput(inputStream, null);
+            mParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            mParser.setInput(inputStream, null);
 
-                    parseXML(mParser);
-                    inputStream.close();
-                }
+            parseXML(mParser);
+            inputStream.close();
+        }
 
-                catch (Exception e) {
-                    Log.e(TAG, e.toString());
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
+        catch (Exception e) {
+            Log.e(TAG, e.toString());
+            e.printStackTrace();
+        }
         return parkList;
     }
 
