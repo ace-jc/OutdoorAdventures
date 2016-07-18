@@ -1,5 +1,6 @@
 package casaubon.outdooradventures;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -69,9 +70,11 @@ public class MainMenuActivity extends AppCompatActivity {
         }
         // creating a BuildURL object to add the state and pass to next activity
         url = new BuildUrl();
+        Log.d(TAG, "Value in lati:" + lati);
+        Log.d(TAG, "Value in longi:" + longi);
         url.setLati(String.valueOf(lati));
         url.setLongi(String.valueOf(longi));
-        Intent i = new Intent(this, StateSearch.class);
+        Intent i = new Intent(this, ParkActivity.class);
         // saving variables before starting next activity
         i.putExtra("actualURL", url);
         i.putExtra("state", url);
@@ -134,10 +137,19 @@ public class MainMenuActivity extends AppCompatActivity {
             mVeggsterLocationListener = new VeggsterLocationListener();
             mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-            try {
-                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mVeggsterLocationListener);
-            } catch (SecurityException e) {
-                Log.d(TAG, "Error with the call to: mLocationManager.requestLocationUpdates(...)");
+
+//            try {
+//                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mVeggsterLocationListener);
+//            } catch (SecurityException e) {
+//                Log.d(TAG, "Error with the call to: mLocationManager.requestLocationUpdates(...)");
+//            }
+
+            if (mLocationManager != null) {
+                if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                        || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mVeggsterLocationListener);
+                    Log.d(TAG, "Error with the call to: mLocationManager.requestLocationUpdates(...)");
+                }
             }
 
 

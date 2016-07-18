@@ -22,58 +22,54 @@
         android:layout_alignParentEnd="true"
         android:gravity="bottom">
 
-        <GridLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:rowCount="2">
-
-            <Button
-                android:id="@+id/NearMe"
-                android:layout_width="wrap_content"
-                android:text="Near Me"
-                android:layout_row="0"
-                android:layout_column="0"
-                android:layout_gravity="fill_horizontal|center_horizontal"
-                android:stretchMode="columnWidth"
-                android:layout_height="150dp"
-                android:onClick="nearMeCall"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom">
 
             <Button
                 android:id="@+id/StateSearch"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:text="State Search"
                 android:layout_row="0"
                 android:layout_column="1"
-                android:layout_gravity="fill_horizontal|center_horizontal"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:onClick="stateSearchCall"/>
 
             <Button
+                android:id="@+id/NearMe"
+                android:layout_width="fill_parent"
+                android:text="Near Me"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:stretchMode="columnWidth"
+                android:layout_height="wrap_content"
+                android:onClick="nearMeCall"/>
+
+            <Button
                 android:id="@+id/LocationPreferences"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:text="Location Preferences"
                 android:layout_row="1"
                 android:layout_column="0"
-                android:layout_gravity="fill_horizontal|center_horizontal"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:onClick="locationPreferencesCall"/>
 
             <Button
                 android:id="@+id/AboutApp"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:text="About App"
                 android:layout_row="1"
                 android:layout_column="1"
-                android:layout_gravity="fill_horizontal|center_horizontal"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:onClick="aboutCall"/>
-
-        </GridLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="30dp"></LinearLayout>
+            android:layout_height="100dp"></LinearLayout>
+
     </LinearLayout>
 </RelativeLayout>
