@@ -1,16 +1,10 @@
 package casaubon.outdooradventures;
 
 import android.Manifest;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -23,8 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.util.List;
-
 public class MainMenuActivity extends AppCompatActivity {
 
     // private variables
@@ -33,6 +25,8 @@ public class MainMenuActivity extends AppCompatActivity {
     AlertDialog alertDialog = null;
     private double lati = 0.0;
     private double longi = 0.0;
+    private LocationManager mgr;
+    private Location lastKnownLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +35,7 @@ public class MainMenuActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -57,21 +52,34 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     }
 
+
     public void nearMeCall(View view) {
         // Will make use of GPS return position and will start activity with result saved
         Log.d(TAG, "In nearMeCall");
-
-        // From stackoverflow location listed below
-        if (!startService()) {
-            CreateAlert("Error!", "Service Cannot be started");
-        } else {
-            Toast.makeText(MainMenuActivity.this, "Service Started",
-                    Toast.LENGTH_LONG).show();
+        mgr = (LocationManager) getSystemService(LOCATION_SERVICE);
+        // Here, thisActivity is the current activity
+        Log.d(TAG, "checkSelfPermission: " + ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION));
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Permission was not granted.. we need it now.
+            Log.d(TAG, "Need to check Permission");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
-        // creating a BuildURL object to add the state and pass to next activity
+        else {
+            Log.d(TAG, "Permission was already set");
+            moveToNextActivity();
+        }
+    }
+
+
+    public void moveToNextActivity() {
+        try {
+            lastKnownLocation = mgr.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        } catch (SecurityException e) {
+            Log.d(TAG, "Error with the call to: mLocationManager.requestLocationUpdates(...)");
+        }
         url = new BuildUrl();
-        Log.d(TAG, "Value in lati:" + lati);
-        Log.d(TAG, "Value in longi:" + longi);
+        lati = lastKnownLocation.getLatitude();
+        longi = lastKnownLocation.getLongitude();
         url.setLati(String.valueOf(lati));
         url.setLongi(String.valueOf(longi));
         Intent i = new Intent(this, ParkActivity.class);
@@ -84,6 +92,22 @@ public class MainMenuActivity extends AppCompatActivity {
         i.putExtra("lati", url);
         i.putExtra("longi", url);
         startActivity(i);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        Log.d(TAG, "Granted Results [0]: " + grantResults[0]);
+        Log.d(TAG, "Granted Results Length: " + grantResults.length);
+        if(PackageManager.PERMISSION_GRANTED == grantResults[0]) { // if permission granted
+            // creating a BuildURL object to add the state and pass to next activity
+            moveToNextActivity();
+        }
+        else{
+            Log.d(TAG, "In onRequestPermissionsResult... Permission was denied");
+            //TODO: Add a toast that says we don't have the permission
+            Toast.makeText(MainMenuActivity.this, "Permission was never granted to Outdoor Adventures", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void stateSearchCall(View view) {
@@ -120,143 +144,4 @@ public class MainMenuActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main_menu, menu);
         return true;
     }
-
-
-    /**
-     * From stackoverflow:
-     * http://stackoverflow.com/questions/5676653/how-to-get-location-using-asynctask
-     * */
-    public class FetchCordinates extends AsyncTask<String, Integer, String> {
-        ProgressDialog progDialog = null;
-
-        public LocationManager mLocationManager;
-        public VeggsterLocationListener mVeggsterLocationListener;
-
-        @Override
-        protected void onPreExecute() {
-            mVeggsterLocationListener = new VeggsterLocationListener();
-            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-
-//            try {
-//                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mVeggsterLocationListener);
-//            } catch (SecurityException e) {
-//                Log.d(TAG, "Error with the call to: mLocationManager.requestLocationUpdates(...)");
-//            }
-
-            if (mLocationManager != null) {
-                if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                        || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mVeggsterLocationListener);
-                    Log.d(TAG, "Error with the call to: mLocationManager.requestLocationUpdates(...)");
-                }
-            }
-
-
-
-
-            progDialog = new ProgressDialog(MainMenuActivity.this);
-            progDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    FetchCordinates.this.cancel(true);
-                }
-            });
-            progDialog.setMessage("Loading...");
-            progDialog.setIndeterminate(true);
-            progDialog.setCancelable(true);
-            progDialog.show();
-
-        }
-
-        @Override
-        protected void onCancelled(){
-            System.out.println("Cancelled by user!");
-            progDialog.dismiss();
-            try {
-                mLocationManager.removeUpdates(mVeggsterLocationListener);
-            } catch (SecurityException e) {
-                Log.d(TAG, "Error with the call to: mLocationManager.removeUpdates(...)");
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            progDialog.dismiss();
-
-            Toast.makeText(MainMenuActivity.this,
-                    "LATITUDE :" + lati + " LONGITUDE :" + longi,
-                    Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            // TODO Auto-generated method stub
-
-            while (lati == 0.0) {
-
-            }
-            return null;
-        }
-
-        public class VeggsterLocationListener implements LocationListener {
-
-            @Override
-            public void onLocationChanged(Location location) {
-
-                int lat = (int) location.getLatitude(); // * 1E6);
-                int log = (int) location.getLongitude(); // * 1E6);
-                int acc = (int) (location.getAccuracy());
-
-                String info = location.getProvider();
-                try {
-                    lati = location.getLatitude();
-                    longi = location.getLongitude();
-
-                } catch (Exception e) {
-                    // progDailog.dismiss();
-                    // Toast.makeText(getApplicationContext(),"Unable to get Location"
-                    // , Toast.LENGTH_LONG).show();
-                }
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-                Log.i("OnProviderDisabled", "OnProviderDisabled");
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-                Log.i("onProviderEnabled", "onProviderEnabled");
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status,
-                                        Bundle extras) {
-                Log.i("onStatusChanged", "onStatusChanged");
-
-            }
-
-        }
-
-    }
-    public boolean startService() {
-        try {
-            FetchCordinates fetchCordinates = new FetchCordinates();
-            fetchCordinates.execute();
-            return true;
-        } catch (Exception error) {
-            return false;
-        }
-
-    }
-    public AlertDialog CreateAlert(String title, String message) {
-        AlertDialog alert = new AlertDialog.Builder(this).create();
-        alert.setTitle(title);
-        alert.setMessage(message);
-        return alert;
-    }
-
 }
