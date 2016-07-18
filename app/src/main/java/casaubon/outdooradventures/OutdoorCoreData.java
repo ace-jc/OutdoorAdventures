@@ -69,45 +69,39 @@ public class OutdoorCoreData {
     // return: arraylist of parks
     public static ArrayList<OutdoorDetails> searchQuery(final String urlString) {
         clearParkList();
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(urlString);
-                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                    //conn.setReadTimeout(10000);
-                    //conn.setConnectTimeout(15000);
-                    conn.setRequestMethod("GET");
-                    conn.setDoInput(true);
-                    conn.connect();
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            //conn.setReadTimeout(10000);
+            //conn.setConnectTimeout(15000);
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+            conn.connect();
 
-                    int responseCode = conn.getResponseCode();
-                    Log.d(TAG, "response code: " + responseCode);
+            int responseCode = conn.getResponseCode();
+            Log.d(TAG, "response code: " + responseCode);
 
-                    if (responseCode == 200) {
-                        InputStream inputStream = conn.getInputStream();
-                        XmlPullParserFactory xmlFactoryObject = XmlPullParserFactory.newInstance();
-                        XmlPullParser mParser = xmlFactoryObject.newPullParser();
+            if (responseCode == 200) {
+                InputStream inputStream = conn.getInputStream();
+                XmlPullParserFactory xmlFactoryObject = XmlPullParserFactory.newInstance();
+                XmlPullParser mParser = xmlFactoryObject.newPullParser();
 
-                        mParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-                        mParser.setInput(inputStream, null);
+                mParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+                mParser.setInput(inputStream, null);
 
-                        parseXML(mParser);
-                        inputStream.close();
-                    }
-                    else {
-                        Log.d(TAG, "BAD URL");
-                        //handle bad url here
-                    }
-                }
-
-                catch (Exception e) {
-                    Log.e(TAG, e.toString());
-                    e.printStackTrace();
-                }
+                parseXML(mParser);
+                inputStream.close();
             }
-        });
-        thread.start();
+            else {
+                Log.d(TAG, "BAD URL");
+                //handle bad url here
+            }
+        }
+
+        catch (Exception e) {
+            Log.e(TAG, e.toString());
+            e.printStackTrace();
+        }
         return parkList;
     }
 

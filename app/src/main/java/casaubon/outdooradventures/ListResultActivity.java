@@ -50,6 +50,10 @@ public class ListResultActivity extends AppCompatActivity {
         parksListView.setAdapter(new OutdoorDetailAdapter(this, parkList));
     }
 
+    public void parkSelected(View view) {
+        Toast.makeText(this, "position: " + view.getTag(), Toast.LENGTH_SHORT).show();
+    }
+
     private class OutdoorDetailAdapter extends BaseAdapter {
 
         ArrayList<OutdoorDetails> parkList;
