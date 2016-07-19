@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="casaubon.outdooradventures.MainMenuActivity">
+    <item
+        android:id="@+id/MainMenu"
+        android:title="@string/MainMenu"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/AboutAppMenu"
+        android:title="@string/AboutApp"
+        app:showAsAction="never" />
+</menu>
