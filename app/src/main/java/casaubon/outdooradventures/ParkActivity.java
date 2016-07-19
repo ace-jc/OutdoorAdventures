@@ -91,7 +91,7 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         // TODO: setup the api call here!!! Call this: "url.checkActualURL()"
 
         //Start List Result Activity
-        Intent intent = ListResultActivity.newInstance(this, url.checkActualURL());
+        Intent intent = ResultTabBarActivity.newIntent(this, url.checkActualURL());
         startActivity(intent);
     }
 

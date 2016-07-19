@@ -25,4 +25,5 @@
     6. You can always return to the previous screen by hitting the Android back button on your phone.
     </string>
     <string name="step_seven">7. Have fun finding your next Outdoor Adventure!</string>
+    <string name="title_activity_map_result">Map</string>
 </resources>
