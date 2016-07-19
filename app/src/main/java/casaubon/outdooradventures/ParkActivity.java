@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class ParkActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    // private variables
+    // private variables here
     private static final String TAG = "Outdoor Adventures";
     private BuildUrl url;
     private String tempPark;
