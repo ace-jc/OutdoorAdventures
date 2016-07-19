@@ -74,7 +74,7 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
                 startActivity(new Intent(this, MainMenuActivity.class));
                 return true;
             case R.id.LocationPreferencesMenu:
-                startActivity(new Intent(this, AboutPage.class)); // TODO: Correct this!!! should be location pref not about page
+                startActivity(new Intent(this, LocationPreferences.class));
                 return true;
             case R.id.AboutAppMenu:
                 startActivity(new Intent(this, AboutPage.class));
@@ -88,8 +88,6 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         url.addParkActivity(activityMap.get(tempPark));
         url.buildURLFresh();
         Log.d(TAG, "In submitAPIcall and URL is: " + url.checkActualURL());
-        // TODO: setup the api call here!!! Call this: "url.checkActualURL()"
-
         //Start List Result Activity
         Intent intent = ResultTabBarActivity.newIntent(this, url.checkActualURL());
         startActivity(intent);
@@ -111,6 +109,6 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         activityMap.put("Sports","4011");
         activityMap.put("Beach/Water Activities","4012");
         activityMap.put("Winter Activities","4013");
-        activityMap.put("No Preference", "0");
+        activityMap.put("No Park Activity Preference", "0");
     }
 }

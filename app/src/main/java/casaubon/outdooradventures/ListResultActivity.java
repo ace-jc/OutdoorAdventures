@@ -1,24 +1,22 @@
 package casaubon.outdooradventures;
 
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ListResultActivity extends AppCompatActivity {
@@ -108,5 +106,30 @@ public class ListResultActivity extends AppCompatActivity {
             Log.d(TAG, "list size: " + parkList.size());
             setupAdapter();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Will allow the user to jump to the following menu items
+        switch (item.getItemId()) {
+            case R.id.MainMenu:
+                startActivity(new Intent(this, MainMenuActivity.class));
+                return true;
+            case R.id.LocationPreferencesMenu:
+                startActivity(new Intent(this, LocationPreferences.class));
+                return true;
+            case R.id.AboutAppMenu:
+                startActivity(new Intent(this, AboutPage.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_statesearch_menu, menu);
+        return true;
     }
 }

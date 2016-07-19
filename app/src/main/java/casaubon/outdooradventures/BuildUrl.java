@@ -38,6 +38,15 @@ public class BuildUrl implements Parcelable {
     }
 
 
+    public String getLati() {
+        return lati;
+    }
+
+    public String getLongi() {
+        return longi;
+    }
+
+
     public void addState(String selectedState) {
         // save US state
         state = selectedState;
@@ -47,12 +56,14 @@ public class BuildUrl implements Parcelable {
 
     public void setLati(String inputLat) {
         // setting latitude
+        Log.d(TAG, "setLati inputLat:" + inputLat);
         lati = inputLat;
     }
 
 
     public void setLongi(String inputLongi) {
         // setting longitude
+        Log.d(TAG, "setLongi inputLat:" + inputLongi);
         longi = inputLongi;
     }
 
@@ -95,6 +106,8 @@ public class BuildUrl implements Parcelable {
         out.writeString(parkActivity);
         out.writeInt(stateCreated);
         out.writeInt(parkCreated);
+        out.writeString(lati);
+        out.writeString(longi);
     }
 
     private BuildUrl(Parcel in) {
@@ -104,6 +117,8 @@ public class BuildUrl implements Parcelable {
         parkActivity = in.readString();
         stateCreated = in.readInt();
         parkCreated = in.readInt();
+        lati = in.readString();
+        longi = in.readString();
     }
 
     @Override
