@@ -25,4 +25,8 @@
     6. You can always return to the previous screen by hitting the Android back button on your phone.
     </string>
     <string name="step_seven">7. Have fun finding your next Outdoor Adventure!</string>
+    <string name="open_location_settings">Open location settings</string>
+    <string name="Cancel">Cancel Action</string>
+    <string name="gps_network_not_enabled">GPS is currently not enabled</string>
+
 </resources>
