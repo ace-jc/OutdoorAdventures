@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class ListResultActivity extends AppCompatActivity {
 
     ListView parksListView;
-    ArrayList<OutdoorDetails> parkList = new ArrayList<OutdoorDetails>(100);
+    ArrayList<OutdoorDetails> mParkList = new ArrayList<OutdoorDetails>(100);
     private final static String URL_EXTRA = "url";
     private String queryURL;
     private static final String TAG = "ListResultActivity";
@@ -45,11 +45,13 @@ public class ListResultActivity extends AppCompatActivity {
     }
 
     private void setupAdapter() {
-        parksListView.setAdapter(new OutdoorDetailAdapter(this, parkList));
+        parksListView.setAdapter(new OutdoorDetailAdapter(this, mParkList));
     }
 
     public void parkSelected(View view) {
-        Toast.makeText(this, "position: " + view.getTag(), Toast.LENGTH_SHORT).show();
+        OutdoorDetails selectedPark = mParkList.get((int) view.getTag());
+        Log.d(TAG, selectedPark.toString());
+        //TODO: open park details activity here
     }
 
     private class OutdoorDetailAdapter extends BaseAdapter {
@@ -102,8 +104,8 @@ public class ListResultActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ArrayList<OutdoorDetails> items) {
-            parkList = items;
-            Log.d(TAG, "list size: " + parkList.size());
+            mParkList = items;
+            Log.d(TAG, "list size: " + mParkList.size());
             setupAdapter();
         }
     }

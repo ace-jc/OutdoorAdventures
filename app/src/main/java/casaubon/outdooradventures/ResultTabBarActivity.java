@@ -45,8 +45,7 @@ public class ResultTabBarActivity extends TabActivity implements TabHost.OnTabCh
         tabHost.addTab(spec);
 
         /* Map View */
-        // TODO: add newIntent method to MapResultActivity
-        intent = new Intent().setClass(this, MapResultActivity.class);
+        intent = MapResultActivity.newIntent(this, queryUrl);
         spec = tabHost.newTabSpec("Second").setIndicator("Map View")
                 .setContent(intent);
 
@@ -56,7 +55,6 @@ public class ResultTabBarActivity extends TabActivity implements TabHost.OnTabCh
 
     @Override
     public void onTabChanged(String tabId) {
-
         //take care of icon changes here
     }
 }
