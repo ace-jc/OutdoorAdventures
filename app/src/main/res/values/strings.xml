@@ -10,7 +10,7 @@
     1. Edit Your Preferences in the Preferences Menu. These will be used to help filter your searches.
     </string>
     <string name="step_two">
-    2. Find places near you by clicking the Near Me button. This will use a search with a 50 mile radius around you. Enable Location Settings in order to use this feature.
+    2. Find places near you by clicking the Near Me button. This will use a search with a large radius around you(hundreds of miles). Enable Location Settings in order to use this feature.
     </string>
     <string name="step_three">
     3. Find sites and activities in your state by clicking the State Search button. You will first be taken to the state selection screen and then the activity search screen.
