@@ -95,8 +95,13 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
         for (int i = 0; i < mParkList.size(); i++) {
             OutdoorDetails curPark = mParkList.get(i);
             LatLng curParkLoc = new LatLng(curPark.getLatitude(), curPark.getLongitude());
-            Marker curMarker = mMap.addMarker(new MarkerOptions().position(curParkLoc).title(curPark.getName()));
-            markers.add(curMarker);
+            if (curPark.getLatitude() != 0 && curPark.getLongitude() != 0) {
+                Marker curMarker = mMap.addMarker(new MarkerOptions()
+                        .position(curParkLoc)
+                        .title(curPark.getName())
+                        .snippet("Location: " + curPark.getLatitude() + ", " + curPark.getLongitude()));
+                markers.add(curMarker);
+            }
         }
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -105,7 +110,7 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
         }
         LatLngBounds bounds = builder.build();
 
-        int padding = 75; // offset from edges of the map in pixels
+        int padding = 175; // offset from edges of the map in pixels
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         mMap.animateCamera(cu);
     }
