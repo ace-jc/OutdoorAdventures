@@ -140,7 +140,6 @@ public class MainMenuActivity extends AppCompatActivity {
         }
         else{
             Log.d(TAG, "In onRequestPermissionsResult... Permission was denied");
-            //TODO: Add a toast that says we don't have the permission
             Toast.makeText(MainMenuActivity.this, "Permission was never granted to Outdoor Adventures", Toast.LENGTH_LONG).show();
         }
     }

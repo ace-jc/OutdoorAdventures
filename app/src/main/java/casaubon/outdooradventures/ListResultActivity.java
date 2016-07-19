@@ -21,11 +21,13 @@ import java.util.ArrayList;
 
 public class ListResultActivity extends AppCompatActivity {
 
+    // private variables
     ListView parksListView;
     ArrayList<OutdoorDetails> mParkList = new ArrayList<OutdoorDetails>(100);
     private final static String URL_EXTRA = "url";
     private String queryURL;
     private static final String TAG = "ListResultActivity";
+
 
     public static Intent newIntent (Context packageContext, String url) {
         Intent intent = new Intent(packageContext, ListResultActivity.class);
@@ -52,6 +54,8 @@ public class ListResultActivity extends AppCompatActivity {
         OutdoorDetails selectedPark = mParkList.get((int) view.getTag());
         Log.d(TAG, selectedPark.toString());
         //TODO: open park details activity here
+        Intent i = new Intent(this, ParkDetail.class);
+        startActivity(i);
     }
 
     private class OutdoorDetailAdapter extends BaseAdapter {
