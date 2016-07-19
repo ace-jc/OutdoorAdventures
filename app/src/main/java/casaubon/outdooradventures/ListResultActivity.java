@@ -27,8 +27,8 @@ public class ListResultActivity extends AppCompatActivity {
     private String queryURL;
     private static final String TAG = "ListResultActivity";
 
-    public static Intent newInstance (Context c, String url) {
-        Intent intent = new Intent(c, ListResultActivity.class);
+    public static Intent newIntent (Context packageContext, String url) {
+        Intent intent = new Intent(packageContext, ListResultActivity.class);
         intent.putExtra(URL_EXTRA, url);
         return intent;
     }

@@ -92,7 +92,7 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         url.buildURLFresh();
         Log.d(TAG, "In submitAPIcall and URL is: " + url.checkActualURL());
         //Start List Result Activity
-        Intent intent = ListResultActivity.newInstance(this, url.checkActualURL());
+        Intent intent = ResultTabBarActivity.newIntent(this, url.checkActualURL());
         startActivity(intent);
     }
 
