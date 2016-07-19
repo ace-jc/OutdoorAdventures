@@ -1,5 +1,6 @@
 package casaubon.outdooradventures;
 
+import android.content.SharedPreferences;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -26,6 +27,7 @@ public class BuildUrl implements Parcelable {
     private String parkActivity;
     private String lati;
     private String longi;
+    private String sharedPreferences;
 
     public BuildUrl() {
         // only add initial url in construction
@@ -35,17 +37,8 @@ public class BuildUrl implements Parcelable {
         parkCreated = 0;
         lati = "0";
         longi = "0";
+        sharedPreferences = "";
     }
-
-
-    public String getLati() {
-        return lati;
-    }
-
-    public String getLongi() {
-        return longi;
-    }
-
 
     public void addState(String selectedState) {
         // save US state
@@ -71,6 +64,7 @@ public class BuildUrl implements Parcelable {
         return this.actualURL;
     }
 
+
     public void buildURLFresh() {
         // building URL with information if it exists
         actualURL = urlStart;
@@ -82,8 +76,14 @@ public class BuildUrl implements Parcelable {
             actualURL += "landmarkLat=" + lati + "&landmarkLong=" + longi + "&";
             actualURL += "landmarkName=true&";
         }
+        actualURL += sharedPreferences;
         // adding apikey to the end of the URL
         actualURL += apiKey;
+    }
+
+
+    public void setPreferences(String inputStr) {
+        sharedPreferences = inputStr;
     }
 
     public void addParkActivity(String selectedActivity) {

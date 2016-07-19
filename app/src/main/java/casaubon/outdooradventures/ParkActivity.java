@@ -1,6 +1,8 @@
 package casaubon.outdooradventures;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -86,12 +88,41 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public void submitAPIcall(View view) {
         url.addParkActivity(activityMap.get(tempPark));
+        url.setPreferences(addSharedPrefstoURL());
         url.buildURLFresh();
         Log.d(TAG, "In submitAPIcall and URL is: " + url.checkActualURL());
         //Start List Result Activity
         Intent intent = ListResultActivity.newInstance(this, url.checkActualURL());
         startActivity(intent);
     }
+
+    private String addSharedPrefstoURL() {
+        String temp = "";
+//        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences("LocationPreferences", Context.MODE_PRIVATE);
+        Log.d(TAG, "sewer bool is: " + sharedPref.getBoolean("Sewer Hookup", false));
+        Log.d(TAG, "water bool is: " + sharedPref.getBoolean("Water Hookup", false));
+        Log.d(TAG, "pulldriveway bool is: " + sharedPref.getBoolean("Pull Through Driveway", false));
+        Log.d(TAG, "pets bool is: " + sharedPref.getBoolean("Pets Allowed", false));
+        Log.d(TAG, "waterfront: " + sharedPref.getBoolean("Waterfront Sites", false));
+        if(sharedPref.getBoolean("Sewer Hookup", false)) {
+            temp += "sewer=3007&";
+        }
+        if(sharedPref.getBoolean("Water Hookup", false)) {
+            temp += "water=3006&";
+        }
+        if(sharedPref.getBoolean("Pull Through Driveway", false)) {
+            temp += "pull=3008&";
+        }
+        if(sharedPref.getBoolean("Pets Allowed", false)) {
+            temp += "pets=3010&";
+        }
+        if(sharedPref.getBoolean("Waterfront Sites", false)) {
+            temp += "waterfront=3011&";
+        }
+        return temp;
+    }
+
 
     private void activityMapCluster() {
         // instantiating a HashMap and filling with data
@@ -110,5 +141,15 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         activityMap.put("Beach/Water Activities","4012");
         activityMap.put("Winter Activities","4013");
         activityMap.put("No Park Activity Preference", "0");
+    }
+
+    private void preferenceCluster() {
+        // instantiating a HashMap and filling with data
+        activityMap = new HashMap<String, String>();
+        activityMap.put("Water Hookup","3006");
+        activityMap.put("Sewer Hookup","3007");
+        activityMap.put("Pull Through Driveway","3008");
+        activityMap.put("Pets Allowed","3010");
+        activityMap.put("Waterfront Sites","3011");
     }
 }
