@@ -96,7 +96,10 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
             OutdoorDetails curPark = mParkList.get(i);
             LatLng curParkLoc = new LatLng(curPark.getLatitude(), curPark.getLongitude());
             if (curPark.getLatitude() != 0 && curPark.getLongitude() != 0) {
-                Marker curMarker = mMap.addMarker(new MarkerOptions().position(curParkLoc).title(curPark.getName()));
+                Marker curMarker = mMap.addMarker(new MarkerOptions()
+                        .position(curParkLoc)
+                        .title(curPark.getName())
+                        .snippet("Location: " + curPark.getLatitude() + ", " + curPark.getLongitude()));
                 markers.add(curMarker);
             }
         }
