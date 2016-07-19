@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="countries">
+    <array name="preferenceList">
         <item>Sewer Hookup</item>
         <item>Water Hookup</item>
         <item>Pull Through Driveway</item>

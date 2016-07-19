@@ -117,9 +117,9 @@ public class ListResultActivity extends AppCompatActivity {
             case R.id.MainMenu:
                 startActivity(new Intent(this, MainMenuActivity.class));
                 return true;
-            case R.id.LocationPreferencesMenu:
-                startActivity(new Intent(this, LocationPreferences.class));
-                return true;
+//            case R.id.LocationPreferencesMenu:
+//                startActivity(new Intent(this, LocationPreferences.class));
+//                return true;
             case R.id.AboutAppMenu:
                 startActivity(new Intent(this, AboutPage.class));
                 return true;
@@ -131,7 +131,7 @@ public class ListResultActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_statesearch_menu, menu);
+        getMenuInflater().inflate(R.menu.result_list_menu, menu);
         return true;
     }
 }
