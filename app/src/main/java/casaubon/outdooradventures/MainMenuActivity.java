@@ -42,7 +42,7 @@ public class MainMenuActivity extends AppCompatActivity {
         // Will allow the user to jump to the following menu items
         switch (item.getItemId()) {
             case R.id.LocationPreferencesMenu:
-                startActivity(new Intent(this, AboutPage.class));
+                startActivity(new Intent(this, LocationPreferences.class));
                 return true;
             case R.id.AboutAppMenu:
                 startActivity(new Intent(this, AboutPage.class));

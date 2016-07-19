@@ -31,7 +31,7 @@ public class AboutPage extends AppCompatActivity {
                 startActivity(new Intent(this, MainMenuActivity.class));
                 return true;
             case R.id.LocationPreferencesMenu:
-                startActivity(new Intent(this, AboutPage.class));
+                startActivity(new Intent(this, LocationPreferences.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
