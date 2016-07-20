@@ -141,14 +141,4 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         activityMap.put("Winter Activities","4013");
         activityMap.put("No Park Activity Preference", "0");
     }
-
-    private void preferenceCluster() {
-        // instantiating a HashMap and filling with data
-        activityMap = new HashMap<String, String>();
-        activityMap.put("Water Hookup","3006");
-        activityMap.put("Sewer Hookup","3007");
-        activityMap.put("Pull Through Driveway","3008");
-        activityMap.put("Pets Allowed","3010");
-        activityMap.put("Waterfront Sites","3011");
-    }
 }
