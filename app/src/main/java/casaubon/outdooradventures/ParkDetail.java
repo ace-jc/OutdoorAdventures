@@ -58,7 +58,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback 
                 .position(curParkLoc)
                 .title(selectedPark.getName()));
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curParkLoc, 10));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curParkLoc, 11));
     }
 
     @Override
