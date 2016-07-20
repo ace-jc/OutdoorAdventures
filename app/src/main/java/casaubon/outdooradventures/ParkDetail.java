@@ -52,6 +52,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.getUiSettings().setScrollGesturesEnabled(false);
         mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         LatLng curParkLoc = new LatLng(selectedPark.getLatitude(), selectedPark.getLongitude());
         Marker curMarker = mMap.addMarker(new MarkerOptions()

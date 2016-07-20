@@ -77,9 +77,9 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
 
     public int getMarkerPos(Marker marker) {
         Log.d(TAG, "Marker selected id= " + marker.getId());
-        for (int index = 0; index < markers.size(); index++) {
-            Log.d(TAG, "marker i= " + index + " id= " + markers.get(index).getId());
-            if (markers.get(index).getId().equals(marker.getId())) {
+        for (int index = 0; index < mParkList.size(); index++) {
+            if (mParkList.get(index).getMarkerID().equals(marker.getId())) {
+                //Log.d(TAG, "marker id= " + markers.get(index).getId());
                 return index;
             }
         }
@@ -112,6 +112,7 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
                         .title(curPark.getName())
                         .snippet("Location: " + curPark.getLatitude() + ", " + curPark.getLongitude()));
                 markers.add(curMarker);
+                curPark.setMarkerID(curMarker.getId());
             }
         }
 

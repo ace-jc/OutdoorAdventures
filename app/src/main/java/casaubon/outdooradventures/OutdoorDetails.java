@@ -16,6 +16,7 @@ public class OutdoorDetails implements Parcelable{
     private boolean mPetsAllowed;
     private boolean mSewerHookup;
     private boolean mWaterHookup;
+    private String mMarkerID = "";
 
     public OutdoorDetails(int id, String name, String state, float latitude, float longitude,
                           boolean hasOutlet, boolean allowsPets, boolean hasSewerHU, boolean hasWaterHU) {
@@ -67,6 +68,13 @@ public class OutdoorDetails implements Parcelable{
         return mWaterHookup;
     }
 
+    public void setMarkerID(String markerID) {
+        mMarkerID = markerID;
+    }
+
+    public String getMarkerID() {
+        return mMarkerID;
+    }
 
     public String toString() {
         String details = "";
