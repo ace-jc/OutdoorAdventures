@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.vision.face.Landmark;
 
 import java.util.ArrayList;
 
@@ -99,6 +100,8 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        LatLng center = new LatLng(38.68551, -96.503906);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 3));
         mMap.setOnInfoWindowClickListener(this);
     }
 
@@ -106,7 +109,10 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
         for (int i = 0; i < mParkList.size(); i++) {
             OutdoorDetails curPark = mParkList.get(i);
             LatLng curParkLoc = new LatLng(curPark.getLatitude(), curPark.getLongitude());
-            if (curPark.getLatitude() != 0 && curPark.getLongitude() != 0) {
+            float lngt = curPark.getLongitude();
+            float lang = curPark.getLatitude();
+            if (lngt > -169.804687 && lngt < -66.533203
+                    && lang > 24.926295 && lang < 71.497037) {
                 Marker curMarker = mMap.addMarker(new MarkerOptions()
                         .position(curParkLoc)
                         .title(curPark.getName())
@@ -120,11 +126,13 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
         for (Marker marker : markers) {
             builder.include(marker.getPosition());
         }
-        LatLngBounds bounds = builder.build();
+        if (markers.size() > 0) {
+            LatLngBounds bounds = builder.build();
 
-        int padding = 175; // offset from edges of the map in pixels
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-        mMap.animateCamera(cu);
+            int padding = 175; // offset from edges of the map in pixels
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+            mMap.animateCamera(cu);
+        }
     }
 
     private class QuerySearch extends AsyncTask<Void, Void, ArrayList<OutdoorDetails>> {
