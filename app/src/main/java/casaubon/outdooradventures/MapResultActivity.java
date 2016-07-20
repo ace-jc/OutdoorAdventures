@@ -98,6 +98,7 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         mMap.setOnInfoWindowClickListener(this);
     }
 

@@ -29,4 +29,5 @@
     <string name="open_location_settings">Open location settings</string>
     <string name="Cancel">Cancel Action</string>
     <string name="gps_network_not_enabled">GPS is currently not enabled</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

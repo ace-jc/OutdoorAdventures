@@ -7,10 +7,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class ParkDetail extends AppCompatActivity {
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback {
 
     // private variables
     private OutdoorDetails selectedPark;
+    GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +43,22 @@ public class ParkDetail extends AppCompatActivity {
         lati.setText("Latitude: " + selectedPark.getLatitude());
         TextView longi = (TextView)findViewById(R.id.textView8);
         longi.setText("Longitude: " + selectedPark.getLongitude());
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        LatLng curParkLoc = new LatLng(selectedPark.getLatitude(), selectedPark.getLongitude());
+        Marker curMarker = mMap.addMarker(new MarkerOptions()
+                .position(curParkLoc)
+                .title(selectedPark.getName()));
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curParkLoc, 10));
     }
 
     @Override

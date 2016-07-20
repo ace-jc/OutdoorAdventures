@@ -54,7 +54,7 @@
         <activity
             android:name=".MapResultActivity"
             android:label="@string/title_activity_map_result" />
-        <activity android:name=".ParkDetail"></activity>
+        <activity android:name=".ParkDetail" />
     </application>
 
 </manifest>
