@@ -27,6 +27,7 @@ public class ListResultActivity extends AppCompatActivity {
     private final static String URL_EXTRA = "url";
     private String queryURL;
     private static final String TAG = "ListResultActivity";
+    private OutdoorDetails selectedPark;
 
 
     public static Intent newIntent (Context packageContext, String url) {
@@ -51,10 +52,18 @@ public class ListResultActivity extends AppCompatActivity {
     }
 
     public void parkSelected(View view) {
-        OutdoorDetails selectedPark = mParkList.get((int) view.getTag());
+        selectedPark = mParkList.get((int) view.getTag());
         Log.d(TAG, selectedPark.toString());
-        //TODO: open park details activity here
         Intent i = new Intent(this, ParkDetail.class);
+        i.putExtra("mID", selectedPark);
+        i.putExtra("mName", selectedPark);
+        i.putExtra("mState", selectedPark);
+        i.putExtra("mLat", selectedPark);
+        i.putExtra("mLngt", selectedPark);
+        i.putExtra("mAmpOutlet", selectedPark);
+        i.putExtra("mPetsAllowed", selectedPark);
+        i.putExtra("mSewerHookup", selectedPark);
+        i.putExtra("mWaterHookup", selectedPark);
         startActivity(i);
     }
 

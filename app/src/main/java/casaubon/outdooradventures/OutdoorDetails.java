@@ -1,9 +1,12 @@
 package casaubon.outdooradventures;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by alepena01 on 7/12/16.
  */
-public class OutdoorDetails {
+public class OutdoorDetails implements Parcelable{
     private int mID;
     private String mName;
     private String mState;
@@ -76,7 +79,54 @@ public class OutdoorDetails {
         details += "sitesWithSewerHookup: " + ((mSewerHookup) ? "Y" : "N") + "\n";
         details += "sitesWithWaterHookup: " + ((mWaterHookup) ? "Y" : "N") + "\n";
         details += "state: " + mState + "\n \n";
-
         return details;
     }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        // writing out when copying the object
+        out.writeInt(mID);
+        out.writeString(mName);
+        out.writeString(mState);
+        out.writeFloat(mLat);
+        out.writeFloat(mLngt);
+        out.writeInt(mAmpOutlet ? 1 : 0);  //mAmpOutlet
+        out.writeInt(mPetsAllowed ? 1 : 0);  //mPetsAllowed
+        out.writeInt(mSewerHookup ? 1 : 0);  //mSewerHookup
+        out.writeInt(mWaterHookup ? 1 : 0);  //mWaterHookup
+    }
+
+    private OutdoorDetails(Parcel in) {
+        // writing in when creating the object from another activity
+        mID = in.readInt();
+        mName = in.readString();
+        mState = in.readString();
+        mLat = in.readFloat();
+        mLngt = in.readFloat();
+        mAmpOutlet = (in.readInt()) == 1 ? true : false;
+        mPetsAllowed = (in.readInt()) == 1 ? true : false;
+        mSewerHookup = (in.readInt()) == 1 ? true : false;
+        mWaterHookup = (in.readInt()) == 1 ? true : false;
+    }
+
+    @Override
+    // This is what the internet said... :O
+    public int describeContents() {
+        return 0;
+    }
+
+
+    public static final Parcelable.Creator<OutdoorDetails> CREATOR
+            = new Parcelable.Creator<OutdoorDetails>() {
+
+        @Override
+        public OutdoorDetails createFromParcel(Parcel in) {
+            return new OutdoorDetails(in);
+        }
+
+        @Override
+        public OutdoorDetails[] newArray(int size) {
+            return new OutdoorDetails[size];
+        }
+    };
 }

@@ -58,7 +58,17 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
         if (position != -1) {
             OutdoorDetails selectedPark = mParkList.get(position);
             Log.d(TAG, selectedPark.toString());
-            //TODO: open park details activity here
+            Intent i = new Intent(this, ParkDetail.class);
+            i.putExtra("mID", selectedPark);
+            i.putExtra("mName", selectedPark);
+            i.putExtra("mState", selectedPark);
+            i.putExtra("mLat", selectedPark);
+            i.putExtra("mLngt", selectedPark);
+            i.putExtra("mAmpOutlet", selectedPark);
+            i.putExtra("mPetsAllowed", selectedPark);
+            i.putExtra("mSewerHookup", selectedPark);
+            i.putExtra("mWaterHookup", selectedPark);
+            startActivity(i);
         }
         else {
             //park not found
