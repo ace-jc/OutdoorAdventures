@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,12 +20,15 @@ public class StateSearch extends AppCompatActivity implements AdapterView.OnItem
     private BuildUrl url;
     private String tempState;
     private Map<String, String> statesMap;
+    Spinner spinner;
+    RelativeLayout mScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mScreen = (RelativeLayout) findViewById(R.id.stateSearchMainBackground);
         setContentView(R.layout.activity_state_search);
-        Spinner spinner = (Spinner) findViewById(R.id.stateSpinner);
+        spinner = (Spinner) findViewById(R.id.stateSpinner);
         spinner.setOnItemSelectedListener(this);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -48,8 +52,29 @@ public class StateSearch extends AppCompatActivity implements AdapterView.OnItem
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         // An item was selected. You can retrieve the selected item using
         Log.d(TAG, "NUMBER IS: " + parent.getItemAtPosition(pos).toString());
+        mScreen = (RelativeLayout) findViewById(R.id.stateSearchMainBackground);
         // saving the current (temporary) park activity in variable
         tempState = parent.getItemAtPosition(pos).toString();
+        if(parent.getItemAtPosition(pos).toString().equals("Alabama"))
+            mScreen.setBackgroundResource(R.drawable.alabama);
+        if(parent.getItemAtPosition(pos).toString().equals("California"))
+            mScreen.setBackgroundResource(R.drawable.california);
+        if(parent.getItemAtPosition(pos).toString().equals("Florida"))
+            mScreen.setBackgroundResource(R.drawable.florida);
+        if(parent.getItemAtPosition(pos).toString().equals("Missouri"))
+            mScreen.setBackgroundResource(R.drawable.missouri);
+        if(parent.getItemAtPosition(pos).toString().equals("New Mexico"))
+            mScreen.setBackgroundResource(R.drawable.newmexico);
+        if(parent.getItemAtPosition(pos).toString().equals("New York"))
+            mScreen.setBackgroundResource(R.drawable.newyork);
+        if(parent.getItemAtPosition(pos).toString().equals("North Carolina"))
+            mScreen.setBackgroundResource(R.drawable.northcarolina);
+        if(parent.getItemAtPosition(pos).toString().equals("Texas"))
+            mScreen.setBackgroundResource(R.drawable.texas);
+        if(parent.getItemAtPosition(pos).toString().equals("Utah"))
+            mScreen.setBackgroundResource(R.drawable.utah);
+        if(parent.getItemAtPosition(pos).toString().equals("Washington"))
+            mScreen.setBackgroundResource(R.drawable.washingtonstate);
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
