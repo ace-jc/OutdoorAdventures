@@ -25,7 +25,7 @@
         android:layout_weight="1"
         android:switchPadding="1dp"
         android:checked="true"
-        android:text="Need This?"
+        android:text="Always Need This?"
         android:textOff="NO"
         android:textOn="Yes!" />
 

@@ -28,7 +28,7 @@ android:id="@+id/stateSearchMainBackground">
     <Spinner
         android:id="@+id/stateSpinner"
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:background="#FFFFFF" />
