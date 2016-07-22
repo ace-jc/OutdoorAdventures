@@ -74,7 +74,6 @@ public class MainMenuActivity extends AppCompatActivity {
             dialog.setPositiveButton(this.getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                    // TODO Auto-generated method stub
                     Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(myIntent);
                     //get gps
@@ -84,8 +83,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
                 @Override
                 public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                    // TODO Auto-generated method stub
-
+                    // nothing
                 }
             });
             dialog.show();
@@ -170,12 +168,5 @@ public class MainMenuActivity extends AppCompatActivity {
         // this activity will let the user know information about the app and its usage
         Log.d(TAG, "In aboutCall");
         startActivity(new Intent(this, AboutPage.class));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main_menu, menu);
-        return true;
     }
 }
