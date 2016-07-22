@@ -57,12 +57,56 @@ public class StateSearch extends AppCompatActivity implements AdapterView.OnItem
         tempState = parent.getItemAtPosition(pos).toString();
         if(parent.getItemAtPosition(pos).toString().equals("Alabama"))
             mScreen.setBackgroundResource(R.drawable.alabama);
+        if(parent.getItemAtPosition(pos).toString().equals("Alaska"))
+            mScreen.setBackgroundResource(R.drawable.alaska);
+        if(parent.getItemAtPosition(pos).toString().equals("Arizona"))
+            mScreen.setBackgroundResource(R.drawable.arizona);
+        if(parent.getItemAtPosition(pos).toString().equals("Arkansas"))
+            mScreen.setBackgroundResource(R.drawable.arkansas);
         if(parent.getItemAtPosition(pos).toString().equals("California"))
             mScreen.setBackgroundResource(R.drawable.california);
+        if(parent.getItemAtPosition(pos).toString().equals("Colorado"))
+            mScreen.setBackgroundResource(R.drawable.colorado);
+        if(parent.getItemAtPosition(pos).toString().equals("Connecticut"))
+            mScreen.setBackgroundResource(R.drawable.connecticut);
+        if(parent.getItemAtPosition(pos).toString().equals("Delaware"))
+            mScreen.setBackgroundResource(R.drawable.delaware);
         if(parent.getItemAtPosition(pos).toString().equals("Florida"))
             mScreen.setBackgroundResource(R.drawable.florida);
+        if(parent.getItemAtPosition(pos).toString().equals("Georgia"))
+            mScreen.setBackgroundResource(R.drawable.georgia);
+        if(parent.getItemAtPosition(pos).toString().equals("Hawaii"))
+            mScreen.setBackgroundResource(R.drawable.hawaii);
+        if(parent.getItemAtPosition(pos).toString().equals("Idaho"))
+            mScreen.setBackgroundResource(R.drawable.idaho);
+        if(parent.getItemAtPosition(pos).toString().equals("Illinois"))
+            mScreen.setBackgroundResource(R.drawable.illinois);
+        if(parent.getItemAtPosition(pos).toString().equals("Indiana"))
+            mScreen.setBackgroundResource(R.drawable.indiana);
+        if(parent.getItemAtPosition(pos).toString().equals("Iowa"))
+            mScreen.setBackgroundResource(R.drawable.iowa);
+        if(parent.getItemAtPosition(pos).toString().equals("Kansas"))
+            mScreen.setBackgroundResource(R.drawable.kansas);
+        if(parent.getItemAtPosition(pos).toString().equals("Kentucky"))
+            mScreen.setBackgroundResource(R.drawable.kentucky);
+        if(parent.getItemAtPosition(pos).toString().equals("Louisiana"))
+            mScreen.setBackgroundResource(R.drawable.louisiana);
+        if(parent.getItemAtPosition(pos).toString().equals("Maine"))
+            mScreen.setBackgroundResource(R.drawable.maine);
+        if(parent.getItemAtPosition(pos).toString().equals("Maryland"))
+            mScreen.setBackgroundResource(R.drawable.maryland);
+        if(parent.getItemAtPosition(pos).toString().equals("Massachusetts"))
+            mScreen.setBackgroundResource(R.drawable.massachusetts);
+        if(parent.getItemAtPosition(pos).toString().equals("Michigan"))
+            mScreen.setBackgroundResource(R.drawable.michigan);
+        if(parent.getItemAtPosition(pos).toString().equals("Minnesota"))
+            mScreen.setBackgroundResource(R.drawable.minnesota);
+        if(parent.getItemAtPosition(pos).toString().equals("Mississippi"))
+            mScreen.setBackgroundResource(R.drawable.mississippi);
         if(parent.getItemAtPosition(pos).toString().equals("Missouri"))
             mScreen.setBackgroundResource(R.drawable.missouri);
+        if(parent.getItemAtPosition(pos).toString().equals("Montana"))
+            mScreen.setBackgroundResource(R.drawable.montana);
         if(parent.getItemAtPosition(pos).toString().equals("New Mexico"))
             mScreen.setBackgroundResource(R.drawable.newmexico);
         if(parent.getItemAtPosition(pos).toString().equals("New York"))
@@ -74,7 +118,7 @@ public class StateSearch extends AppCompatActivity implements AdapterView.OnItem
         if(parent.getItemAtPosition(pos).toString().equals("Utah"))
             mScreen.setBackgroundResource(R.drawable.utah);
         if(parent.getItemAtPosition(pos).toString().equals("Washington"))
-            mScreen.setBackgroundResource(R.drawable.washingtonstate);
+            mScreen.setBackgroundResource(R.drawable.washington);
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
