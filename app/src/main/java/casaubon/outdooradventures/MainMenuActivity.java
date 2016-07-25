@@ -111,8 +111,10 @@ public class MainMenuActivity extends AppCompatActivity {
             Log.d(TAG, "Error with the call to: mLocationManager.requestLocationUpdates(...)");
         }
         url = new BuildUrl();
-        lati = lastKnownLocation.getLatitude();
-        longi = lastKnownLocation.getLongitude();
+        while(lastKnownLocation == null) {
+            lati = lastKnownLocation.getLatitude();
+            longi = lastKnownLocation.getLongitude();
+        }
         url.setLati(String.valueOf(lati));
         url.setLongi(String.valueOf(longi));
         Intent i = new Intent(this, ParkActivity.class);

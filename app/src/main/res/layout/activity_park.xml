@@ -17,8 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:onClick="submitAPIcall"
-        android:background="#FFFFFF" />
+        android:onClick="submitAPIcall" />
 
     <LinearLayout
         android:orientation="vertical"
