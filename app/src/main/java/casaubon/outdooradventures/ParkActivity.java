@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,11 +23,12 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
     private BuildUrl url;
     private String tempPark;
     private Map<String, String> activityMap;
-
+    RelativeLayout mScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mScreen = (RelativeLayout) findViewById(R.id.ParkActivityMainBackground);
         setContentView(R.layout.activity_park);
         Spinner spinner = (Spinner) findViewById(R.id.parkActivitySpinner);
         spinner.setOnItemSelectedListener(this);
@@ -53,6 +55,35 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         Log.d(TAG, "NUMBER IS: " + parent.getItemAtPosition(pos).toString());
         // saving the current (temporary) park activity in variable
         tempPark = parent.getItemAtPosition(pos).toString();
+        mScreen = (RelativeLayout) findViewById(R.id.ParkActivityMainBackground);
+        if(tempPark.equals("No Park Activity Preference"))
+            mScreen.setBackgroundResource(R.drawable.noactivitypreference);
+        if(tempPark.equals("Biking"))
+            mScreen.setBackgroundResource(R.drawable.biking);
+        if(tempPark.equals("Boating"))
+            mScreen.setBackgroundResource(R.drawable.boating);
+        if(tempPark.equals("Equipment Rental"))
+            mScreen.setBackgroundResource(R.drawable.equiptmentrental);
+        if(tempPark.equals("Fishing"))
+            mScreen.setBackgroundResource(R.drawable.fishing);
+        if(tempPark.equals("Golf"))
+            mScreen.setBackgroundResource(R.drawable.golf);
+        if(tempPark.equals("Hiking"))
+            mScreen.setBackgroundResource(R.drawable.hiking);
+        if(tempPark.equals("Horseback Riding"))
+            mScreen.setBackgroundResource(R.drawable.horsebackriding);
+        if(tempPark.equals("Hunting"))
+            mScreen.setBackgroundResource(R.drawable.hunting);
+        if(tempPark.equals("Recreational Activities"))
+            mScreen.setBackgroundResource(R.drawable.recreationalactivities);
+        if(tempPark.equals("Scenic Trails"))
+            mScreen.setBackgroundResource(R.drawable.scenictrails);
+        if(tempPark.equals("Beach/Water Activities"))
+            mScreen.setBackgroundResource(R.drawable.beachwateractivities);
+        if(tempPark.equals("Sports"))
+            mScreen.setBackgroundResource(R.drawable.sports);
+        if(tempPark.equals("Winter Activities"))
+            mScreen.setBackgroundResource(R.drawable.winteractivities);
     }
 
     public void onNothingSelected(AdapterView<?> parent) {

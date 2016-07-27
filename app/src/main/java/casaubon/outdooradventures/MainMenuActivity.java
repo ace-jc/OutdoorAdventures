@@ -110,23 +110,28 @@ public class MainMenuActivity extends AppCompatActivity {
         } catch (SecurityException e) {
             Log.d(TAG, "Error with the call to: mLocationManager.requestLocationUpdates(...)");
         }
-        url = new BuildUrl();
-        while(lastKnownLocation == null) {
+        if(lastKnownLocation != null){
+            Log.d(TAG, "If was true and lastKnownLocation != null");
+            url = new BuildUrl();
             lati = lastKnownLocation.getLatitude();
             longi = lastKnownLocation.getLongitude();
+            url.setLati(String.valueOf(lati));
+            url.setLongi(String.valueOf(longi));
+            Intent i = new Intent(this, ParkActivity.class);
+            // saving variables before starting next activity
+            i.putExtra("actualURL", url);
+            i.putExtra("state", url);
+            i.putExtra("parkActivity", url);
+            i.putExtra("stateCreated", url);
+            i.putExtra("parkCreated", url);
+            i.putExtra("lati", url);
+            i.putExtra("longi", url);
+            startActivity(i);
         }
-        url.setLati(String.valueOf(lati));
-        url.setLongi(String.valueOf(longi));
-        Intent i = new Intent(this, ParkActivity.class);
-        // saving variables before starting next activity
-        i.putExtra("actualURL", url);
-        i.putExtra("state", url);
-        i.putExtra("parkActivity", url);
-        i.putExtra("stateCreated", url);
-        i.putExtra("parkCreated", url);
-        i.putExtra("lati", url);
-        i.putExtra("longi", url);
-        startActivity(i);
+        else{
+            Log.d(TAG, "Fell into else case");
+            Toast.makeText(MainMenuActivity.this, "Could not find your location...", Toast.LENGTH_LONG).show();
+        }
     }
 
 
