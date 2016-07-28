@@ -130,9 +130,9 @@ public class ListResultActivity extends AppCompatActivity {
             case R.id.MainMenu:
                 startActivity(new Intent(this, MainMenuActivity.class));
                 return true;
-//            case R.id.LocationPreferencesMenu:
-//                startActivity(new Intent(this, LocationPreferences.class));
-//                return true;
+            case R.id.LocationPreferencesMenu:
+                startActivity(new Intent(this, LocationPreferences.class));
+                return true;
             case R.id.AboutAppMenu:
                 startActivity(new Intent(this, AboutPage.class));
                 return true;

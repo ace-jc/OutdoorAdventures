@@ -128,7 +128,6 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private String addSharedPrefstoURL() {
         String temp = "";
-//        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
         SharedPreferences sharedPref = getSharedPreferences("LocationPreferences", Context.MODE_PRIVATE);
         Log.d(TAG, "sewer bool is: " + sharedPref.getBoolean("Sewer Hookup", false));
         Log.d(TAG, "water bool is: " + sharedPref.getBoolean("Water Hookup", false));
