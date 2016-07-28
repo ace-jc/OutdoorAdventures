@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 
 public class ListResultActivity extends AppCompatActivity {
@@ -45,9 +44,6 @@ public class ListResultActivity extends AppCompatActivity {
         QuerySearch task = new QuerySearch();
         task.execute();
         setupAdapter();
-        if(mParkList.size() == 0){
-            Toast.makeText(ListResultActivity.this, "There are no Parks that meet the search criteria", Toast.LENGTH_LONG).show();
-        }
     }
 
     private void setupAdapter() {
@@ -123,6 +119,9 @@ public class ListResultActivity extends AppCompatActivity {
             mParkList = items;
             Log.d(TAG, "list size: " + mParkList.size());
             setupAdapter();
+            if(mParkList.size() == 0){
+                Toast.makeText(ListResultActivity.this, "There are no Parks that meet the search criteria", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,7 +16,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.vision.face.Landmark;
 
 import java.util.ArrayList;
 
@@ -49,9 +46,6 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        if(mParkList.size() == 0){
-            Toast.makeText(MapResultActivity.this, "There are no Parks that meet the search criteria", Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
@@ -150,6 +144,9 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
             mParkList = items;
             Log.d(TAG, "list size: " + mParkList.size());
             setupPins();
+            if(mParkList.size() == 0){
+                Toast.makeText(MapResultActivity.this, "There are no Parks that meet the search criteria", Toast.LENGTH_LONG).show();
+            }
         }
     }
 }
