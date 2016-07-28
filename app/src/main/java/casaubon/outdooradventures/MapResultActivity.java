@@ -49,6 +49,9 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        if(mParkList.size() == 0){
+            Toast.makeText(MapResultActivity.this, "There are no Parks that meet the search criteria", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

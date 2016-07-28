@@ -45,6 +45,9 @@ public class ListResultActivity extends AppCompatActivity {
         QuerySearch task = new QuerySearch();
         task.execute();
         setupAdapter();
+        if(mParkList.size() == 0){
+            Toast.makeText(ListResultActivity.this, "There are no Parks that meet the search criteria", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void setupAdapter() {
