@@ -76,7 +76,6 @@ public class LocationPreferences extends ListActivity {
     private void saveCurrentStateofPreferences(String str, boolean bool) {
         Log.d(TAG, "saving the current state to the shared preferences");
         SharedPreferences sharedPref = getSharedPreferences("LocationPreferences", Context.MODE_PRIVATE);
-//        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean(str, bool);
         editor.apply();

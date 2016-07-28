@@ -1,14 +1,17 @@
 package casaubon.outdooradventures;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.preference.PreferenceManager;
 
 /**
  * Created by j on 7/12/16.
  */
-public class BuildUrl implements Parcelable {
+public class BuildUrl extends AppCompatActivity implements Parcelable {
 
     // debug tag
     private static final String TAG = "Outdoor Adventures";
@@ -28,6 +31,7 @@ public class BuildUrl implements Parcelable {
     private String lati;
     private String longi;
     private String sharedPreferences;
+    Context ctx;
 
     public BuildUrl() {
         // only add initial url in construction
@@ -44,6 +48,16 @@ public class BuildUrl implements Parcelable {
         // save US state
         state = selectedState;
         stateCreated = 1;
+    }
+
+
+    public int addStateCheck(){
+        return stateCreated;
+    }
+
+
+    public int addParkCheck(){
+        return parkCreated;
     }
 
 
@@ -65,8 +79,9 @@ public class BuildUrl implements Parcelable {
     }
 
 
-    public void buildURLFresh() {
+    public void buildURLFresh(Context inputContext) {
         // building URL with information if it exists
+        setPreferences(inputContext);
         actualURL = urlStart;
         if(stateCreated == 1)
             actualURL += "pstate=" + state + "&";
@@ -82,8 +97,31 @@ public class BuildUrl implements Parcelable {
     }
 
 
-    public void setPreferences(String inputStr) {
-        sharedPreferences = inputStr;
+    private void setPreferences(Context inputContext) {
+        ctx = inputContext;
+        String temp = "";
+        SharedPreferences sharedPref = ctx.getSharedPreferences("LocationPreferences", Context.MODE_PRIVATE);
+        Log.d(TAG, "sewer bool is: " + sharedPref.getBoolean("Sewer Hookup", false));
+        Log.d(TAG, "water bool is: " + sharedPref.getBoolean("Water Hookup", false));
+        Log.d(TAG, "pulldriveway bool is: " + sharedPref.getBoolean("Pull Through Driveway", false));
+        Log.d(TAG, "pets bool is: " + sharedPref.getBoolean("Pets Allowed", false));
+        Log.d(TAG, "waterfront: " + sharedPref.getBoolean("Waterfront Sites", false));
+        if(sharedPref.getBoolean("Sewer Hookup", false)) {
+            temp += "sewer=3007&";
+        }
+        if(sharedPref.getBoolean("Water Hookup", false)) {
+            temp += "water=3006&";
+        }
+        if(sharedPref.getBoolean("Pull Through Driveway", false)) {
+            temp += "pull=3008&";
+        }
+        if(sharedPref.getBoolean("Pets Allowed", false)) {
+            temp += "pets=3010&";
+        }
+        if(sharedPref.getBoolean("Waterfront Sites", false)) {
+            temp += "waterfront=3011&";
+        }
+        sharedPreferences = temp;
     }
 
     public void addParkActivity(String selectedActivity) {

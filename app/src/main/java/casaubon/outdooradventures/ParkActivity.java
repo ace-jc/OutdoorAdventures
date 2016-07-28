@@ -117,39 +117,30 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void submitAPIcall(View view) {
+        Log.d(TAG, "In submitAPIcall");
+        // creating a BuildURL object to add the state and pass to next activity
+        Log.d(TAG, "In submitState BEFORE NEW stateCreated? " + url.addStateCheck());
         url.addParkActivity(activityMap.get(tempPark));
-        url.setPreferences(addSharedPrefstoURL());
-        url.buildURLFresh();
-        Log.d(TAG, "In submitAPIcall and URL is: " + url.checkActualURL());
-        //Start List Result Activity
-        Intent intent = ResultTabBarActivity.newIntent(this, url.checkActualURL());
-        startActivity(intent);
-    }
+        Intent i = new Intent(this, ResultTabBarActivity.class);
+        // saving variables before starting next activity
+        i.putExtra("actualURL", url);
+        i.putExtra("state", url);
+        i.putExtra("parkActivity", url);
+        i.putExtra("stateCreated", url);
+        i.putExtra("parkCreated", url);
+        i.putExtra("lati", url);
+        i.putExtra("longi", url);
+        Log.d(TAG, "In submitAPIcall");
+        Log.d(TAG, "In submitAPIcall stateCreated? " + url.addStateCheck());
+        Log.d(TAG, "In submitAPIcall parkCreated?: " + url.addParkCheck());
+        startActivity(i);
 
-    private String addSharedPrefstoURL() {
-        String temp = "";
-        SharedPreferences sharedPref = getSharedPreferences("LocationPreferences", Context.MODE_PRIVATE);
-        Log.d(TAG, "sewer bool is: " + sharedPref.getBoolean("Sewer Hookup", false));
-        Log.d(TAG, "water bool is: " + sharedPref.getBoolean("Water Hookup", false));
-        Log.d(TAG, "pulldriveway bool is: " + sharedPref.getBoolean("Pull Through Driveway", false));
-        Log.d(TAG, "pets bool is: " + sharedPref.getBoolean("Pets Allowed", false));
-        Log.d(TAG, "waterfront: " + sharedPref.getBoolean("Waterfront Sites", false));
-        if(sharedPref.getBoolean("Sewer Hookup", false)) {
-            temp += "sewer=3007&";
-        }
-        if(sharedPref.getBoolean("Water Hookup", false)) {
-            temp += "water=3006&";
-        }
-        if(sharedPref.getBoolean("Pull Through Driveway", false)) {
-            temp += "pull=3008&";
-        }
-        if(sharedPref.getBoolean("Pets Allowed", false)) {
-            temp += "pets=3010&";
-        }
-        if(sharedPref.getBoolean("Waterfront Sites", false)) {
-            temp += "waterfront=3011&";
-        }
-        return temp;
+//        url.setPreferences(ParkActivity.this);
+//        url.buildURLFresh();
+//        Log.d(TAG, "In submitAPIcall and URL is: " + url.checkActualURL());
+        //Start List Result Activity
+//        Intent i = ResultTabBarActivity.newIntent(this, url.checkActualURL());
+//        startActivity(i);
     }
 
 

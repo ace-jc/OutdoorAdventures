@@ -190,7 +190,8 @@ public class StateSearch extends AppCompatActivity implements AdapterView.OnItem
     public void submitState(View view) {
         Log.d(TAG, "In submitState");
         // creating a BuildURL object to add the state and pass to next activity
-        url = new BuildUrl();
+        Log.d(TAG, "In submitState BEFORE NEW stateCreated? " + url.addStateCheck());
+//        url = new BuildUrl();
         url.addState(statesMap.get(tempState));
         Intent i = new Intent(this, ParkActivity.class);
         // saving variables before starting next activity
@@ -201,6 +202,9 @@ public class StateSearch extends AppCompatActivity implements AdapterView.OnItem
         i.putExtra("parkCreated", url);
         i.putExtra("lati", url);
         i.putExtra("longi", url);
+        Log.d(TAG, "In submitState");
+        Log.d(TAG, "In submitState stateCreated? " + url.addStateCheck());
+        Log.d(TAG, "In submitState parkCreated?: " + url.addParkCheck());
         startActivity(i);
     }
 
