@@ -3,6 +3,7 @@ package casaubon.outdooradventures;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TabHost;
@@ -57,7 +58,6 @@ public class ResultTabBarActivity extends TabActivity implements TabHost.OnTabCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result_tab_bar);
-
         // filling url object with data from previous activity
         url = (BuildUrl) getIntent().getParcelableExtra("actualURL");
         url = (BuildUrl) getIntent().getParcelableExtra("state");
@@ -66,32 +66,20 @@ public class ResultTabBarActivity extends TabActivity implements TabHost.OnTabCh
         url = (BuildUrl) getIntent().getParcelableExtra("parkCreated");
         url = (BuildUrl) getIntent().getParcelableExtra("lati");
         url = (BuildUrl) getIntent().getParcelableExtra("longi");
-
-
+        url = (BuildUrl) getIntent().getParcelableExtra("radius");
+        // building url and setting queryURL with API call ready URL
         Log.d(TAG, "In onCreate in ResultTabBarActivity");
         url.buildURLFresh(ResultTabBarActivity.this);
         Log.d(TAG, "url is: " + url.checkActualURL());
+        Log.d(TAG, "radius is: " + url.checkRadius());
+        SharedPreferences sharedPref = getSharedPreferences("LocationPreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        // saving radius and lati and longi in non-volatile memory
+        editor.putInt("radius", url.checkRadius());
+        editor.putFloat("lati", url.getLatiFloat());
+        editor.putFloat("longi", url.getLongiFloat());
+        editor.apply();
         queryUrl = url.checkActualURL();
-
-//        queryUrl = getIntent().getStringExtra(EXTRA_URL);
-//        tabHost = getTabHost();
-//
-//        tabHost.setOnTabChangedListener(this);
-//
-//        /* List View */
-//        intent = ListResultActivity.newIntent(this, queryUrl);
-//        spec = tabHost.newTabSpec("First").setIndicator("List View")
-//                .setContent(intent);
-//
-//        tabHost.addTab(spec);
-//
-//        /* Map View */
-//        intent = MapResultActivity.newIntent(this, queryUrl);
-//        spec = tabHost.newTabSpec("Second").setIndicator("Map View")
-//                .setContent(intent);
-//
-//        tabHost.addTab(spec);
-
     }
 
     @Override

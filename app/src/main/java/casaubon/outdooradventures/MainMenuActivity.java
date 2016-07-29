@@ -1,7 +1,6 @@
 package casaubon.outdooradventures;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,8 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 public class MainMenuActivity extends AppCompatActivity {
@@ -25,7 +22,6 @@ public class MainMenuActivity extends AppCompatActivity {
     // private variables
     private static final String TAG = "Outdoor Adventures";
     private BuildUrl url;
-    AlertDialog alertDialog = null;
     private double lati = 0.0;
     private double longi = 0.0;
     private LocationManager mgr;
@@ -38,23 +34,6 @@ public class MainMenuActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Will allow the user to jump to the following menu items
-        switch (item.getItemId()) {
-            case R.id.LocationPreferencesMenu:
-                startActivity(new Intent(this, LocationPreferences.class));
-                return true;
-            case R.id.AboutAppMenu:
-                startActivity(new Intent(this, AboutPage.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
 
     public void nearMeCall(View view) {
         // Will make use of GPS return position and will start activity with result saved
@@ -117,16 +96,37 @@ public class MainMenuActivity extends AppCompatActivity {
             longi = lastKnownLocation.getLongitude();
             url.setLati(String.valueOf(lati));
             url.setLongi(String.valueOf(longi));
-            Intent i = new Intent(this, ParkActivity.class);
-            // saving variables before starting next activity
-            i.putExtra("actualURL", url);
-            i.putExtra("state", url);
-            i.putExtra("parkActivity", url);
-            i.putExtra("stateCreated", url);
-            i.putExtra("parkCreated", url);
-            i.putExtra("lati", url);
-            i.putExtra("longi", url);
-            startActivity(i);
+
+            // Will look for a radius clicked from the user before creating the next activity
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainMenuActivity.this)
+                    .setTitle("Select maximum distance to your Adventure")
+                    .setItems(R.array.radiusmiles, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // The 'which' argument contains the index position of the selected item
+                            // Should be the three radii checked in the if statement below
+                            Log.d(TAG, "The index of the item selected was: " + which);
+                            if( which==0 || which==1 || which==2 ){
+                                // 50 miles, 100 miles, or 300 miles
+                                switch (which){
+                                    case 0: url.setRadius(50); break; // setting radius to 50
+                                    case 1: url.setRadius(100); break; // setting radius to 100
+                                    case 2: url.setRadius(300); break; // setting radius to 300
+                                }
+                                Intent i = new Intent(MainMenuActivity.this, ParkActivity.class);
+                                // saving variables before starting next activity
+                                i.putExtra("actualURL", url);
+                                i.putExtra("state", url);
+                                i.putExtra("parkActivity", url);
+                                i.putExtra("stateCreated", url);
+                                i.putExtra("parkCreated", url);
+                                i.putExtra("lati", url);
+                                i.putExtra("longi", url);
+                                i.putExtra("radius", url);
+                                startActivity(i);
+                            }
+                        }
+                    });
+            builder.create().show();
         }
         else{
             Log.d(TAG, "Fell into else case");
@@ -162,6 +162,7 @@ public class MainMenuActivity extends AppCompatActivity {
         i.putExtra("parkCreated", url);
         i.putExtra("lati", url);
         i.putExtra("longi", url);
+        i.putExtra("radius", url);
         startActivity(i);
     }
 

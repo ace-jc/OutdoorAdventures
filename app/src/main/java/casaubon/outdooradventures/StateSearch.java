@@ -47,6 +47,114 @@ public class StateSearch extends AppCompatActivity implements AdapterView.OnItem
         url = (BuildUrl) getIntent().getParcelableExtra("parkCreated");
         url = (BuildUrl) getIntent().getParcelableExtra("lati");
         url = (BuildUrl) getIntent().getParcelableExtra("longi");
+        url = (BuildUrl) getIntent().getParcelableExtra("radius");
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // This method needs to exist :(
+        // Another interface callback
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_statesearch_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Will allow the user to jump to the following menu items
+        switch (item.getItemId()) {
+            case R.id.MainMenu:
+                startActivity(new Intent(this, MainMenuActivity.class));
+                return true;
+            case R.id.LocationPreferencesMenu:
+                startActivity(new Intent(this, LocationPreferences.class));
+                return true;
+            case R.id.AboutAppMenu:
+                startActivity(new Intent(this, AboutPage.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void submitState(View view) {
+        Log.d(TAG, "In submitState");
+        // creating a BuildURL object to add the state and pass to next activity
+        Log.d(TAG, "In submitState BEFORE NEW stateCreated? " + url.addStateCheck());
+//        url = new BuildUrl();
+        url.addState(statesMap.get(tempState));
+        Intent i = new Intent(this, ParkActivity.class);
+        // saving variables before starting next activity
+        i.putExtra("actualURL", url);
+        i.putExtra("state", url);
+        i.putExtra("parkActivity", url);
+        i.putExtra("stateCreated", url);
+        i.putExtra("parkCreated", url);
+        i.putExtra("lati", url);
+        i.putExtra("longi", url);
+        i.putExtra("radius", url);
+        Log.d(TAG, "In submitState");
+        Log.d(TAG, "In submitState stateCreated? " + url.addStateCheck());
+        Log.d(TAG, "In submitState parkCreated?: " + url.addParkCheck());
+        startActivity(i);
+    }
+
+    private void stateMapCluster() {
+        // instantiating a HashMap and filling with data
+        statesMap = new HashMap<String, String>();
+        statesMap.put("Alabama","AL");
+        statesMap.put("Alaska","AK");
+        statesMap.put("Arizona","AZ");
+        statesMap.put("Arkansas","AR");
+        statesMap.put("California","CA");
+        statesMap.put("Colorado","CO");
+        statesMap.put("Connecticut","CT");
+        statesMap.put("Delaware","DE");
+        statesMap.put("Florida","FL");
+        statesMap.put("Georgia","GA");
+        statesMap.put("Hawaii","HI");
+        statesMap.put("Idaho","ID");
+        statesMap.put("Illinois","IL");
+        statesMap.put("Indiana","IN");
+        statesMap.put("Iowa","IA");
+        statesMap.put("Kansas","KS");
+        statesMap.put("Kentucky","KY");
+        statesMap.put("Louisiana","LA");
+        statesMap.put("Maine","ME");
+        statesMap.put("Maryland","MD");
+        statesMap.put("Massachusetts","MA");
+        statesMap.put("Michigan","MI");
+        statesMap.put("Minnesota","MN");
+        statesMap.put("Mississippi","MS");
+        statesMap.put("Missouri","MO");
+        statesMap.put("Montana","MT");
+        statesMap.put("Nebraska","NE");
+        statesMap.put("Nevada","NV");
+        statesMap.put("New Hampshire","NH");
+        statesMap.put("New Jersey","NJ");
+        statesMap.put("New Mexico","NM");
+        statesMap.put("New York","NY");
+        statesMap.put("North Carolina","NC");
+        statesMap.put("North Dakota","ND");
+        statesMap.put("Ohio","OH");
+        statesMap.put("Oklahoma","OK");
+        statesMap.put("Oregon","OR");
+        statesMap.put("Pennsylvania","PA");
+        statesMap.put("Rhode Island","RI");
+        statesMap.put("South Carolina","SC");
+        statesMap.put("South Dakota","SD");
+        statesMap.put("Tennessee","TN");
+        statesMap.put("Texas","TX");
+        statesMap.put("Utah","UT");
+        statesMap.put("Vermont","VT");
+        statesMap.put("Virginia","VA");
+        statesMap.put("Washington","WA");
+        statesMap.put("West Virginia","WV");
+        statesMap.put("Wisconsin","WI");
+        statesMap.put("Wyoming","WY");
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -155,111 +263,5 @@ public class StateSearch extends AppCompatActivity implements AdapterView.OnItem
             mScreen.setBackgroundResource(R.drawable.wisconsin);
         if(parent.getItemAtPosition(pos).toString().equals("Wyoming"))
             mScreen.setBackgroundResource(R.drawable.wyoming);
-    }
-
-    public void onNothingSelected(AdapterView<?> parent) {
-        // This method needs to exist :(
-        // Another interface callback
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_statesearch_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Will allow the user to jump to the following menu items
-        switch (item.getItemId()) {
-            case R.id.MainMenu:
-                startActivity(new Intent(this, MainMenuActivity.class));
-                return true;
-            case R.id.LocationPreferencesMenu:
-                startActivity(new Intent(this, LocationPreferences.class));
-                return true;
-            case R.id.AboutAppMenu:
-                startActivity(new Intent(this, AboutPage.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public void submitState(View view) {
-        Log.d(TAG, "In submitState");
-        // creating a BuildURL object to add the state and pass to next activity
-        Log.d(TAG, "In submitState BEFORE NEW stateCreated? " + url.addStateCheck());
-//        url = new BuildUrl();
-        url.addState(statesMap.get(tempState));
-        Intent i = new Intent(this, ParkActivity.class);
-        // saving variables before starting next activity
-        i.putExtra("actualURL", url);
-        i.putExtra("state", url);
-        i.putExtra("parkActivity", url);
-        i.putExtra("stateCreated", url);
-        i.putExtra("parkCreated", url);
-        i.putExtra("lati", url);
-        i.putExtra("longi", url);
-        Log.d(TAG, "In submitState");
-        Log.d(TAG, "In submitState stateCreated? " + url.addStateCheck());
-        Log.d(TAG, "In submitState parkCreated?: " + url.addParkCheck());
-        startActivity(i);
-    }
-
-    private void stateMapCluster() {
-        // instantiating a HashMap and filling with data
-        statesMap = new HashMap<String, String>();
-        statesMap.put("Alabama","AL");
-        statesMap.put("Alaska","AK");
-        statesMap.put("Arizona","AZ");
-        statesMap.put("Arkansas","AR");
-        statesMap.put("California","CA");
-        statesMap.put("Colorado","CO");
-        statesMap.put("Connecticut","CT");
-        statesMap.put("Delaware","DE");
-        statesMap.put("Florida","FL");
-        statesMap.put("Georgia","GA");
-        statesMap.put("Hawaii","HI");
-        statesMap.put("Idaho","ID");
-        statesMap.put("Illinois","IL");
-        statesMap.put("Indiana","IN");
-        statesMap.put("Iowa","IA");
-        statesMap.put("Kansas","KS");
-        statesMap.put("Kentucky","KY");
-        statesMap.put("Louisiana","LA");
-        statesMap.put("Maine","ME");
-        statesMap.put("Maryland","MD");
-        statesMap.put("Massachusetts","MA");
-        statesMap.put("Michigan","MI");
-        statesMap.put("Minnesota","MN");
-        statesMap.put("Mississippi","MS");
-        statesMap.put("Missouri","MO");
-        statesMap.put("Montana","MT");
-        statesMap.put("Nebraska","NE");
-        statesMap.put("Nevada","NV");
-        statesMap.put("New Hampshire","NH");
-        statesMap.put("New Jersey","NJ");
-        statesMap.put("New Mexico","NM");
-        statesMap.put("New York","NY");
-        statesMap.put("North Carolina","NC");
-        statesMap.put("North Dakota","ND");
-        statesMap.put("Ohio","OH");
-        statesMap.put("Oklahoma","OK");
-        statesMap.put("Oregon","OR");
-        statesMap.put("Pennsylvania","PA");
-        statesMap.put("Rhode Island","RI");
-        statesMap.put("South Carolina","SC");
-        statesMap.put("South Dakota","SD");
-        statesMap.put("Tennessee","TN");
-        statesMap.put("Texas","TX");
-        statesMap.put("Utah","UT");
-        statesMap.put("Vermont","VT");
-        statesMap.put("Virginia","VA");
-        statesMap.put("Washington","WA");
-        statesMap.put("West Virginia","WV");
-        statesMap.put("Wisconsin","WI");
-        statesMap.put("Wyoming","WY");
     }
 }

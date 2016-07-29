@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -20,7 +19,6 @@ public class LocationPreferences extends ListActivity {
     //private variables
     private static final String TAG = "Outdoor Adventures";
     private boolean mfirstRun;
-
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -48,20 +46,17 @@ public class LocationPreferences extends ListActivity {
 
     private boolean savedPreferenceRestore(String s) {
         SharedPreferences sharedPref = getSharedPreferences("LocationPreferences", Context.MODE_PRIVATE);
-//        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
         return sharedPref.getBoolean(s, false);
     }
 
     private void checkForFirstRun() {
         SharedPreferences sharedPref = getSharedPreferences("LocationPreferences", Context.MODE_PRIVATE);
-//        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
         mfirstRun = sharedPref.getBoolean("mfirstRun", true);
     }
 
 
     private void firstRunSetInstanceVarsFromSharedPrefs() {
         SharedPreferences sharedPref = getSharedPreferences("LocationPreferences", MODE_PRIVATE);
-//        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         // setting up the variables for the first time in the xml file
         editor.putBoolean("mfirstRun", false); // after this not the first run

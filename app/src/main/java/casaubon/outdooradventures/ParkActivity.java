@@ -1,8 +1,6 @@
 package casaubon.outdooradventures;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,41 +47,7 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         url = (BuildUrl) getIntent().getParcelableExtra("parkCreated");
         url = (BuildUrl) getIntent().getParcelableExtra("lati");
         url = (BuildUrl) getIntent().getParcelableExtra("longi");
-    }
-
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        Log.d(TAG, "NUMBER IS: " + parent.getItemAtPosition(pos).toString());
-        // saving the current (temporary) park activity in variable
-        tempPark = parent.getItemAtPosition(pos).toString();
-        mScreen = (RelativeLayout) findViewById(R.id.ParkActivityMainBackground);
-        if(tempPark.equals("No Park Activity Preference"))
-            mScreen.setBackgroundResource(R.drawable.noactivitypreference);
-        if(tempPark.equals("Biking"))
-            mScreen.setBackgroundResource(R.drawable.biking);
-        if(tempPark.equals("Boating"))
-            mScreen.setBackgroundResource(R.drawable.boating);
-        if(tempPark.equals("Equipment Rental"))
-            mScreen.setBackgroundResource(R.drawable.equiptmentrental);
-        if(tempPark.equals("Fishing"))
-            mScreen.setBackgroundResource(R.drawable.fishing);
-        if(tempPark.equals("Golf"))
-            mScreen.setBackgroundResource(R.drawable.golf);
-        if(tempPark.equals("Hiking"))
-            mScreen.setBackgroundResource(R.drawable.hiking);
-        if(tempPark.equals("Horseback Riding"))
-            mScreen.setBackgroundResource(R.drawable.horsebackriding);
-        if(tempPark.equals("Hunting"))
-            mScreen.setBackgroundResource(R.drawable.hunting);
-        if(tempPark.equals("Recreational Activities"))
-            mScreen.setBackgroundResource(R.drawable.recreationalactivities);
-        if(tempPark.equals("Scenic Trails"))
-            mScreen.setBackgroundResource(R.drawable.scenictrails);
-        if(tempPark.equals("Beach/Water Activities"))
-            mScreen.setBackgroundResource(R.drawable.beachwateractivities);
-        if(tempPark.equals("Sports"))
-            mScreen.setBackgroundResource(R.drawable.sports);
-        if(tempPark.equals("Winter Activities"))
-            mScreen.setBackgroundResource(R.drawable.winteractivities);
+        url = (BuildUrl) getIntent().getParcelableExtra("radius");
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
@@ -130,17 +94,11 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         i.putExtra("parkCreated", url);
         i.putExtra("lati", url);
         i.putExtra("longi", url);
+        i.putExtra("radius", url);
         Log.d(TAG, "In submitAPIcall");
         Log.d(TAG, "In submitAPIcall stateCreated? " + url.addStateCheck());
         Log.d(TAG, "In submitAPIcall parkCreated?: " + url.addParkCheck());
         startActivity(i);
-
-//        url.setPreferences(ParkActivity.this);
-//        url.buildURLFresh();
-//        Log.d(TAG, "In submitAPIcall and URL is: " + url.checkActualURL());
-        //Start List Result Activity
-//        Intent i = ResultTabBarActivity.newIntent(this, url.checkActualURL());
-//        startActivity(i);
     }
 
 
@@ -161,5 +119,40 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         activityMap.put("Beach/Water Activities","4012");
         activityMap.put("Winter Activities","4013");
         activityMap.put("No Park Activity Preference", "0");
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        Log.d(TAG, "NUMBER IS: " + parent.getItemAtPosition(pos).toString());
+        // saving the current (temporary) park activity in variable
+        tempPark = parent.getItemAtPosition(pos).toString();
+        mScreen = (RelativeLayout) findViewById(R.id.ParkActivityMainBackground);
+        if(tempPark.equals("No Park Activity Preference"))
+            mScreen.setBackgroundResource(R.drawable.noactivitypreference);
+        if(tempPark.equals("Biking"))
+            mScreen.setBackgroundResource(R.drawable.biking);
+        if(tempPark.equals("Boating"))
+            mScreen.setBackgroundResource(R.drawable.boating);
+        if(tempPark.equals("Equipment Rental"))
+            mScreen.setBackgroundResource(R.drawable.equiptmentrental);
+        if(tempPark.equals("Fishing"))
+            mScreen.setBackgroundResource(R.drawable.fishing);
+        if(tempPark.equals("Golf"))
+            mScreen.setBackgroundResource(R.drawable.golf);
+        if(tempPark.equals("Hiking"))
+            mScreen.setBackgroundResource(R.drawable.hiking);
+        if(tempPark.equals("Horseback Riding"))
+            mScreen.setBackgroundResource(R.drawable.horsebackriding);
+        if(tempPark.equals("Hunting"))
+            mScreen.setBackgroundResource(R.drawable.hunting);
+        if(tempPark.equals("Recreational Activities"))
+            mScreen.setBackgroundResource(R.drawable.recreationalactivities);
+        if(tempPark.equals("Scenic Trails"))
+            mScreen.setBackgroundResource(R.drawable.scenictrails);
+        if(tempPark.equals("Beach/Water Activities"))
+            mScreen.setBackgroundResource(R.drawable.beachwateractivities);
+        if(tempPark.equals("Sports"))
+            mScreen.setBackgroundResource(R.drawable.sports);
+        if(tempPark.equals("Winter Activities"))
+            mScreen.setBackgroundResource(R.drawable.winteractivities);
     }
 }

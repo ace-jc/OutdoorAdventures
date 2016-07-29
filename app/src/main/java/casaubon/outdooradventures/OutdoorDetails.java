@@ -17,6 +17,7 @@ public class OutdoorDetails implements Parcelable{
     private boolean mSewerHookup;
     private boolean mWaterHookup;
     private String mMarkerID = "";
+    double distance;
 
     public OutdoorDetails(int id, String name, String state, float latitude, float longitude,
                           boolean hasOutlet, boolean allowsPets, boolean hasSewerHU, boolean hasWaterHU) {
@@ -29,6 +30,7 @@ public class OutdoorDetails implements Parcelable{
         mPetsAllowed = allowsPets;
         mSewerHookup = hasSewerHU;
         mWaterHookup = hasWaterHU;
+        distance = 0;
     }
 
     /* getter methods */
@@ -76,6 +78,10 @@ public class OutdoorDetails implements Parcelable{
         return mMarkerID;
     }
 
+    public double getDistance() {return distance;};
+
+    public void setDistance(double input){ distance = input;}
+
     public String toString() {
         String details = "";
         details += "facilityID: " + mID + "\n";
@@ -86,9 +92,11 @@ public class OutdoorDetails implements Parcelable{
         details += "sitesWithPetsAllowed: " + ((mPetsAllowed) ? "Y" : "N") + "\n";
         details += "sitesWithSewerHookup: " + ((mSewerHookup) ? "Y" : "N") + "\n";
         details += "sitesWithWaterHookup: " + ((mWaterHookup) ? "Y" : "N") + "\n";
+        details += "distance: " + distance + "\n";
         details += "state: " + mState + "\n \n";
         return details;
     }
+
 
     @Override
     public void writeToParcel(Parcel out, int flags) {

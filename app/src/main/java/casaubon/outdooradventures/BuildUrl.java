@@ -6,7 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.preference.PreferenceManager;
+import java.lang.Integer;
 
 /**
  * Created by j on 7/12/16.
@@ -26,6 +26,7 @@ public class BuildUrl extends AppCompatActivity implements Parcelable {
     // variables
     private int stateCreated;
     private int parkCreated;
+    private int radius;
     private String state;
     private String parkActivity;
     private String lati;
@@ -36,12 +37,13 @@ public class BuildUrl extends AppCompatActivity implements Parcelable {
     public BuildUrl() {
         // only add initial url in construction
         actualURL = urlStart;
-        // initially do not have state or parkActivity fields filled
+        state = "";
+        sharedPreferences = "";
         stateCreated = 0;
         parkCreated = 0;
         lati = "0";
         longi = "0";
-        sharedPreferences = "";
+        radius = 1000000; // default will include all states
     }
 
     public void addState(String selectedState) {
@@ -74,8 +76,26 @@ public class BuildUrl extends AppCompatActivity implements Parcelable {
         longi = inputLongi;
     }
 
+    public float getLatiFloat(){
+        return Float.parseFloat(lati);
+    }
+
+    public float getLongiFloat(){
+        return Float.parseFloat(longi);
+    }
+
     public String checkActualURL() {
         return this.actualURL;
+    }
+
+
+    public void setRadius(int input){
+        radius = input;
+    }
+
+
+    public int checkRadius(){
+        return radius;
     }
 
 
@@ -146,6 +166,7 @@ public class BuildUrl extends AppCompatActivity implements Parcelable {
         out.writeInt(parkCreated);
         out.writeString(lati);
         out.writeString(longi);
+        out.writeInt(radius);
     }
 
     private BuildUrl(Parcel in) {
@@ -157,6 +178,7 @@ public class BuildUrl extends AppCompatActivity implements Parcelable {
         parkCreated = in.readInt();
         lati = in.readString();
         longi = in.readString();
+        radius = in.readInt();
     }
 
     @Override

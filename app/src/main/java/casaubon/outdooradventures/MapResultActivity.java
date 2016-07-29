@@ -2,6 +2,7 @@ package casaubon.outdooradventures;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MapResultActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
@@ -27,6 +29,7 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
     private String queryURL;
     private ArrayList<OutdoorDetails> mParkList = new ArrayList<OutdoorDetails>(100);
     private ArrayList<Marker> markers = new ArrayList<Marker>(100);
+    SharedPreferences sharedPref;
 
     public static Intent newIntent(Context packageContext, String url) {
         Intent intent = new Intent(packageContext, MapResultActivity.class);
@@ -37,6 +40,7 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPref = getSharedPreferences("LocationPreferences", Context.MODE_PRIVATE);
         setContentView(R.layout.activity_map_result);
         queryURL = getIntent().getStringExtra(EXTRA_URL);
         Log.d(TAG, "url: " + queryURL);
@@ -108,12 +112,22 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
             LatLng curParkLoc = new LatLng(curPark.getLatitude(), curPark.getLongitude());
             float lngt = curPark.getLongitude();
             float lang = curPark.getLatitude();
+            double dist = curPark.getDistance();
             if (lngt > -169.804687 && lngt < -66.533203
                     && lang > 24.926295 && lang < 71.497037) {
-                Marker curMarker = mMap.addMarker(new MarkerOptions()
-                        .position(curParkLoc)
-                        .title(curPark.getName())
-                        .snippet("Location: " + curPark.getLatitude() + ", " + curPark.getLongitude()));
+                Marker curMarker;
+                if(sharedPref.getFloat("lati", 0) == 0){
+                    curMarker = mMap.addMarker(new MarkerOptions()
+                            .position(curParkLoc)
+                            .title(curPark.getName())
+                            .snippet("Location: " + curPark.getLatitude() + ", " + curPark.getLongitude()));
+                }
+                else{
+                    curMarker = mMap.addMarker(new MarkerOptions()
+                            .position(curParkLoc)
+                            .title(curPark.getName())
+                            .snippet("Distance: " + (double)Math.round(dist * 100d) / 100d + " miles"));
+                }
                 markers.add(curMarker);
                 curPark.setMarkerID(curMarker.getId());
             }
@@ -142,11 +156,48 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
         @Override
         protected void onPostExecute(ArrayList<OutdoorDetails> items) {
             mParkList = items;
-            Log.d(TAG, "list size: " + mParkList.size());
+            Log.d(TAG, "list size BEFORE radius applied: " + mParkList.size());
+            ensureInRadius();
+            Log.d(TAG, "list size AFTER radius applied: " + mParkList.size());
             setupPins();
             if(mParkList.size() == 0){
                 Toast.makeText(MapResultActivity.this, "There are no Parks that meet the search criteria", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private void ensureInRadius(){
+        int sizeOfRadius = sharedPref.getInt("radius", -1);
+        Log.d(TAG, "Size of radius: " + sizeOfRadius);
+        Iterator<OutdoorDetails> it = mParkList.iterator();
+        // iterating over the list mParkList
+        while(it.hasNext()){
+            // setting distance for each Park
+            OutdoorDetails curr = it.next();
+            curr.setDistance(distanceMeasure(sharedPref.getFloat("lati",0),
+                    sharedPref.getFloat("longi",0), curr.getLatitude(), curr.getLongitude()));
+            // ensuring it is within radius
+            Log.d(TAG, "current distance: " + curr.getDistance());
+            if(curr.getDistance() > sizeOfRadius){
+                it.remove();
+            }
+        }
+    }
+
+    // The following distance equation is from http://stackoverflow.com/questions/15890081/calculate-distance-in-x-y-between-two-gps-points
+    private static double distanceMeasure(double lat1, double long1, double lat2, double long2) {
+        lat1 *=Math.PI/180;
+        lat2 *=Math.PI/180;
+        long1*=Math.PI/180;
+        long2*=Math.PI/180;
+
+        double dlong = (long2 - long1);
+        double dlat  = (lat2 - lat1);
+
+        // Haversine formula:
+        double R = 6371;
+        double a = Math.sin(dlat/2)*Math.sin(dlat/2) + Math.cos(lat1)*Math.cos(lat2)*Math.sin(dlong/2)*Math.sin(dlong/2);
+        double c = 2 * Math.atan2( Math.sqrt(a), Math.sqrt(1-a) );
+        return R * c;
     }
 }
