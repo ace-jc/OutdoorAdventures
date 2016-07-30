@@ -161,7 +161,8 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
             Log.d(TAG, "list size AFTER radius applied: " + mParkList.size());
             setupPins();
             if(mParkList.size() == 0){
-                Toast.makeText(MapResultActivity.this, "There are no Parks that meet the search criteria", Toast.LENGTH_LONG).show();
+                Toast.makeText(MapResultActivity.this, "There are no Parks that meet the search criteria. " +
+                        "Please check your location settings for any added filters.", Toast.LENGTH_LONG).show();
             }
         }
     }

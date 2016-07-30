@@ -128,7 +128,8 @@ public class ListResultActivity extends AppCompatActivity {
             Log.d(TAG, "list size AFTER radius applied: " + mParkList.size());
             setupAdapter();
             if(mParkList.size() == 0){
-                Toast.makeText(ListResultActivity.this, "There are no Parks that meet the search criteria", Toast.LENGTH_LONG).show();
+                Toast.makeText(ListResultActivity.this, "There are no Parks that meet the search criteria. " +
+                        "Please check your location settings for any added filters.", Toast.LENGTH_LONG).show();
             }
         }
     }
