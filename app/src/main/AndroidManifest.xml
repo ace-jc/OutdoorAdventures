@@ -11,9 +11,9 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:largeHeap="true">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainMenuActivity"
             android:label="@string/app_name"
@@ -26,9 +26,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ParkListActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".AboutPage"
             android:screenOrientation="portrait" />
         <activity
@@ -37,9 +34,18 @@
         <activity
             android:name=".ParkActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".LocationPreferences" />
-        <activity android:name=".ListResultActivity" />
-        <activity android:name=".ResultTabBarActivity" />
+        <activity
+            android:name=".ParkListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LocationPreferences"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ListResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ResultTabBarActivity"
+            android:screenOrientation="portrait" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -56,6 +62,9 @@
             android:name=".MapResultActivity"
             android:label="@string/title_activity_map_result" />
         <activity android:name=".ParkDetail" />
+        <activity
+            android:name=".ResultPagerActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
