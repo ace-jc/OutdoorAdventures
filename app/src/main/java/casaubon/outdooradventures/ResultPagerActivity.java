@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class ResultPagerActivity extends AppCompatActivity {
@@ -31,13 +32,16 @@ public class ResultPagerActivity extends AppCompatActivity {
     private static final String TAG = "ResultPagerActivity";
     private static final String EXTRA_URL = "casaubon.outdooradventures.result_pager.extra_url";
     private String query_url;
+    private String prev_query_url = null;
     private BuildUrl url;
+    private boolean firstRun = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result_pager);
 
+        firstRun = true;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -64,38 +68,55 @@ public class ResultPagerActivity extends AppCompatActivity {
         query_url = url.checkActualURL();
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
-            @Override
-            public Fragment getItem(int position) {
-                // tab 1: List View
-                if (position == 0) {
-                    return ParkListFragment.newInstance(query_url);
-                }
-                //tab 2: Map View
-                else {
-                    return ParkMapFragment.newInstance(query_url);
-                }
-            }
+        prev_query_url = query_url;
+    }
 
-            @Override
-            public int getCount() {
-                return 2;
-            }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        url.buildURLFresh(ResultPagerActivity.this);
+        query_url = url.checkActualURL();
+        // check if the user changed his preferences and does new search
+        if (prev_query_url != null && !prev_query_url.equals(query_url) || firstRun) {
+            //TODO: check if the user changed his preferences
+            Log.d(TAG, "in onResume url is: " + url.checkActualURL());
 
-            @Override
-            public CharSequence getPageTitle(int position) {
-                switch (position) {
-                    case 0:
-                        return "LIST VIEW";
-                    case 1:
-                        return "MAP VIEW";
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
+                @Override
+                public Fragment getItem(int position) {
+                    // tab 1: List View
+                    if (position == 0) {
+                        return ParkListFragment.newInstance(query_url);
+                    }
+                    //tab 2: Map View
+                    else {
+                        return ParkMapFragment.newInstance(query_url);
+                    }
                 }
-                return null;
-            }
-        });
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+
+                @Override
+                public int getCount() {
+                    return 2;
+                }
+
+                @Override
+                public CharSequence getPageTitle(int position) {
+                    switch (position) {
+                        case 0:
+                            return "LIST VIEW";
+                        case 1:
+                            return "MAP VIEW";
+                        default:
+                            return null;
+                    }
+                }
+            });
+            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+            tabLayout.setupWithViewPager(mViewPager);
+            firstRun = false;
+        }
+        prev_query_url = query_url;
     }
 
     public static Intent newIntent(Context packageContext, BuildUrl url) {
@@ -111,9 +132,9 @@ public class ResultPagerActivity extends AppCompatActivity {
             case R.id.MainMenu:
                 startActivity(new Intent(this, MainMenuActivity.class));
                 return true;
-//            case R.id.LocationPreferencesMenu:
-//                startActivity(new Intent(this, LocationPreferences.class));
-//                return true;
+            case R.id.LocationPreferencesMenu:
+                startActivity(new Intent(this, LocationPreferences.class));
+                return true;
             case R.id.AboutAppMenu:
                 startActivity(new Intent(this, AboutPage.class));
                 return true;
