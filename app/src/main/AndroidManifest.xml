@@ -64,7 +64,12 @@
         <activity android:name=".ParkDetail" />
         <activity
             android:name=".ResultPagerActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ParkMapActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

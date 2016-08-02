@@ -2,6 +2,7 @@ package casaubon.outdooradventures;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -26,8 +28,10 @@ public class ResultPagerActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private ViewPager mViewPager;
+    private static final String TAG = "ResultPagerActivity";
     private static final String EXTRA_URL = "casaubon.outdooradventures.result_pager.extra_url";
     private String query_url;
+    private BuildUrl url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +42,26 @@ public class ResultPagerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        query_url = getIntent().getStringExtra(EXTRA_URL);
+        url = (BuildUrl) getIntent().getParcelableExtra("actualURL");
+        url = (BuildUrl) getIntent().getParcelableExtra("state");
+        url = (BuildUrl) getIntent().getParcelableExtra("parkActivity");
+        url = (BuildUrl) getIntent().getParcelableExtra("stateCreated");
+        url = (BuildUrl) getIntent().getParcelableExtra("parkCreated");
+        url = (BuildUrl) getIntent().getParcelableExtra("lati");
+        url = (BuildUrl) getIntent().getParcelableExtra("longi");
+        url = (BuildUrl) getIntent().getParcelableExtra("radius");
+
+        url.buildURLFresh(ResultPagerActivity.this);
+        Log.d(TAG, "url is: " + url.checkActualURL());
+        Log.d(TAG, "radius is: " + url.checkRadius());
+        SharedPreferences sharedPref = getSharedPreferences("LocationPreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        // saving radius and lati and longi in non-volatile memory
+        editor.putInt("radius", url.checkRadius());
+        editor.putFloat("lati", url.getLatiFloat());
+        editor.putFloat("longi", url.getLongiFloat());
+        editor.apply();
+        query_url = url.checkActualURL();
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -75,7 +98,7 @@ public class ResultPagerActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
     }
 
-    public static Intent newIntent(Context packageContext, String url) {
+    public static Intent newIntent(Context packageContext, BuildUrl url) {
         Intent intent = new Intent(packageContext, ResultPagerActivity.class);
         intent.putExtra(EXTRA_URL, url);
         return intent;

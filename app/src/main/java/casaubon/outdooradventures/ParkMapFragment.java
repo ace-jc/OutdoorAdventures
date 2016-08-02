@@ -64,8 +64,13 @@ public class ParkMapFragment extends Fragment implements OnMapReadyCallback, Goo
             fragmentTransaction.replace(R.id.map, mapFragment).commit();
         }
 
-        QuerySearch task = new QuerySearch();
-        task.execute();
+        mapFragment.getMapAsync(this);
+//        if (mapFragment != null) {
+//            mapFragment.getMapAsync(new OnMapReadyCallback() {
+//                @Override
+//                public void onMapReady(GoogleMap googleMap) {
+//                    if (googleMap != null) {
+//
 
         return view;
     }
@@ -117,12 +122,16 @@ public class ParkMapFragment extends Fragment implements OnMapReadyCallback, Goo
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d(TAG, "onMapReady");
-        mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        LatLng center = new LatLng(38.68551, -96.503906);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 3));
-        mMap.setOnInfoWindowClickListener(this);
+        if (googleMap != null) {
+            Log.d(TAG, "onMapReady");
+            mMap = googleMap;
+            mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+            LatLng center = new LatLng(38.68551, -96.503906);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 3));
+            mMap.setOnInfoWindowClickListener(this);
+            QuerySearch task = new QuerySearch();
+            task.execute();
+        }
     }
 
     public void setupPins() {

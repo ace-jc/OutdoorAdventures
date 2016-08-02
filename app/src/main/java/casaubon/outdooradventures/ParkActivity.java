@@ -85,7 +85,8 @@ public class ParkActivity extends AppCompatActivity implements AdapterView.OnIte
         // creating a BuildURL object to add the state and pass to next activity
         Log.d(TAG, "In submitState BEFORE NEW stateCreated? " + url.addStateCheck());
         url.addParkActivity(activityMap.get(tempPark));
-        Intent i = new Intent(this, ResultTabBarActivity.class);
+
+        Intent i = new Intent(this, ResultPagerActivity.class);
         // saving variables before starting next activity
         i.putExtra("actualURL", url);
         i.putExtra("state", url);
