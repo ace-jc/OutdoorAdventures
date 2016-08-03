@@ -16,11 +16,12 @@ public class OutdoorDetails implements Parcelable{
     private boolean mPetsAllowed;
     private boolean mSewerHookup;
     private boolean mWaterHookup;
+    private boolean mWaterFront;
     private String mMarkerID = "";
     double distance;
 
     public OutdoorDetails(int id, String name, String state, float latitude, float longitude,
-                          boolean hasOutlet, boolean allowsPets, boolean hasSewerHU, boolean hasWaterHU) {
+                          boolean hasOutlet, boolean allowsPets, boolean hasSewerHU, boolean hasWaterHU, boolean waterFront) {
         mID = id;
         mName = name;
         mState = state;
@@ -31,6 +32,7 @@ public class OutdoorDetails implements Parcelable{
         mSewerHookup = hasSewerHU;
         mWaterHookup = hasWaterHU;
         distance = 0;
+        mWaterFront= waterFront;
     }
 
     /* getter methods */
@@ -82,6 +84,21 @@ public class OutdoorDetails implements Parcelable{
 
     public void setDistance(double input){ distance = input;}
 
+    public String amenitiesList(){
+        String output = "";
+        if(mPetsAllowed)
+            output += "Pets allowed ";
+        if(mSewerHookup)
+            output += "Sewer Hookup ";
+        if(mWaterHookup)
+            output += "Water Hookup ";
+        if(mWaterFront)
+            output += "WaterFront Sites ";
+        if(mAmpOutlet)
+            output += "Electric Hookup ";
+        return output;
+    }
+
     public String toString() {
         String details = "";
         details += "facilityID: " + mID + "\n";
@@ -110,6 +127,7 @@ public class OutdoorDetails implements Parcelable{
         out.writeInt(mPetsAllowed ? 1 : 0);  //mPetsAllowed
         out.writeInt(mSewerHookup ? 1 : 0);  //mSewerHookup
         out.writeInt(mWaterHookup ? 1 : 0);  //mWaterHookup
+        out.writeInt(mWaterFront ? 1 : 0);  //mWaterFront
     }
 
     private OutdoorDetails(Parcel in) {
@@ -123,6 +141,7 @@ public class OutdoorDetails implements Parcelable{
         mPetsAllowed = (in.readInt()) == 1 ? true : false;
         mSewerHookup = (in.readInt()) == 1 ? true : false;
         mWaterHookup = (in.readInt()) == 1 ? true : false;
+        mWaterFront = (in.readInt()) == 1 ? true : false;
     }
 
     @Override

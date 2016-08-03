@@ -37,12 +37,13 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback 
         selectedPark = (OutdoorDetails) getIntent().getParcelableExtra("mPetsAllowed");
         selectedPark = (OutdoorDetails) getIntent().getParcelableExtra("mSewerHookup");
         selectedPark = (OutdoorDetails) getIntent().getParcelableExtra("mWaterHookup");
-        TextView parkName = (TextView)findViewById(R.id.textView6);
+        selectedPark = (OutdoorDetails) getIntent().getParcelableExtra("mWaterFront");
+        TextView parkName = (TextView)findViewById(R.id.textView2);
         parkName.setText(selectedPark.getName());
-        TextView lati = (TextView)findViewById(R.id.textView7);
-        lati.setText("Latitude: " + selectedPark.getLatitude());
-        TextView longi = (TextView)findViewById(R.id.textView8);
-        longi.setText("Longitude: " + selectedPark.getLongitude());
+        TextView cityStateDistance = (TextView)findViewById(R.id.textView7);
+        cityStateDistance.setText("City, " + selectedPark.getState());
+        TextView amenitiesList = (TextView)findViewById(R.id.textView8);
+        amenitiesList.setText("Amenities: " + selectedPark.amenitiesList());
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -75,6 +76,9 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback 
         switch (item.getItemId()) {
             case R.id.MainMenu:
                 startActivity(new Intent(this, MainMenuActivity.class));
+                return true;
+            case R.id.LocationPreferencesMenu:
+                startActivity(new Intent(this, LocationPreferences.class));
                 return true;
             case R.id.AboutAppMenu:
                 startActivity(new Intent(this, AboutPage.class));

@@ -62,7 +62,7 @@ public class LocationPreferences extends ListActivity {
         editor.putBoolean("mfirstRun", false); // after this not the first run
         editor.putBoolean("Sewer Hookup", false);
         editor.putBoolean("Water Hookup", false);
-        editor.putBoolean("Pull Through Driveway", false);
+        editor.putBoolean("Electric Hookup", false);
         editor.putBoolean("Pets Allowed", false);
         editor.putBoolean("Waterfront Sites", true);
         editor.apply();

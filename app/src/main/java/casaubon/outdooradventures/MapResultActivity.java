@@ -70,6 +70,7 @@ public class MapResultActivity extends FragmentActivity implements OnMapReadyCal
             i.putExtra("mPetsAllowed", selectedPark);
             i.putExtra("mSewerHookup", selectedPark);
             i.putExtra("mWaterHookup", selectedPark);
+            i.putExtra("mWaterFront", selectedPark);
             startActivity(i);
         }
         else {

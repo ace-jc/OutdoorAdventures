@@ -120,6 +120,7 @@ public class OutdoorCoreData {
         boolean petsAllowed;
         boolean sewerHookup;
         boolean waterHookup;
+        Boolean waterFront;
         String trueFlag = "Y";
         OutdoorDetails curObject;
 
@@ -148,21 +149,19 @@ public class OutdoorCoreData {
                             sewerHookup = trueFlag.equals(parser.getAttributeValue(null, "sitesWithSewerHookup"));
                             waterHookup = trueFlag.equals(parser.getAttributeValue(null, "sitesWithWaterHookup"));
                             state = parser.getAttributeValue(null, "state");
+                            waterFront = !((parser.getAttributeValue(null, "sitesWithWaterfront")).equals(""));
                             curObject = new OutdoorDetails(id, parkName, state, lat, lngt, ampOutlet, petsAllowed, sewerHookup,
-                                    waterHookup);
+                                    waterHookup, waterFront);
                             Log.d(TAG, curObject.toString());
                             parkList.add(curObject);
                         }
                 }
                 event = parser.next();
             }
-
         }
-
         catch (Exception e) {
             e.printStackTrace();
         }
-
         Log.d(TAG, "Size: " + parkList.size());
     }
 }

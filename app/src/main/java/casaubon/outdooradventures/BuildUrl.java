@@ -123,7 +123,7 @@ public class BuildUrl extends AppCompatActivity implements Parcelable {
         SharedPreferences sharedPref = ctx.getSharedPreferences("LocationPreferences", Context.MODE_PRIVATE);
         Log.d(TAG, "sewer bool is: " + sharedPref.getBoolean("Sewer Hookup", false));
         Log.d(TAG, "water bool is: " + sharedPref.getBoolean("Water Hookup", false));
-        Log.d(TAG, "pulldriveway bool is: " + sharedPref.getBoolean("Pull Through Driveway", false));
+        Log.d(TAG, "electric hookup bool is: " + sharedPref.getBoolean("Electric Hookup", false));
         Log.d(TAG, "pets bool is: " + sharedPref.getBoolean("Pets Allowed", false));
         Log.d(TAG, "waterfront: " + sharedPref.getBoolean("Waterfront Sites", false));
         if(sharedPref.getBoolean("Sewer Hookup", false)) {
@@ -132,8 +132,8 @@ public class BuildUrl extends AppCompatActivity implements Parcelable {
         if(sharedPref.getBoolean("Water Hookup", false)) {
             temp += "water=3006&";
         }
-        if(sharedPref.getBoolean("Pull Through Driveway", false)) {
-            temp += "pull=3008&";
+        if(sharedPref.getBoolean("Electric Hookup", false)) {
+            temp += "hookup=3002&";
         }
         if(sharedPref.getBoolean("Pets Allowed", false)) {
             temp += "pets=3010&";

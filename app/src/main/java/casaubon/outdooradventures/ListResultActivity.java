@@ -69,6 +69,7 @@ public class ListResultActivity extends AppCompatActivity {
         i.putExtra("mPetsAllowed", selectedPark);
         i.putExtra("mSewerHookup", selectedPark);
         i.putExtra("mWaterHookup", selectedPark);
+        i.putExtra("mWaterFront", selectedPark);
         startActivity(i);
     }
 
