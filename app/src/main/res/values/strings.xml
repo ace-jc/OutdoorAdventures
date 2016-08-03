@@ -30,4 +30,7 @@
     <string name="Cancel">Cancel Action</string>
     <string name="gps_network_not_enabled">GPS is currently not enabled</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>
