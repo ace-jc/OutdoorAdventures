@@ -118,6 +118,7 @@ public class BuildUrl extends AppCompatActivity implements Parcelable {
 
 
     private void setPreferences(Context inputContext) {
+        // useless comment
         ctx = inputContext;
         String temp = "";
         SharedPreferences sharedPref = ctx.getSharedPreferences("LocationPreferences", Context.MODE_PRIVATE);
