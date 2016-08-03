@@ -178,6 +178,7 @@ public class ParkListFragment extends Fragment {
             i.putExtra("mPetsAllowed", mPark);
             i.putExtra("mSewerHookup", mPark);
             i.putExtra("mWaterHookup", mPark);
+            i.putExtra("mWaterFront", mPark);
             startActivity(i);
         }
     }

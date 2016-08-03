@@ -76,9 +76,9 @@ public class ResultPagerActivity extends AppCompatActivity {
         super.onResume();
         url.buildURLFresh(ResultPagerActivity.this);
         query_url = url.checkActualURL();
+
         // check if the user changed his preferences and does new search
-        if (prev_query_url != null && !prev_query_url.equals(query_url) || firstRun) {
-            //TODO: check if the user changed his preferences
+        if ((prev_query_url != null && !prev_query_url.equals(query_url)) || firstRun) {
             Log.d(TAG, "in onResume url is: " + url.checkActualURL());
 
             FragmentManager fragmentManager = getSupportFragmentManager();

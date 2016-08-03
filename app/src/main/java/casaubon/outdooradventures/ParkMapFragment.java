@@ -13,13 +13,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.google.android.gms.cast.LaunchOptions;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -33,7 +29,7 @@ import java.util.Iterator;
 /**
  * Created by alepena01 on 7/27/16.
  */
-public class ParkMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+public class ParkMapFragment extends Fragment {
     private static final String EXTRA_URL = "casaubon.outdooradventures.url";
     private static final String TAG = "ParkMapFragment";
     private GoogleMap mMap;
@@ -41,7 +37,8 @@ public class ParkMapFragment extends Fragment implements OnMapReadyCallback, Goo
     private ArrayList<OutdoorDetails> mParkList = new ArrayList<OutdoorDetails>(100);
     private ArrayList<Marker> markers = new ArrayList<Marker>(100);
     SharedPreferences sharedPref;
-    SupportMapFragment mapFragment;
+    SupportMapFragment mMapFragment;
+    private boolean newSearch = true;
 
     public static ParkMapFragment newInstance(String url) {
         Bundle args = new Bundle();
@@ -60,53 +57,90 @@ public class ParkMapFragment extends Fragment implements OnMapReadyCallback, Goo
         queryURL = getArguments().getString(EXTRA_URL);
         sharedPref = getActivity().getSharedPreferences("LocationPreferences", Context.MODE_PRIVATE);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.map);
-        if (mapFragment == null) {
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            mapFragment = SupportMapFragment.newInstance();
-            fragmentTransaction.replace(R.id.map, mapFragment).commit();
-        }
-
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }
-
+        mMapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.map);
         return view;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        //Toast.makeText(getActivity(), "onDestroy", Toast.LENGTH_LONG).show();
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.remove(mapFragment).commit();
-        mMap = null;
+    public void setMapFragment(@Nullable SupportMapFragment mapFragment) {
+        final FragmentManager fragmentManager = getFragmentManager();
+
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (mMapFragment == null) {
+            //Toast.makeText(getActivity(), "new map fragment", Toast.LENGTH_SHORT).show();
+            mMapFragment = SupportMapFragment.newInstance();
+            fragmentTransaction
+                    .add(R.id.map, mMapFragment)
+                    .commit();
+        }
+
+        else {
+            //Toast.makeText(getActivity(), "existing map fragment", Toast.LENGTH_SHORT).show();
+            fragmentTransaction
+                    .replace(R.id.map, mMapFragment)
+                    .commit();
+        }
+
+        mMapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                Log.d(TAG, "onMapReady");
+                mMap = googleMap;
+                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+                        LatLng loc = marker.getPosition();
+                        Log.d (TAG, "marker location: " + loc.latitude + " " + loc.longitude);
+                        int position = getMarkerPos(marker);
+                        if (position != -1) {
+                            OutdoorDetails selectedPark = mParkList.get(position);
+                            Log.d(TAG, selectedPark.toString());
+                            Intent i = new Intent(getActivity(), ParkDetail.class);
+                            i.putExtra("mID", selectedPark);
+                            i.putExtra("mName", selectedPark);
+                            i.putExtra("mState", selectedPark);
+                            i.putExtra("mLat", selectedPark);
+                            i.putExtra("mLngt", selectedPark);
+                            i.putExtra("mAmpOutlet", selectedPark);
+                            i.putExtra("mPetsAllowed", selectedPark);
+                            i.putExtra("mSewerHookup", selectedPark);
+                            i.putExtra("mWaterHookup", selectedPark);
+                            i.putExtra("mWaterFront", selectedPark);
+                            startActivity(i);
+                            // This is a useless comment
+                        }
+                    }
+                });
+
+                mMap.getUiSettings().setScrollGesturesEnabled(false);
+                mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                LatLng center = new LatLng(38.68551, -96.503906);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 3));
+                if (newSearch) {
+                    QuerySearch task = new QuerySearch();
+                    task.execute();
+                }
+                else {
+                    setupPins();
+                }
+            }
+        });
+
     }
 
     @Override
-    public void onInfoWindowClick(Marker marker) {
-        LatLng loc = marker.getPosition();
-        Log.d (TAG, "marker location: " + loc.latitude + " " + loc.longitude);
-        int position = getMarkerPos(marker);
-        if (position != -1) {
-            OutdoorDetails selectedPark = mParkList.get(position);
-            Log.d(TAG, selectedPark.toString());
-            Intent i = new Intent(getActivity(), ParkDetail.class);
-            i.putExtra("mID", selectedPark);
-            i.putExtra("mName", selectedPark);
-            i.putExtra("mState", selectedPark);
-            i.putExtra("mLat", selectedPark);
-            i.putExtra("mLngt", selectedPark);
-            i.putExtra("mAmpOutlet", selectedPark);
-            i.putExtra("mPetsAllowed", selectedPark);
-            i.putExtra("mSewerHookup", selectedPark);
-            i.putExtra("mWaterHookup", selectedPark);
-            startActivity(i);
-        }
-        else {
-            //park not found
-        }
+    public void onPause() {
+        super.onPause();
+        final FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction
+                .remove(mMapFragment)
+                .commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setMapFragment(mMapFragment);
     }
 
     public int getMarkerPos(Marker marker) {
@@ -118,30 +152,6 @@ public class ParkMapFragment extends Fragment implements OnMapReadyCallback, Goo
             }
         }
         return -1;
-    }
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        if (googleMap != null) {
-            Log.d(TAG, "onMapReady");
-            mMap = googleMap;
-            mMap.getUiSettings().setScrollGesturesEnabled(false);
-            mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-            LatLng center = new LatLng(38.68551, -96.503906);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 3));
-            mMap.setOnInfoWindowClickListener(this);
-            QuerySearch task = new QuerySearch();
-            task.execute();
-        }
     }
 
     public void setupPins() {
@@ -198,10 +208,7 @@ public class ParkMapFragment extends Fragment implements OnMapReadyCallback, Goo
             ensureInRadius();
             Log.d(TAG, "list size AFTER radius applied: " + mParkList.size());
             setupPins();
-            if(mParkList.size() == 0){
-                Toast.makeText(getActivity(), "There are no Parks that meet the search criteria. " +
-                        "Please check your location settings for any added filters.", Toast.LENGTH_LONG).show();
-            }
+            newSearch = false;
         }
     }
 
