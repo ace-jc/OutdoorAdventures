@@ -6,6 +6,7 @@
 
     <string name="about_page_title">About Outdoor Adventures</string>
     <string name="instructions">Instructions:</string>
+    <string name="appsummary">Outdoor Adventures allows you to search for outdoor activities in the US, such as hiking, biking, fishing, hunting and more. You can search for a specific area, narrowing choices down by state or you can find places near your current location. </string>
     <string name="step_one">
     1. Edit Your Preferences in the Preferences Menu. These will be used to help filter your searches.
     </string>

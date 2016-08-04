@@ -25,13 +25,22 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/about_page_title"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/appsummary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/about_title"
+                android:paddingTop="16dp"
+                android:text="@string/appsummary"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/instructions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/about_title"
+                android:layout_below="@id/appsummary"
                 android:paddingTop="16dp"
                 android:text="@string/instructions"
                 android:textSize="18sp" />

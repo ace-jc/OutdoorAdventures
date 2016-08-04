@@ -23,10 +23,13 @@ public class OutdoorDetails implements Parcelable{
     public OutdoorDetails(int id, String name, String state, float latitude, float longitude,
                           boolean hasOutlet, boolean allowsPets, boolean hasSewerHU, boolean hasWaterHU, boolean waterFront) {
         mID = id;
-        mName = name.replace("&apos;", "'");
+        mName = (name.replace("&apos;", "'")).toUpperCase();
         mState = state;
         mLat = latitude;
         mLngt = longitude;
+        // gacky fix for broken API data
+        if(mName.equals("ARROWHEAD RV CAMPGROUND"))
+            mLngt = (float)-89.848779;
         mAmpOutlet = hasOutlet;
         mPetsAllowed = allowsPets;
         mSewerHookup = hasSewerHU;
