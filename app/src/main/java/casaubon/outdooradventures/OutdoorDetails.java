@@ -23,7 +23,7 @@ public class OutdoorDetails implements Parcelable{
     public OutdoorDetails(int id, String name, String state, float latitude, float longitude,
                           boolean hasOutlet, boolean allowsPets, boolean hasSewerHU, boolean hasWaterHU, boolean waterFront) {
         mID = id;
-        mName = name;
+        mName = name.replace("&apos;", "'");
         mState = state;
         mLat = latitude;
         mLngt = longitude;
