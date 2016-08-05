@@ -97,31 +97,40 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
             AutocompleteFilter filter = new AutocompleteFilter.Builder()
                     .setTypeFilter(AutocompleteFilter.TYPE_FILTER_NONE)
                     .build();
-            PendingResult<AutocompletePredictionBuffer> results = Places.GeoDataApi.getAutocompletePredictions( mGoogleApiClient, params[0], null, filter);
+            PendingResult<AutocompletePredictionBuffer> results = Places.GeoDataApi.getAutocompletePredictions(mGoogleApiClient, params[0], null, filter);
             AutocompletePredictionBuffer autocompletePredictions = results.await();
+            Log.i(TAG, "Number in doInBackground: " + autocompletePredictions.getCount());
+            for(int i=0; i<autocompletePredictions.getCount(); ++i){
+
+                Log.i(TAG, "ENTRY NUMBER: " + i);
+                Places.GeoDataApi.getPlaceById(mGoogleApiClient, autocompletePredictions.get(i).getPlaceId()) // getPlaceId is for each one i send in
+                        .setResultCallback(new ResultCallback<PlaceBuffer>() {
+                            @Override
+                            public void onResult(PlaceBuffer places) {
+                                if (places.getStatus().isSuccess() && places.getCount() > 0) {
+                                    final Place myPlace = places.get(0);
+                                    Log.i(TAG, "The number of places in the array is: " + places.getCount());
+                                    Log.i(TAG, "Place found: " + myPlace.getName());
+                                    Log.i(TAG, "Place address: " + myPlace.getAddress());
+                                    Log.i(TAG, "ID is: " + myPlace.getId());
+                                    Log.i(TAG, "Place phone: " + myPlace.getPhoneNumber());
+                                    Log.i(TAG, "URL is: " + myPlace.getWebsiteUri());
+                                    Log.i(TAG, "Price level is: " + myPlace.getPriceLevel());
+                                    Log.i(TAG, "Rating is: " + myPlace.getRating());
+                                } else {
+                                    Log.e(TAG, "Place not found");
+                                }
+                                places.release();
+                                mGoogleApiClient.disconnect();
+                            }
+                        });
+            }
             return autocompletePredictions.get(0).getPlaceId();
         }
 
         @Override
         protected void onPostExecute(String input) {
             Log.i(TAG, "in onPostExecute with String : " + input);
-            Places.GeoDataApi.getPlaceById(mGoogleApiClient, input)
-                    .setResultCallback(new ResultCallback<PlaceBuffer>() {
-                        @Override
-                        public void onResult(PlaceBuffer places) {
-                            if (places.getStatus().isSuccess() && places.getCount() > 0) {
-                                final Place myPlace = places.get(0);
-                                Log.i(TAG, "Place found: " + myPlace.getName());
-                                Log.i(TAG, "Place address: " + myPlace.getAddress());
-                                Log.i(TAG, "Place phone: " + myPlace.getPhoneNumber());
-                                Log.i(TAG, "Place rating: " + myPlace.getRating());
-                            } else {
-                                Log.e(TAG, "Place not found");
-                            }
-//                        places.release();
-//                        mGoogleApiClient.disconnect();
-                        }
-                    });
         }
     }
 
