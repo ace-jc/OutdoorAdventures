@@ -1,13 +1,29 @@
 package casaubon.outdooradventures;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.drive.query.Filter;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.AutocompletePredictionBuffer;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -17,11 +33,19 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback {
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback, OnConnectionFailedListener {
 
     // private variables
+    private static final String TAG = "Outdoor Adventures";
     private OutdoorDetails selectedPark;
     GoogleMap mMap;
+    private GoogleApiClient mGoogleApiClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +72,63 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        // Google Places API test
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build();
+        mGoogleApiClient.connect();
+
+
+        Log.i(TAG, "We are sending in the following park : " + selectedPark.getName());
+        DisplayResults resultsOfQuery = new DisplayResults();
+        resultsOfQuery.execute(selectedPark.getName());
+        Log.i(TAG, "AFTER : " + selectedPark.getName());
+
+    }
+
+    private class DisplayResults extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            Log.i(TAG, "in doInBackground with query: " + params[0]);
+            AutocompleteFilter filter = new AutocompleteFilter.Builder()
+                    .setTypeFilter(AutocompleteFilter.TYPE_FILTER_NONE)
+                    .build();
+            PendingResult<AutocompletePredictionBuffer> results = Places.GeoDataApi.getAutocompletePredictions( mGoogleApiClient, params[0], null, filter);
+            AutocompletePredictionBuffer autocompletePredictions = results.await();
+            return autocompletePredictions.get(0).getPlaceId();
+        }
+
+        @Override
+        protected void onPostExecute(String input) {
+            Log.i(TAG, "in onPostExecute with String : " + input);
+            Places.GeoDataApi.getPlaceById(mGoogleApiClient, input)
+                    .setResultCallback(new ResultCallback<PlaceBuffer>() {
+                        @Override
+                        public void onResult(PlaceBuffer places) {
+                            if (places.getStatus().isSuccess() && places.getCount() > 0) {
+                                final Place myPlace = places.get(0);
+                                Log.i(TAG, "Place found: " + myPlace.getName());
+                                Log.i(TAG, "Place address: " + myPlace.getAddress());
+                                Log.i(TAG, "Place phone: " + myPlace.getPhoneNumber());
+                                Log.i(TAG, "Place rating: " + myPlace.getRating());
+                            } else {
+                                Log.e(TAG, "Place not found");
+                            }
+//                        places.release();
+//                        mGoogleApiClient.disconnect();
+                        }
+                    });
+        }
+    }
+
+
+    public void onConnectionFailed (ConnectionResult result){
+        //TODO: Fail gracefully?!?! when connection fails
+        Log.d(TAG, "In onConnectionFailed");
     }
 
     @Override
