@@ -6,3 +6,8 @@
 .DS_Store
 /build
 /captures
+
+
+# Google Maps API key
+app/src/debug/res/values/google_maps_api.xml
+app/src/release/

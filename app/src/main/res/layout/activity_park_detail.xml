@@ -36,12 +36,19 @@
                     android:text="Park Name"
                     android:id="@+id/textView1" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Phone number (not available)"
-                    android:id="@+id/textView2" />
+                    android:layout_gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Phone number (not available)"
+                        android:id="@+id/textView2" />
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"

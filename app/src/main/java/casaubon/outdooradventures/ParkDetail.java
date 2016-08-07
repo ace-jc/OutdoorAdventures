@@ -126,15 +126,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                                     parkPhone.setText("Phone: " + myPlace.getPhoneNumber());
                                     parkAddress.setText("Address: " + myPlace.getAddress());
                                     amenitiesList.setText("Amenities: " + selectedPark.amenitiesList());
-//                                    TextView parkAddress = (TextView)findViewById(R.id.textView7);
-//                                    parkAddress.setText(myPlace.getAddress());
-//                                    parkPhone = (TextView)findViewById(R.id.textView3);
-//                                    parkPhone.setText("Phone number: " + myPlace.getPhoneNumber());
-//                                    TextView amenitiesList = (TextView)findViewById(R.id.textView8);
-//                                    amenitiesList.setText("Amenities: " + selectedPark.amenitiesList());
-//                                    Log.i(TAG, "Amenities: " + selectedPark.amenitiesList());
-
-                                    // this ensures we don't have a memory leak
+                                    // the following ensures we don't have a memory leak
                                     places.release();
                                     mGoogleApiClient.disconnect();
                                 } else {
