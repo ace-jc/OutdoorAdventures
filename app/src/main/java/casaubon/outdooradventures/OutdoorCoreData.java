@@ -1,12 +1,21 @@
 package casaubon.outdooradventures;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -19,6 +28,7 @@ public class OutdoorCoreData {
     private static final String apiKey = "&api_key=72fhbjk366qjzk5y5seuxyzv";
     private static ArrayList<OutdoorDetails> parkList = new ArrayList<OutdoorDetails>(50);
     private static String queryUrl = "";
+    private final static String imageBaseUrl = "http://www.reserveamerica.com/webphotos/";
 
     public OutdoorCoreData(String urlString) {
         this.queryUrl = urlString;
@@ -120,7 +130,9 @@ public class OutdoorCoreData {
         boolean petsAllowed;
         boolean sewerHookup;
         boolean waterHookup;
-        Boolean waterFront;
+        boolean waterFront;
+        String imageURL;
+
         String trueFlag = "Y";
         OutdoorDetails curObject;
 
@@ -150,10 +162,17 @@ public class OutdoorCoreData {
                             waterHookup = trueFlag.equals(parser.getAttributeValue(null, "sitesWithWaterHookup"));
                             state = parser.getAttributeValue(null, "state");
                             waterFront = !((parser.getAttributeValue(null, "sitesWithWaterfront")).equals(""));
+                            imageURL = imageBaseUrl + parser.getAttributeValue(null, "contractID") + "/pid" + idString + "/0/540x360.jpg";
+
+                            Bitmap ThmbBitmap = getBitmap(imageURL);
+                            if (ThmbBitmap == null) {
+                                Log.d(TAG, parkName + " has no image");
+                            }
                             curObject = new OutdoorDetails(id, parkName, state, lat, lngt, ampOutlet, petsAllowed, sewerHookup,
-                                    waterHookup, waterFront);
-                            Log.d(TAG, curObject.toString());
+                                    waterHookup, waterFront, ThmbBitmap);
                             parkList.add(curObject);
+
+
                         }
                 }
                 event = parser.next();
@@ -163,5 +182,61 @@ public class OutdoorCoreData {
             e.printStackTrace();
         }
         Log.d(TAG, "Size: " + parkList.size());
+    }
+
+    private static Bitmap getBitmap(String url)
+    {
+        //from web
+        try {
+            Bitmap bitmap;
+            URL imageUrl = new URL(url);
+            HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+            conn.connect();
+
+            if (conn.getResponseCode() == 200) {
+                Log.d(TAG, "successful connection");
+                InputStream is = conn.getInputStream();
+                bitmap = BitmapFactory.decodeStream(is);
+                return bitmap;
+            }
+            else {
+                Log.e(TAG, "response code: " + conn.getResponseCode());
+                return null;
+            }
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    //decodes image and scales it to reduce memory consumption
+    private static Bitmap decodeFile(InputStream is){
+        try {
+            //decode image size
+            //BitmapFactory.Options o = new BitmapFactory.Options();
+            Bitmap originalBitmap = BitmapFactory.decodeStream(is);
+
+            //Find the correct scale value. It should be the power of 2.
+            final int REQUIRED_SIZE = 512;
+            int newWidth = originalBitmap.getWidth(), newHeight = originalBitmap.getHeight();
+            int scale = 1;
+            while(true){
+                if (newWidth / 2 < REQUIRED_SIZE || newHeight / 2 < REQUIRED_SIZE)
+                    break;
+                newWidth/=2;
+                newHeight/=2;
+                scale*=2;
+            }
+
+            //decode with inSampleSize
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(
+                    originalBitmap, newWidth, newHeight, false);
+
+            return resizedBitmap;
+        } catch (Exception e) {}
+        return null;
     }
 }

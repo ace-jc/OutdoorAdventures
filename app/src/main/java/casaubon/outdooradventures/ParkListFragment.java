@@ -3,9 +3,12 @@ package casaubon.outdooradventures;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,13 +16,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by alepena01 on 7/19/16.
@@ -151,18 +164,65 @@ public class ParkListFragment extends Fragment {
         public OutdoorDetails mPark;
         private TextView mNameTextView;
         private TextView mStateTextView;
+        private GridView mGridView;
+        private CircleImageView mParkThmb;
+        private ArrayList<Integer> mUtilIcons;
+        private ArrayList<String> mUtilPrompts;
 
         public ParkHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
             mNameTextView = (TextView) itemView.findViewById(R.id.park_name);
             mStateTextView = (TextView) itemView.findViewById(R.id.park_state);
+            mGridView = (GridView) itemView.findViewById(R.id.amenities_icons);
+            mParkThmb = (CircleImageView) itemView.findViewById(R.id.park_image);
+            itemView.setOnClickListener(this);
         }
 
         public void bindPark(OutdoorDetails park) {
             mPark = park;
+            getThumbIds();
             mNameTextView.setText(mPark.getName());
             mStateTextView.setText(mPark.getState());
+            mParkThmb.setImageBitmap(mPark.getImage());
+            mGridView.setAdapter(new BaseAdapter() {
+                @Override
+                public int getCount() {
+                    return mUtilIcons.size();
+                }
+
+                @Override
+                public Object getItem(int position) {
+                    return null;
+                }
+
+                @Override
+                public long getItemId(int position) {
+                    return 0;
+                }
+
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    ImageView imageView;
+                    if (convertView == null) {
+                        imageView = new ImageView(getActivity());
+                        //imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+                        //imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        imageView.setPadding(8, 8, 8, 8);
+                    }
+                    else {
+                        imageView = (ImageView) convertView;
+                    }
+                    imageView.setImageResource(mUtilIcons.get(position));
+                    imageView.setTag(mUtilIcons.get(position));
+                    return imageView;
+                }
+            });
+            mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Snackbar.make(getView(), mUtilPrompts.get(position), Snackbar.LENGTH_SHORT).show();
+                }
+            });
         }
 
         @Override
@@ -181,5 +241,34 @@ public class ParkListFragment extends Fragment {
             i.putExtra("mWaterFront", mPark);
             startActivity(i);
         }
+
+        public void getThumbIds() {
+            mUtilIcons = new ArrayList<Integer>(5);
+            mUtilPrompts = new ArrayList<String>(5);
+            String[] prefs = getResources().getStringArray(R.array.preferenceList);
+
+            if (mPark.hasSewerHookup()) {
+                mUtilIcons.add(R.drawable.sewer_hookup);
+                mUtilPrompts.add(prefs[0]);
+            }
+            if (mPark.hasWaterHookup()) {
+                mUtilIcons.add(R.drawable.water_hookup);
+                mUtilPrompts.add(prefs[1]);
+            }
+            if (mPark.hasAmpOutlet()) {
+                mUtilIcons.add(R.drawable.electric_hookup);
+                mUtilPrompts.add(prefs[2]);
+            }
+            if (mPark.isPetsAllowed()) {
+                mUtilIcons.add(R.drawable.pets_allowed);
+                mUtilPrompts.add(prefs[3]);
+            }
+            if (mPark.hasWaterFront()) {
+                mUtilIcons.add(R.drawable.waterfront);
+                mUtilPrompts.add(prefs[4]);
+            }
+
+        }
+
     }
 }

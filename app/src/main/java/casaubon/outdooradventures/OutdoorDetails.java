@@ -1,5 +1,6 @@
 package casaubon.outdooradventures;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -18,10 +19,12 @@ public class OutdoorDetails implements Parcelable{
     private boolean mWaterHookup;
     private boolean mWaterFront;
     private String mMarkerID = "";
+    private Bitmap mThmbBitmap;
     double distance;
 
     public OutdoorDetails(int id, String name, String state, float latitude, float longitude,
-                          boolean hasOutlet, boolean allowsPets, boolean hasSewerHU, boolean hasWaterHU, boolean waterFront) {
+                          boolean hasOutlet, boolean allowsPets, boolean hasSewerHU, boolean hasWaterHU,
+                          boolean waterFront, Bitmap image) {
         mID = id;
         mName = (name.replace("&apos;", "'")).toUpperCase();
         mState = state;
@@ -36,6 +39,7 @@ public class OutdoorDetails implements Parcelable{
         mWaterHookup = hasWaterHU;
         distance = 0;
         mWaterFront= waterFront;
+        mThmbBitmap = image;
     }
 
     /* getter methods */
@@ -73,6 +77,14 @@ public class OutdoorDetails implements Parcelable{
 
     public boolean hasWaterHookup() {
         return mWaterHookup;
+    }
+
+    public boolean hasWaterFront() {
+        return mWaterFront;
+    }
+
+    public Bitmap getImage() {
+        return mThmbBitmap;
     }
 
     public void setMarkerID(String markerID) {
