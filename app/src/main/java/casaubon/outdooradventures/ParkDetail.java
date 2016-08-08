@@ -2,8 +2,12 @@ package casaubon.outdooradventures;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +19,6 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
@@ -126,7 +129,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
         mContext = this.getApplicationContext();
         Log.i(TAG, "We are sending in the following park : " + selectedPark.getName());
         DisplayResults resultsOfQuery = new DisplayResults();
-        resultsOfQuery.execute(selectedPark.getName() + " " + selectedPark.getState() + "park camping");
+        resultsOfQuery.execute(selectedPark.getName() + " " + selectedPark.getState());
         Log.i(TAG, "AFTER : " + selectedPark.getName());
 
     }
@@ -275,7 +278,10 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
 
     public void phoneButtonPress(View view){
         if(phoneExists){
-            // TODO: Need to make phone call here
+            Toast.makeText(ParkDetail.this, "Phone number exists it is: " + phone, Toast.LENGTH_LONG).show();
+            Uri call = Uri.parse("tel:" + phone);
+            Intent surf = new Intent(Intent.ACTION_DIAL, call);
+            startActivity(surf);
         }else{
             Toast.makeText(ParkDetail.this, "Phone number does not exists", Toast.LENGTH_LONG).show();
         }
