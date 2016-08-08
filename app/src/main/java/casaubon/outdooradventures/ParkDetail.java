@@ -1,5 +1,6 @@
 package casaubon.outdooradventures;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -8,6 +9,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,11 +39,17 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
     private static final String TAG = "Outdoor Adventures";
     private OutdoorDetails selectedPark;
     GoogleMap mMap;
-    private GoogleApiClient mGoogleApiClient;
     TextView parkName;
     TextView parkPhone;
     TextView parkAddress;
     TextView amenitiesList;
+    TextView ratingText;
+    Button callbtn;
+    Button wwwbtn;
+    Button addressbtn;
+    Context mContext;
+    GoogleApiClient mGoogleApiClient;
+    RatingBar ratingBar;
 
 
 
@@ -57,22 +68,38 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
         selectedPark = (OutdoorDetails) getIntent().getParcelableExtra("mSewerHookup");
         selectedPark = (OutdoorDetails) getIntent().getParcelableExtra("mWaterHookup");
         selectedPark = (OutdoorDetails) getIntent().getParcelableExtra("mWaterFront");
-        // setting up the textviews
+        // setting up the textviews and buttons
         parkName = (TextView)findViewById(R.id.textView1);
         parkPhone = (TextView)findViewById(R.id.textView2);
         parkAddress = (TextView)findViewById(R.id.textView3);
         amenitiesList = (TextView)findViewById(R.id.textView4);
+        ratingText = (TextView)findViewById(R.id.textView8);
+        callbtn = (Button)findViewById(R.id.callbutton);
+        wwwbtn = (Button)findViewById(R.id.wwwbutton);
+        addressbtn = (Button)findViewById(R.id.navigatebutton);
         // setting the actual text
         parkName.setText(selectedPark.getName());
         parkPhone.setText("Phone number: (not available)");
         parkAddress.setText("Address: " + selectedPark.getState());
         amenitiesList.setText("Amenities: " + selectedPark.amenitiesList());
+        callbtn.setBackgroundResource(R.drawable.callbutton);
+        wwwbtn.setBackgroundResource(R.drawable.www);
+        addressbtn.setBackgroundResource(R.drawable.navigation);
+        // ratings bar
+        ratingBar = (RatingBar)findViewById(R.id.ratingBar);
+        ratingBar.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        // Google Places API test
+        // Google Places API call
+
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
@@ -80,11 +107,11 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                 .enableAutoManage(this, this)
                 .build();
         mGoogleApiClient.connect();
-
-
+        // saving context
+        mContext = this.getApplicationContext();
         Log.i(TAG, "We are sending in the following park : " + selectedPark.getName());
         DisplayResults resultsOfQuery = new DisplayResults();
-        resultsOfQuery.execute(selectedPark.getName() + selectedPark.getState());
+        resultsOfQuery.execute(selectedPark.getName() + " " + selectedPark.getState());
         Log.i(TAG, "AFTER : " + selectedPark.getName());
 
     }
@@ -98,8 +125,20 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                     .build();
             PendingResult<AutocompletePredictionBuffer> results = Places.GeoDataApi.getAutocompletePredictions(mGoogleApiClient, params[0], null, filter);
             AutocompletePredictionBuffer autocompletePredictions = results.await();
+            String output = "";
             Log.i(TAG, "Number in doInBackground: " + autocompletePredictions.getCount());
-            return autocompletePredictions.get(0).getPlaceId();
+            if(autocompletePredictions.getCount() == 0){
+                Log.i(TAG, "autocompletePredictions.get(0).getPlaceId() is zero");
+                return null;
+            }
+            if(autocompletePredictions.get(0).getPlaceId() instanceof String){
+                output = autocompletePredictions.get(0).getPlaceId();
+            }else{
+                Log.i(TAG, "It is NOT a string or zero found");
+            }
+            autocompletePredictions.release();
+            return output;
+
         }
 
         @Override
@@ -121,17 +160,88 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                                     Log.i(TAG, "URL is: " + myPlace.getWebsiteUri());
                                     Log.i(TAG, "Price level is: " + myPlace.getPriceLevel());
                                     Log.i(TAG, "Rating is: " + myPlace.getRating());
+
                                     // setting text of textviews here
+                                    // phone setup
+                                    if(myPlace.getPhoneNumber() != null){
+                                        String phone = myPlace.getPhoneNumber().toString();
+                                        phone = (phone.replace("+1 ", "")); // making phone number nicer looking
+                                        // setting up phone button
+                                        if(phone.equals(""))
+                                        {
+                                            // Setting text if no phone exists
+                                            phone = "Not Available";
+                                        } else{
+                                            // if phone exists create button
+                                            callbtn.setVisibility(View.VISIBLE);
+                                            callbtn.setBackgroundResource(R.drawable.callbutton);
+                                        }
+                                        parkPhone.setText(phone);
+                                    }else{
+                                        Log.e(TAG, "myPlace.getPhoneNumber() is null");
+                                    }
+
+                                    // url setup
+                                    if(myPlace.getWebsiteUri() != null){
+                                        String url = myPlace.getWebsiteUri().toString();
+                                        // setting up www button
+                                        if(url.equals("")){
+                                            // no www exists
+                                            url = "Not Available";
+                                        }else{
+                                            // www does indeed exist
+                                            wwwbtn.setVisibility(View.VISIBLE);
+                                            wwwbtn.setBackgroundResource(R.drawable.www);
+                                        }
+                                    }else{
+                                        Log.e(TAG, "myPlace.getWebsiteUri() is null");
+                                    }
+
+                                    // navigation setup
+                                    if(myPlace.getAddress() != null){
+                                        // setting up www button
+                                        String address = myPlace.getAddress().toString();
+                                        if(address.equals("")){
+                                            // no www exists
+                                            address = "Not Available";
+                                        }else{
+                                            // address does indeed exist
+                                            addressbtn.setVisibility(View.VISIBLE);
+                                            addressbtn.setBackgroundResource(R.drawable.navigation);
+                                        }
+                                        parkAddress.setText(address);
+                                    }else{
+                                        Log.e(TAG, "myPlace.getAddress() is null");
+                                    }
+
+                                    //set ratingsbar
+                                    float rating = myPlace.getRating();
+                                    if(rating != -1){
+                                        ratingBar.setRating(rating);
+                                        if(rating > 4.0){
+                                            ratingText.setText("Amazing Park!!!");
+                                        }else if(rating > 3.0){
+                                            ratingText.setText("Good Park!");
+                                        }else if(rating > 2.0){
+                                            ratingText.setText("OK Park!");
+                                        }else if(rating > 1.0){
+                                            ratingText.setText("Not a very good Park!");
+                                        }else{
+                                            ratingText.setText("Terrible Park!");
+                                        }
+                                    }else{
+                                        ratingText.setText("No Reviews Available");
+                                    }
+
+                                    // Setting the remaining text
                                     parkName.setText(selectedPark.getName());
-                                    parkPhone.setText("Phone: " + myPlace.getPhoneNumber());
-                                    parkAddress.setText("Address: " + myPlace.getAddress());
-                                    amenitiesList.setText("Amenities: " + selectedPark.amenitiesList());
-                                    // the following ensures we don't have a memory leak
-                                    places.release();
-                                    mGoogleApiClient.disconnect();
+                                    amenitiesList.setText(selectedPark.amenitiesList());
                                 } else {
                                     Log.e(TAG, "Place not found");
                                 }
+                                // the following ensures we don't have a memory leak
+                                places.release();
+                                mGoogleApiClient.disconnect();
                             }
                         });
             }

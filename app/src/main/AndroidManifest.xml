@@ -40,15 +40,6 @@
         <activity
             android:name=".LocationPreferences"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ListResultActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ResultTabBarActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".MapResultActivity"
-            android:label="@string/title_activity_map_result" />
         <activity android:name=".ParkDetail" />
         <activity
             android:name=".ResultPagerActivity"
