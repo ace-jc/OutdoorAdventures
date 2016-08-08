@@ -107,7 +107,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:gravity="center">
 
                 <Button
@@ -115,19 +115,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/callbutton"
-                    android:layout_margin="10dp"/>
+                    android:layout_margin="10dp"
+                    android:onClick="phoneButtonPress"/>
                 <Button
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/wwwbutton"
-                    android:layout_margin="10dp" />
+                    android:layout_margin="10dp"
+                    android:onClick="wwwButtonPress"/>
                 <Button
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/navigatebutton"
-                    android:layout_margin="10dp" />
+                    android:layout_margin="10dp"
+                    android:onClick="addressButtonPress"/>
             </LinearLayout>
 
             <TextView

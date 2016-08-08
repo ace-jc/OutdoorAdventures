@@ -50,6 +50,12 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
     Context mContext;
     GoogleApiClient mGoogleApiClient;
     RatingBar ratingBar;
+    boolean phoneExists;
+    boolean wwwExists;
+    boolean addressExists;
+    String url;
+    String phone;
+    String address;
 
 
 
@@ -79,12 +85,13 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
         addressbtn = (Button)findViewById(R.id.navigatebutton);
         // setting the actual text
         parkName.setText(selectedPark.getName());
-        parkPhone.setText("Phone number: (not available)");
-        parkAddress.setText("Address: " + selectedPark.getState());
-        amenitiesList.setText("Amenities: " + selectedPark.amenitiesList());
-        callbtn.setBackgroundResource(R.drawable.callbuttonpic);
-        wwwbtn.setBackgroundResource(R.drawable.wwwpic);
-        addressbtn.setBackgroundResource(R.drawable.navigationpic);
+        parkPhone.setText("");
+        parkAddress.setText("");
+        amenitiesList.setText(selectedPark.amenitiesList());
+        // setting up buttons to default with no functionality
+        callbtn.setBackgroundResource(R.drawable.nocallbuttonpic);
+        wwwbtn.setBackgroundResource(R.drawable.nowwwpic);
+        addressbtn.setBackgroundResource(R.drawable.nonavigationpic);
         // ratings bar
         ratingBar = (RatingBar)findViewById(R.id.ratingBar);
         ratingBar.setOnTouchListener(new View.OnTouchListener() {
@@ -92,11 +99,19 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                 return true;
             }
         });
-
+        // setting up bools for buttons
+        phoneExists = false;
+        wwwExists = false;
+        addressExists = false;
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        // setting up strings for later use
+        url = "";
+        phone = "";
+        address = "";
+
 
         // Google Places API call
 
@@ -111,7 +126,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
         mContext = this.getApplicationContext();
         Log.i(TAG, "We are sending in the following park : " + selectedPark.getName());
         DisplayResults resultsOfQuery = new DisplayResults();
-        resultsOfQuery.execute(selectedPark.getName() + " " + selectedPark.getState());
+        resultsOfQuery.execute(selectedPark.getName() + " " + selectedPark.getState() + "park camping");
         Log.i(TAG, "AFTER : " + selectedPark.getName());
 
     }
@@ -164,7 +179,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                                     // setting text of textviews here
                                     // phone setup
                                     if(myPlace.getPhoneNumber() != null){
-                                        String phone = myPlace.getPhoneNumber().toString();
+                                        phone = myPlace.getPhoneNumber().toString();
                                         phone = (phone.replace("+1 ", "")); // making phone number nicer looking
                                         // setting up phone button
                                         if(phone.equals(""))
@@ -174,6 +189,8 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                                             callbtn.setBackgroundResource(R.drawable.nocallbuttonpic);
                                         } else{
                                             // if phone exists create button
+                                            Log.e(TAG, "Phone Number is:" + phone);
+                                            phoneExists = true;
                                             callbtn.setBackgroundResource(R.drawable.callbuttonpic);
                                         }
                                         parkPhone.setText(phone);
@@ -183,7 +200,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
 
                                     // url setup
                                     if(myPlace.getWebsiteUri() != null){
-                                        String url = myPlace.getWebsiteUri().toString();
+                                        url = myPlace.getWebsiteUri().toString();
                                         // setting up www button
                                         if(url.equals("")){
                                             // no www exists
@@ -192,6 +209,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
 
                                         }else{
                                             // www does indeed exist
+                                            wwwExists = true;
                                             wwwbtn.setBackgroundResource(R.drawable.wwwpic);
                                         }
                                     }else{
@@ -200,14 +218,15 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
 
                                     // navigation setup
                                     if(myPlace.getAddress() != null){
-                                        // setting up www button
-                                        String address = myPlace.getAddress().toString();
+                                        // setting up address button
+                                        address = myPlace.getAddress().toString();
                                         if(address.equals("")){
-                                            // no www exists
+                                            // no address exists
                                             address = "Not Available";
                                             addressbtn.setBackgroundResource(R.drawable.nonavigationpic);
                                         }else{
                                             // address does indeed exist
+                                            addressExists = true;
                                             addressbtn.setBackgroundResource(R.drawable.navigationpic);
                                         }
                                         parkAddress.setText(address);
@@ -250,6 +269,31 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                 Log.e(TAG, "do in Background returned null");
             }
 
+        }
+    }
+
+
+    public void phoneButtonPress(View view){
+        if(phoneExists){
+            // TODO: Need to make phone call here
+        }else{
+            Toast.makeText(ParkDetail.this, "Phone number does not exists", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void wwwButtonPress(View view){
+        if(wwwExists){
+            // TODO: Need to call browser here
+        }else{
+            Toast.makeText(ParkDetail.this, "No Web Link Exists", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void addressButtonPress(View view){
+        if(addressExists){
+            // TODO: Need to call google maps here
+        }else{
+            Toast.makeText(ParkDetail.this, "Missing Physical Address", Toast.LENGTH_LONG).show();
         }
     }
 
