@@ -278,7 +278,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
 
     public void phoneButtonPress(View view){
         if(phoneExists){
-            Toast.makeText(ParkDetail.this, "Phone number exists it is: " + phone, Toast.LENGTH_LONG).show();
+            Log.e(TAG, "Phone number exists it is: " + phone);
             Uri call = Uri.parse("tel:" + phone);
             Intent surf = new Intent(Intent.ACTION_DIAL, call);
             startActivity(surf);
@@ -289,7 +289,10 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
 
     public void wwwButtonPress(View view){
         if(wwwExists){
-            // TODO: Need to call browser here
+            Log.e(TAG, "url exists it is: " + url);
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
         }else{
             Toast.makeText(ParkDetail.this, "No Web Link Exists", Toast.LENGTH_LONG).show();
         }
