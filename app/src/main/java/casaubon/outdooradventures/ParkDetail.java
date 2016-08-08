@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
@@ -156,7 +158,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
             PendingResult<AutocompletePredictionBuffer> results = Places.GeoDataApi.getAutocompletePredictions(mGoogleApiClient, params[0], null, filter);
             AutocompletePredictionBuffer autocompletePredictions = results.await();
             String output = "";
-            Log.i(TAG, "Number in doInBackground: " + autocompletePredictions.getCount());
+            Log.i(TAG, "N " + autocompletePredictions.getCount());
             if(autocompletePredictions.getCount() == 0){
                 Log.i(TAG, "autocompletePredictions.get(0).getPlaceId() is zero");
                 return null;
@@ -234,11 +236,12 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
 
                                     // navigation setup
                                     if(myPlace.getAddress() != null){
+                                        Log.e(TAG, "myPlace.getAddress() is: " + myPlace.getAddress());
                                         // setting up address button
                                         address = myPlace.getAddress().toString();
                                         if(address.equals("")){
                                             // no address exists
-                                            address = "Not Available";
+                                            address = selectedPark.getLatitude() + " " + selectedPark.getLongitude();
                                             addressbtn.setBackgroundResource(R.drawable.nonavigationpic);
                                         }else{
                                             // address does indeed exist
@@ -279,12 +282,17 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                                 places.release();
                             }
                         });
-            }
-            else{
+            }else{
                 Log.e(TAG, "do in Background returned null");
             }
             // Getting photo here
-            placePhotosAsync(input);
+            Drawable myDrawable = getResources().getDrawable(R.drawable.defaultparkdetail);
+            imageViewContainer.setImageDrawable(myDrawable);
+            if(input != null){
+                placePhotosAsync(input);
+            }else{
+                Log.e(TAG, "input was null");
+            }
         }
     }
 
@@ -384,7 +392,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
      * by using buffers and result callbacks.
      */
     private void placePhotosAsync(String input) {
-        Log.i(TAG, "In placePhotosAsync");
+        Log.i(TAG, "In placePhotosAsync with input: " + input);
         final String placeId = input;
         Places.GeoDataApi.getPlacePhotos(mGoogleApiClient, placeId)
                 .setResultCallback(new ResultCallback<PlacePhotoMetadataResult>() {
