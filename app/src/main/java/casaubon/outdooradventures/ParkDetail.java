@@ -36,6 +36,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.Locale;
+
 public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback, OnConnectionFailedListener {
 
     // private variables
@@ -300,7 +303,10 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
 
     public void addressButtonPress(View view){
         if(addressExists){
-            // TODO: Need to call google maps here
+            Log.e(TAG, "address exists it is: " + address);
+            String uri = String.format(Locale.ENGLISH, "google.navigation:%f,%f", selectedPark.getLatitude(), selectedPark.getLongitude());
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            startActivity(intent);
         }else{
             Toast.makeText(ParkDetail.this, "Missing Physical Address", Toast.LENGTH_LONG).show();
         }
