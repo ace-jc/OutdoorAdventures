@@ -115,22 +115,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/callbutton"
-                    android:maxHeight="20dp"
-                    android:maxWidth="20dp" />
+                    android:layout_margin="10dp"/>
                 <Button
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/wwwbutton"
-                    android:maxHeight="20dp"
-                    android:maxWidth="20dp" />
+                    android:layout_margin="10dp" />
                 <Button
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/navigatebutton"
-                    android:maxHeight="20dp"
-                    android:maxWidth="20dp" />
+                    android:layout_margin="10dp" />
             </LinearLayout>
 
             <TextView

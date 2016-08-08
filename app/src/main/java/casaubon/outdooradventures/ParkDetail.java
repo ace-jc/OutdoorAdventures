@@ -82,9 +82,9 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
         parkPhone.setText("Phone number: (not available)");
         parkAddress.setText("Address: " + selectedPark.getState());
         amenitiesList.setText("Amenities: " + selectedPark.amenitiesList());
-        callbtn.setBackgroundResource(R.drawable.callbutton);
-        wwwbtn.setBackgroundResource(R.drawable.www);
-        addressbtn.setBackgroundResource(R.drawable.navigation);
+        callbtn.setBackgroundResource(R.drawable.callbuttonpic);
+        wwwbtn.setBackgroundResource(R.drawable.wwwpic);
+        addressbtn.setBackgroundResource(R.drawable.navigationpic);
         // ratings bar
         ratingBar = (RatingBar)findViewById(R.id.ratingBar);
         ratingBar.setOnTouchListener(new View.OnTouchListener() {
@@ -171,10 +171,10 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                                         {
                                             // Setting text if no phone exists
                                             phone = "Not Available";
+                                            callbtn.setBackgroundResource(R.drawable.nocallbuttonpic);
                                         } else{
                                             // if phone exists create button
-                                            callbtn.setVisibility(View.VISIBLE);
-                                            callbtn.setBackgroundResource(R.drawable.callbutton);
+                                            callbtn.setBackgroundResource(R.drawable.callbuttonpic);
                                         }
                                         parkPhone.setText(phone);
                                     }else{
@@ -188,10 +188,11 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                                         if(url.equals("")){
                                             // no www exists
                                             url = "Not Available";
+                                            wwwbtn.setBackgroundResource(R.drawable.nowwwpic);
+
                                         }else{
                                             // www does indeed exist
-                                            wwwbtn.setVisibility(View.VISIBLE);
-                                            wwwbtn.setBackgroundResource(R.drawable.www);
+                                            wwwbtn.setBackgroundResource(R.drawable.wwwpic);
                                         }
                                     }else{
                                         Log.e(TAG, "myPlace.getWebsiteUri() is null");
@@ -204,10 +205,10 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                                         if(address.equals("")){
                                             // no www exists
                                             address = "Not Available";
+                                            addressbtn.setBackgroundResource(R.drawable.nonavigationpic);
                                         }else{
                                             // address does indeed exist
-                                            addressbtn.setVisibility(View.VISIBLE);
-                                            addressbtn.setBackgroundResource(R.drawable.navigation);
+                                            addressbtn.setBackgroundResource(R.drawable.navigationpic);
                                         }
                                         parkAddress.setText(address);
                                     }else{
