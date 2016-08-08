@@ -304,7 +304,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
     public void addressButtonPress(View view){
         if(addressExists){
             Log.e(TAG, "address exists it is: " + address);
-            String uri = String.format(Locale.ENGLISH, "google.navigation:%f,%f", selectedPark.getLatitude(), selectedPark.getLongitude());
+            String uri = String.format(Locale.ENGLISH, "google.navigation:q=%f,%f", selectedPark.getLatitude(), selectedPark.getLongitude());
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
             startActivity(intent);
         }else{
@@ -314,7 +314,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
 
 
     public void onConnectionFailed (ConnectionResult result){
-        //TODO: Fail gracefully?!?! when connection fails
+        //Fail gracefully when connection fails
         Log.d(TAG, "In onConnectionFailed");
     }
 
