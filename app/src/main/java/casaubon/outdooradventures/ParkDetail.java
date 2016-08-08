@@ -10,12 +10,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +30,10 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.AutocompletePredictionBuffer;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.PlacePhotoMetadata;
+import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
+import com.google.android.gms.location.places.PlacePhotoMetadataResult;
+import com.google.android.gms.location.places.PlacePhotoResult;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -62,6 +68,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
     String url;
     String phone;
     String address;
+    ImageView imageViewContainer;
 
 
 
@@ -89,6 +96,8 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
         callbtn = (Button)findViewById(R.id.callbutton);
         wwwbtn = (Button)findViewById(R.id.wwwbutton);
         addressbtn = (Button)findViewById(R.id.navigatebutton);
+        // setting up imageview
+        imageViewContainer = (ImageView)findViewById(R.id.imageViewImages);
         // setting the actual text
         parkName.setText(selectedPark.getName());
         parkPhone.setText("");
@@ -155,7 +164,8 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
             if(autocompletePredictions.get(0).getPlaceId() instanceof String){
                 output = autocompletePredictions.get(0).getPlaceId();
             }else{
-                Log.i(TAG, "It is NOT a string or zero found");
+                Log.i(TAG, "It is NOT a string");
+                return null;
             }
             autocompletePredictions.release();
             return output;
@@ -267,14 +277,14 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                                 }
                                 // the following ensures we don't have a memory leak
                                 places.release();
-                                mGoogleApiClient.disconnect();
                             }
                         });
             }
             else{
                 Log.e(TAG, "do in Background returned null");
             }
-
+            // Getting photo here
+            placePhotosAsync(input);
         }
     }
 
@@ -355,5 +365,111 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    private ResultCallback<PlacePhotoResult> mDisplayPhotoResultCallback
+            = new ResultCallback<PlacePhotoResult>() {
+        @Override
+        public void onResult(PlacePhotoResult placePhotoResult) {
+            Log.i(TAG, "In onResult of ResultCallback");
+            if (!placePhotoResult.getStatus().isSuccess()) {
+                return;
+            }
+            imageViewContainer.setImageBitmap(placePhotoResult.getBitmap());
+        }
+    };
+
+    /**
+     * Load a bitmap from the photos API asynchronously
+     * by using buffers and result callbacks.
+     */
+    private void placePhotosAsync(String input) {
+        Log.i(TAG, "In placePhotosAsync");
+        final String placeId = input;
+        Places.GeoDataApi.getPlacePhotos(mGoogleApiClient, placeId)
+                .setResultCallback(new ResultCallback<PlacePhotoMetadataResult>() {
+
+                    @Override
+                    public void onResult(PlacePhotoMetadataResult photos) {
+                        Log.i(TAG, "In onResult of placePhotosAsync");
+                        if (!photos.getStatus().isSuccess()) {
+                            return;
+                        }
+
+                        PlacePhotoMetadataBuffer photoMetadataBuffer = photos.getPhotoMetadata();
+                        Log.i(TAG, "In onResult the photoMetadataBuffer.getCount(): " + photoMetadataBuffer.getCount());
+                        if (photoMetadataBuffer.getCount() > 0) {
+                            // Display the first bitmap in an ImageView in the size of the view
+                            photoMetadataBuffer.get(0)
+                                    .getScaledPhoto(mGoogleApiClient, imageViewContainer.getWidth(),
+                                            imageViewContainer.getHeight())
+                                    .setResultCallback(mDisplayPhotoResultCallback);
+                        }
+                        photoMetadataBuffer.release();
+//                        mGoogleApiClient.disconnect();
+                    }
+                });
+    }
+
+
+
+//    abstract class PhotoTask extends AsyncTask<String, Void, PhotoTask.AttributedPhoto> {
+//        private int mHeight;
+//
+//        private int mWidth;
+//
+//        public PhotoTask(int width, int height) {
+//            mHeight = height;
+//            mWidth = width;
+//        }
+//
+//        /**
+//         * Loads the first photo for a place id from the Geo Data API.
+//         * The place id must be the first (and only) parameter.
+//         */
+//        @Override
+//        protected AttributedPhoto doInBackground(String... params) {
+//            if (params.length != 1) {
+//                return null;
+//            }
+//            final String placeId = params[0];
+//            AttributedPhoto attributedPhoto = null;
+//
+//            PlacePhotoMetadataResult result = Places.GeoDataApi
+//                    .getPlacePhotos(mGoogleApiClient, placeId).await();
+//
+//            if (result.getStatus().isSuccess()) {
+//                PlacePhotoMetadataBuffer photoMetadataBuffer = result.getPhotoMetadata();
+//                if (photoMetadata.getCount() > 0 && !isCancelled()) {
+//                    // Get the first bitmap and its attributions.
+//                    PlacePhotoMetadata photo = photoMetadata.get(0);
+//                    CharSequence attribution = photo.getAttributions();
+//                    // Load a scaled bitmap for this photo.
+//                    Bitmap image = photo.getScaledPhoto(mGoogleApiClient, mWidth, mHeight).await()
+//                            .getBitmap();
+//
+//                    attributedPhoto = new AttributedPhoto(attribution, image);
+//                }
+//                // Release the PlacePhotoMetadataBuffer.
+//                photoMetadataBuffer.release();
+//            }
+//            return attributedPhoto;
+//        }
+//
+//        /**
+//         * Holder for an image and its attribution.
+//         */
+//        class AttributedPhoto {
+//
+//            public final CharSequence attribution;
+//
+//            public final Bitmap bitmap;
+//
+//            public AttributedPhoto(CharSequence attribution, Bitmap bitmap) {
+//                this.attribution = attribution;
+//                this.bitmap = bitmap;
+//            }
+//        }
+//    }
 
 }

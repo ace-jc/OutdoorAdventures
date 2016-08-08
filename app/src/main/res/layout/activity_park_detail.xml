@@ -36,6 +36,12 @@
                     android:text="Park Name"
                     android:id="@+id/textView1" />
 
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:id="@+id/imageViewImages"
+                    android:layout_gravity="center_horizontal" />
+
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
