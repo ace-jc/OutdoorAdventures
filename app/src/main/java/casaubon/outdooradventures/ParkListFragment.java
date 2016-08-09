@@ -41,6 +41,8 @@ public class ParkListFragment extends Fragment {
 
     RecyclerView mParksRecyclerView;
     ParkAdapter mAdapter;
+    OutdoorCoreData coreData;
+    QuerySearch task;
     ArrayList<OutdoorDetails> mParkList = new ArrayList<OutdoorDetails>(100);
     private final static String URL_EXTRA = "url";
     private String queryURL;
@@ -68,9 +70,23 @@ public class ParkListFragment extends Fragment {
         sharedPref = getActivity().getSharedPreferences("LocationPreferences", Context.MODE_PRIVATE);
         int tempTesting = sharedPref.getInt("radius", -1);
         Log.d(TAG, "In ParkListFragment onCreateView: " + tempTesting);
-        QuerySearch task = new QuerySearch();
+        task = new QuerySearch();
         task.execute();
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        //clean up for any open connections and garbage collection
+        if (task != null && !task.isCancelled()) {
+            Log.d(TAG, "task cancelled");
+            task.cancel(true);
+            task = null;
+            new CloseConnections().execute(coreData);
+        }
+
     }
 
     public void setupAdapter() {
@@ -116,7 +132,7 @@ public class ParkListFragment extends Fragment {
     private class QuerySearch extends AsyncTask<Void, Void, ArrayList<OutdoorDetails>> {
         @Override
         protected ArrayList<OutdoorDetails> doInBackground(Void... params) {
-            OutdoorCoreData coreData = new OutdoorCoreData(getActivity(), queryURL);
+            coreData = new OutdoorCoreData(getActivity(), queryURL);
             return coreData.searchQuery(true);
         }
 

@@ -8,15 +8,9 @@ import android.util.Log;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -32,12 +26,20 @@ public class OutdoorCoreData {
     private static String queryUrl = "";
     private final static String imageBaseUrl = "http://www.reserveamerica.com/webphotos/";
     private final int REQUIRED_SIZE = 256;
+    private HttpURLConnection connParser;
+    private HttpURLConnection connImage;
+    InputStream parserInputStream;
+    InputStream imageInputStream;
+    private boolean running = true;
 
     public OutdoorCoreData(Context context, String urlString) {
         this.context = context;
         this.queryUrl = urlString;
     }
 
+    public void setRunning(boolean isRun) {
+        running = isRun;
+    }
     //set the new query URL and clear previous parkList
     public void setURL(String url) {
         queryUrl = url;
@@ -48,84 +50,68 @@ public class OutdoorCoreData {
         parkList = new ArrayList<OutdoorDetails>(50);
     }
 
+    public void cleanUp() {
+        Log.d(TAG, "cleanUp");
+        if (connParser != null) {
+            connParser.disconnect();
+        }
+
+        if (connImage != null) {
+            connImage.disconnect();
+        }
+
+        if (parserInputStream != null) {
+            try {
+                parserInputStream.close();
+            }
+            catch (IOException e) {}
+        }
+
+        if (imageInputStream != null) {
+            try {
+                imageInputStream.close();
+            }
+            catch (IOException e) {}
+        }
+    }
+
     // Method called to start search on current set queryUrl
     // return: arraylist of parks
     public ArrayList<OutdoorDetails> searchQuery(boolean includePictures) {
         clearParkList();
         try {
             URL url = new URL(queryUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.connect();
+            connParser = (HttpURLConnection) url.openConnection();
+            connParser.setRequestMethod("GET");
+            connParser.setDoInput(true);
+            connParser.connect();
 
-            int responseCode = conn.getResponseCode();
+            int responseCode = connParser.getResponseCode();
             Log.d(TAG, "response code: " + responseCode);
 
             if (responseCode == 200) {
-                InputStream inputStream = conn.getInputStream();
+                parserInputStream = connParser.getInputStream();
                 XmlPullParserFactory xmlFactoryObject = XmlPullParserFactory.newInstance();
                 XmlPullParser mParser = xmlFactoryObject.newPullParser();
 
                 mParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-                mParser.setInput(inputStream, null);
-
+                mParser.setInput(parserInputStream, null);
 
                 parseXML(mParser, includePictures);
-
-
-                inputStream.close();
             }
-            conn.disconnect();
+
         }
 
         catch (Exception e) {
             Log.e(TAG, e.toString());
             e.printStackTrace();
+            cleanUp();
+        }
+        finally {
+            cleanUp();
         }
         return parkList;
     }
-
-//    // Method called to start search on provided urlString
-//    // return: arraylist of parks
-//    public static ArrayList<OutdoorDetails> searchQuery(final String urlString) {
-//        clearParkList();
-//        try {
-//            URL url = new URL(urlString);
-//            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-//            //conn.setReadTimeout(10000);
-//            //conn.setConnectTimeout(15000);
-//            conn.setRequestMethod("GET");
-//            conn.setDoInput(true);
-//            conn.connect();
-//
-//            int responseCode = conn.getResponseCode();
-//            Log.d(TAG, "response code: " + responseCode);
-//
-//            if (responseCode == 200) {
-//                InputStream inputStream = conn.getInputStream();
-//                XmlPullParserFactory xmlFactoryObject = XmlPullParserFactory.newInstance();
-//                XmlPullParser mParser = xmlFactoryObject.newPullParser();
-//
-//                mParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-//                mParser.setInput(inputStream, null);
-//
-//                parseXML(mParser);
-//                inputStream.close();
-//                conn.disconnect();
-//            }
-//            else {
-//                Log.d(TAG, "BAD URL");
-//                //handle bad url here
-//            }
-//        }
-//
-//        catch (Exception e) {
-//            Log.e(TAG, e.toString());
-//            e.printStackTrace();
-//        }
-//        return parkList;
-//    }
 
     // Parses and builds the park list
     private void parseXML(XmlPullParser parser, boolean includePic) {
@@ -151,7 +137,7 @@ public class OutdoorCoreData {
         try {
             event = parser.getEventType();
 
-            while (event != XmlPullParser.END_DOCUMENT) {
+            while (event != XmlPullParser.END_DOCUMENT && running) {
                 String name = parser.getName();
 
                 switch (event) {
@@ -192,11 +178,16 @@ public class OutdoorCoreData {
                         }
                 }
                 event = parser.next();
+
+                if (!running) {
+                    Log.d(TAG, "stopped running");
+                }
             }
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+
         Log.d(TAG, "Size: " + parkList.size());
     }
 
@@ -206,16 +197,16 @@ public class OutdoorCoreData {
         try {
             Bitmap bitmap = null;
             URL imageUrl = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.connect();
+            connImage = (HttpURLConnection)imageUrl.openConnection();
+            connImage.setRequestMethod("GET");
+            connImage.setDoInput(true);
+            connImage.connect();
 
-            if (conn.getResponseCode() == 200) {
+            if (connImage.getResponseCode() == 200) {
                 Log.d(TAG, "successful connection");
-                InputStream is = conn.getInputStream();
-                bitmap = resizeImage(is);
-                is.close();
+                imageInputStream = connImage.getInputStream();
+                bitmap = resizeImage(imageInputStream);
+                imageInputStream.close();
             }
             else {
                 Log.e(TAG, "no photo");
@@ -224,7 +215,7 @@ public class OutdoorCoreData {
                         originalBitmap, REQUIRED_SIZE, REQUIRED_SIZE, false);
 
             }
-            conn.disconnect();
+            connImage.disconnect();
             return bitmap;
         }
         catch (Exception ex) {

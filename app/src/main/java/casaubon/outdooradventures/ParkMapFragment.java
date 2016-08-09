@@ -32,6 +32,7 @@ import java.util.Iterator;
 public class ParkMapFragment extends Fragment {
     private static final String EXTRA_URL = "casaubon.outdooradventures.url";
     private static final String TAG = "ParkMapFragment";
+    QuerySearch task;
     private GoogleMap mMap;
     private String queryURL;
     private ArrayList<OutdoorDetails> mParkList = new ArrayList<OutdoorDetails>(100);
@@ -39,6 +40,7 @@ public class ParkMapFragment extends Fragment {
     SharedPreferences sharedPref;
     SupportMapFragment mMapFragment;
     private boolean newSearch = true;
+    OutdoorCoreData coreData;
 
     public static ParkMapFragment newInstance(String url) {
         Bundle args = new Bundle();
@@ -116,7 +118,7 @@ public class ParkMapFragment extends Fragment {
                 LatLng center = new LatLng(38.68551, -96.503906);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 3));
                 if (newSearch) {
-                    QuerySearch task = new QuerySearch();
+                    task = new QuerySearch();
                     task.execute();
                 }
                 else {
@@ -135,6 +137,20 @@ public class ParkMapFragment extends Fragment {
         fragmentTransaction
                 .remove(mMapFragment)
                 .commit();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        //clean up for any open connections and garbage collection
+        if (task != null && !task.isCancelled()) {
+            Log.d(TAG, "task cancelled");
+            task.cancel(true);
+            task = null;
+            new CloseConnections().execute(coreData);
+        }
+
     }
 
     @Override
@@ -197,7 +213,7 @@ public class ParkMapFragment extends Fragment {
     private class QuerySearch extends AsyncTask<Void, Void, ArrayList<OutdoorDetails>> {
         @Override
         protected ArrayList<OutdoorDetails> doInBackground(Void... params) {
-            OutdoorCoreData coreData = new OutdoorCoreData(getActivity(), queryURL);
+            coreData = new OutdoorCoreData(getActivity(), queryURL);
             return coreData.searchQuery(false);
         }
 
