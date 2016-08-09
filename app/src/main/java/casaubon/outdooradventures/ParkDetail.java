@@ -2,17 +2,11 @@ package casaubon.outdooradventures;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +26,6 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.AutocompletePredictionBuffer;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
-import com.google.android.gms.location.places.PlacePhotoMetadata;
 import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
 import com.google.android.gms.location.places.PlacePhotoMetadataResult;
 import com.google.android.gms.location.places.PlacePhotoResult;
@@ -42,10 +35,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback, OnConnectionFailedListener {
 
@@ -71,6 +67,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
     String phone;
     String address;
     ImageView imageViewContainer;
+    private Map<String, String> statesMap;
 
 
 
@@ -108,7 +105,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
         // setting up buttons to default with no functionality
         callbtn.setBackgroundResource(R.drawable.nocallbuttonpic);
         wwwbtn.setBackgroundResource(R.drawable.nowwwpic);
-        addressbtn.setBackgroundResource(R.drawable.nonavigationpic);
+        addressbtn.setBackgroundResource(R.drawable.navigationpic); // will always have a latlng
         // ratings bar
         ratingBar = (RatingBar)findViewById(R.id.ratingBar);
         ratingBar.setOnTouchListener(new View.OnTouchListener() {
@@ -128,14 +125,13 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
         url = "";
         phone = "";
         address = "";
-
+        stateMapCluster();
 
         // Google Places API call
 
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
                 .enableAutoManage(this, this)
                 .build();
         mGoogleApiClient.connect();
@@ -143,7 +139,7 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
         mContext = this.getApplicationContext();
         Log.i(TAG, "We are sending in the following park : " + selectedPark.getName());
         DisplayResults resultsOfQuery = new DisplayResults();
-        resultsOfQuery.execute(selectedPark.getName() + " " + selectedPark.getState());
+        resultsOfQuery.execute(selectedPark.getName());
         Log.i(TAG, "AFTER : " + selectedPark.getName());
 
     }
@@ -152,10 +148,23 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
         @Override
         protected String doInBackground(String... params) {
             Log.i(TAG, "in doInBackground with query: " + params[0]);
+            // Setup the bounds
+            float newLati1 = selectedPark.getLatitude() - (float).1; //SW
+            float newLongi1 = selectedPark.getLongitude() - (float).1; //SW
+            float newLati2 = selectedPark.getLatitude() + (float).1; //NE
+            float newLongi2 = selectedPark.getLongitude() + (float).1; //NE
+            LatLng boundSW = new LatLng(newLati1,newLongi1);
+            LatLng boundNE = new LatLng(newLati2,newLongi2);
+
+//            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+//            builder.include(boundSW);//SW
+//            builder.include(boundNE);//NE
+            LatLngBounds theActualBounds = new LatLngBounds(boundSW, boundNE);
+
             AutocompleteFilter filter = new AutocompleteFilter.Builder()
                     .setTypeFilter(AutocompleteFilter.TYPE_FILTER_NONE)
                     .build();
-            PendingResult<AutocompletePredictionBuffer> results = Places.GeoDataApi.getAutocompletePredictions(mGoogleApiClient, params[0], null, filter);
+            PendingResult<AutocompletePredictionBuffer> results = Places.GeoDataApi.getAutocompletePredictions(mGoogleApiClient, params[0], theActualBounds, filter);
             AutocompletePredictionBuffer autocompletePredictions = results.await();
             String output = "";
             Log.i(TAG, "N " + autocompletePredictions.getCount());
@@ -247,7 +256,8 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                                         if(address.equals("")){
                                             // no address exists
                                             address = selectedPark.getLatitude() + " " + selectedPark.getLongitude();
-                                            addressbtn.setBackgroundResource(R.drawable.nonavigationpic);
+                                            // will always have latlng to route to
+                                            addressbtn.setBackgroundResource(R.drawable.navigationpic);
                                         }else{
                                             // address does indeed exist
                                             addressExists = true;
@@ -258,6 +268,8 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                                         Log.e(TAG, "myPlace.getAddress() is null");
                                         address = selectedPark.getLatitude() + " " + selectedPark.getLongitude();
                                         parkAddress.setText(address);
+                                        // will always have latlng to route to
+                                        addressbtn.setBackgroundResource(R.drawable.navigationpic);
                                     }
 
                                     //set ratingsbar
@@ -332,14 +344,10 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
     }
 
     public void addressButtonPress(View view){
-        if(addressExists){
-            Log.e(TAG, "address exists it is: " + address);
-            String uri = String.format(Locale.ENGLISH, "google.navigation:q=%f,%f", selectedPark.getLatitude(), selectedPark.getLongitude());
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-            startActivity(intent);
-        }else{
-            Toast.makeText(ParkDetail.this, "Missing Physical Address", Toast.LENGTH_LONG).show();
-        }
+        Log.e(TAG, "address exists it is: " + address);
+        String uri = String.format(Locale.ENGLISH, "google.navigation:q=%f,%f", selectedPark.getLatitude(), selectedPark.getLongitude());
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        startActivity(intent);
     }
 
 
@@ -435,5 +443,59 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                 });
     }
 
+    private void stateMapCluster() {
+        // instantiating a HashMap and filling with data
+        statesMap = new HashMap<String, String>();
+        statesMap.put("AL","Alabama");
+        statesMap.put("AK", "Alaska");
+        statesMap.put("AZ","Arizona");
+        statesMap.put("AR","Arkansas");
+        statesMap.put("CA","California");
+        statesMap.put("CO","Colorado");
+        statesMap.put("CT","Connecticut");
+        statesMap.put("DE","Delaware");
+        statesMap.put("FL","Florida");
+        statesMap.put("GA","Georgia");
+        statesMap.put("HI","Hawaii");
+        statesMap.put("ID","Idaho");
+        statesMap.put("IL","Illinois");
+        statesMap.put("IN","Indiana");
+        statesMap.put("IA","Iowa");
+        statesMap.put("KS","Kansas");
+        statesMap.put("KY","Kentucky");
+        statesMap.put("LA","Louisiana");
+        statesMap.put("ME","Maine");
+        statesMap.put("MD","Maryland");
+        statesMap.put("MA","Massachusetts");
+        statesMap.put("MI","Michigan");
+        statesMap.put("MN","Minnesota");
+        statesMap.put("MS","Mississippi");
+        statesMap.put("MD","Missouri");
+        statesMap.put("MT","Montana");
+        statesMap.put("NE","Nebraska");
+        statesMap.put("NV","Nevada");
+        statesMap.put("NH","New Hampshire");
+        statesMap.put("NJ","New Jersey");
+        statesMap.put("NM","New Mexico");
+        statesMap.put("NY","New York");
+        statesMap.put("NC","North Carolina");
+        statesMap.put("ND","North Dakota");
+        statesMap.put("OH","Ohio");
+        statesMap.put("OK","Oklahoma");
+        statesMap.put("OR","Oregon");
+        statesMap.put("PA","Pennsylvania");
+        statesMap.put("RI","Rhode Island");
+        statesMap.put("SC","South Carolina");
+        statesMap.put("SD","South Dakota");
+        statesMap.put("TN","Tennessee");
+        statesMap.put("TX","Texas");
+        statesMap.put("UT","Utah");
+        statesMap.put("VT","Vermont");
+        statesMap.put("VA","Virginia");
+        statesMap.put("WA","Washington");
+        statesMap.put("WV","West Virginia");
+        statesMap.put("WI","Wisconsin");
+        statesMap.put("WY","Wyoming");
+    }
 
 }
