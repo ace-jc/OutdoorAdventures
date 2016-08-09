@@ -101,16 +101,29 @@ public class OutdoorDetails implements Parcelable{
 
     public String amenitiesList(){
         String output = "";
-        if(mPetsAllowed)
-            output += "Pets allowed ";
-        if(mSewerHookup)
+        if(mPetsAllowed){
+            output += "Pets allowed";
+            if(mSewerHookup || mWaterHookup || mWaterFront || mAmpOutlet)
+                output += ", ";
+        }
+        if(mSewerHookup) {
             output += "Sewer Hookup ";
-        if(mWaterHookup)
+            if(mWaterHookup || mWaterFront || mAmpOutlet)
+                output += ", ";
+        }
+        if(mWaterHookup){
             output += "Water Hookup ";
-        if(mWaterFront)
+            if(mWaterFront || mAmpOutlet)
+                output += ", ";
+        }
+        if(mWaterFront){
             output += "WaterFront Sites ";
-        if(mAmpOutlet)
-            output += "Electric Hookup ";
+            if(mAmpOutlet)
+                output += ", ";
+        }
+        if(mAmpOutlet){
+            output += "Electric Hookup";
+        }
         return output;
     }
 
