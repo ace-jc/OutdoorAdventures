@@ -21,6 +21,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ import java.util.Set;
 public class ParkListFragment extends Fragment {
 
     RecyclerView mParksRecyclerView;
+    ProgressBar mProgressBar;
     ParkAdapter mAdapter;
     OutdoorCoreData coreData;
     QuerySearch task;
@@ -66,6 +68,9 @@ public class ParkListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_park_list, container, false);
         mParksRecyclerView = (RecyclerView) view.findViewById(R.id.park_recycler_view);
         mParksRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        mProgressBar.setIndeterminate(true);
+        mProgressBar.setVisibility(View.VISIBLE);
         queryURL = getArguments().getString(URL_EXTRA);
         sharedPref = getActivity().getSharedPreferences("LocationPreferences", Context.MODE_PRIVATE);
         int tempTesting = sharedPref.getInt("radius", -1);
@@ -142,11 +147,13 @@ public class ParkListFragment extends Fragment {
             Log.d(TAG, "list size BEFORE radius applied: " + mParkList.size());
             ensureInRadius();
             Log.d(TAG, "list size AFTER radius applied: " + mParkList.size());
+            mProgressBar.setVisibility(View.GONE);
             setupAdapter();
             if(mParkList.size() == 0){
                 Toast.makeText(getActivity(), "There are no Parks that meet the search criteria. " +
                         "Please check your location settings for any added filters.", Toast.LENGTH_LONG).show();
             }
+
         }
     }
 

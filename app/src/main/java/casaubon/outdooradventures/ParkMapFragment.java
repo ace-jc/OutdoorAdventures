@@ -223,6 +223,10 @@ public class ParkMapFragment extends Fragment {
             return coreData.searchQuery(false);
         }
 
+        protected void onProgressUpdate(Integer... progress) {
+
+        }
+
         @Override
         protected void onPostExecute(ArrayList<OutdoorDetails> items) {
             mParkList = items;
