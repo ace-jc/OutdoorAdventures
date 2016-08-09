@@ -197,15 +197,18 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                                     // setting text of textviews here
                                     // phone setup
                                     if(myPlace.getPhoneNumber() != null){
+                                        Log.e(TAG, "(myPlace.getPhoneNumber() != null");
                                         phone = myPlace.getPhoneNumber().toString();
                                         phone = (phone.replace("+1 ", "")); // making phone number nicer looking
                                         // setting up phone button
                                         if(phone.equals(""))
                                         {
+                                            Log.e(TAG, "in phone.equals()");
                                             // Setting text if no phone exists
                                             phone = "Not Available";
                                             callbtn.setBackgroundResource(R.drawable.nocallbuttonpic);
                                         } else{
+                                            Log.e(TAG, "in else");
                                             // if phone exists create button
                                             Log.e(TAG, "Phone Number is:" + phone);
                                             phoneExists = true;
@@ -214,6 +217,8 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                                         parkPhone.setText(phone);
                                     }else{
                                         Log.e(TAG, "myPlace.getPhoneNumber() is null");
+                                        phone = "Not Available";
+                                        parkPhone.setText(phone);
                                     }
 
                                     // url setup
@@ -251,6 +256,8 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                                         parkAddress.setText(address);
                                     }else{
                                         Log.e(TAG, "myPlace.getAddress() is null");
+                                        address = selectedPark.getLatitude() + " " + selectedPark.getLongitude();
+                                        parkAddress.setText(address);
                                     }
 
                                     //set ratingsbar
@@ -283,15 +290,20 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                             }
                         });
             }else{
+                // handles null case on input string
                 Log.e(TAG, "do in Background returned null");
+                phone = "Not Available";
+                parkPhone.setText(phone);
+                address = selectedPark.getLatitude() + " " + selectedPark.getLongitude();
+                parkAddress.setText(address);
             }
-            // Getting photo here
-            Drawable myDrawable = getResources().getDrawable(R.drawable.defaultparkdetail);
-            imageViewContainer.setImageDrawable(myDrawable);
             if(input != null){
                 placePhotosAsync(input);
             }else{
+                // Setting photo here
                 Log.e(TAG, "input was null");
+                Drawable myDrawable = getResources().getDrawable(R.drawable.defaultparkdetail);
+                imageViewContainer.setImageDrawable(myDrawable);
             }
         }
     }
@@ -412,6 +424,10 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                                     .getScaledPhoto(mGoogleApiClient, imageViewContainer.getWidth(),
                                             imageViewContainer.getHeight())
                                     .setResultCallback(mDisplayPhotoResultCallback);
+                        }else{
+                            // Setting photo here
+                            Drawable myDrawable = getResources().getDrawable(R.drawable.defaultparkdetail);
+                            imageViewContainer.setImageDrawable(myDrawable);
                         }
                         photoMetadataBuffer.release();
 //                        mGoogleApiClient.disconnect();
@@ -419,65 +435,5 @@ public class ParkDetail extends AppCompatActivity implements OnMapReadyCallback,
                 });
     }
 
-
-
-//    abstract class PhotoTask extends AsyncTask<String, Void, PhotoTask.AttributedPhoto> {
-//        private int mHeight;
-//
-//        private int mWidth;
-//
-//        public PhotoTask(int width, int height) {
-//            mHeight = height;
-//            mWidth = width;
-//        }
-//
-//        /**
-//         * Loads the first photo for a place id from the Geo Data API.
-//         * The place id must be the first (and only) parameter.
-//         */
-//        @Override
-//        protected AttributedPhoto doInBackground(String... params) {
-//            if (params.length != 1) {
-//                return null;
-//            }
-//            final String placeId = params[0];
-//            AttributedPhoto attributedPhoto = null;
-//
-//            PlacePhotoMetadataResult result = Places.GeoDataApi
-//                    .getPlacePhotos(mGoogleApiClient, placeId).await();
-//
-//            if (result.getStatus().isSuccess()) {
-//                PlacePhotoMetadataBuffer photoMetadataBuffer = result.getPhotoMetadata();
-//                if (photoMetadata.getCount() > 0 && !isCancelled()) {
-//                    // Get the first bitmap and its attributions.
-//                    PlacePhotoMetadata photo = photoMetadata.get(0);
-//                    CharSequence attribution = photo.getAttributions();
-//                    // Load a scaled bitmap for this photo.
-//                    Bitmap image = photo.getScaledPhoto(mGoogleApiClient, mWidth, mHeight).await()
-//                            .getBitmap();
-//
-//                    attributedPhoto = new AttributedPhoto(attribution, image);
-//                }
-//                // Release the PlacePhotoMetadataBuffer.
-//                photoMetadataBuffer.release();
-//            }
-//            return attributedPhoto;
-//        }
-//
-//        /**
-//         * Holder for an image and its attribution.
-//         */
-//        class AttributedPhoto {
-//
-//            public final CharSequence attribution;
-//
-//            public final Bitmap bitmap;
-//
-//            public AttributedPhoto(CharSequence attribution, Bitmap bitmap) {
-//                this.attribution = attribution;
-//                this.bitmap = bitmap;
-//            }
-//        }
-//    }
 
 }

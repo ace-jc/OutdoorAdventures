@@ -124,6 +124,10 @@ public class OutdoorDetails implements Parcelable{
         if(mAmpOutlet){
             output += "Electric Hookup";
         }
+        // if empty setting default text
+        if(output.equals("")){
+            output = "Not Available";
+        }
         return output;
     }
 
