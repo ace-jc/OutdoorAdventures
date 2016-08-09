@@ -13,8 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,7 +22,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.vision.Frame;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -208,11 +205,8 @@ public class ParkMapFragment extends Fragment {
             LatLngBounds bounds = builder.build();
 
             int padding = 175; // offset from edges of the map in pixels
-            Log.d(TAG, "width: " + mMapFragment.getView().getWidth() +" height: " + mMapFragment.getView().getHeight());
-            if(mMapFragment.getView().getWidth()!=0 && mMapFragment.getView().getHeight()!=0){
-                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, mMapFragment.getView().getWidth(), mMapFragment.getView().getHeight(),padding);
-                mMap.animateCamera(cu);
-            }
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+            mMap.animateCamera(cu);
         }
     }
 
