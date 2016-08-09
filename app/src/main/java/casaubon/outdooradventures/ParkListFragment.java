@@ -148,6 +148,7 @@ public class ParkListFragment extends Fragment {
             ensureInRadius();
             Log.d(TAG, "list size AFTER radius applied: " + mParkList.size());
             mProgressBar.setVisibility(View.GONE);
+            ((ViewGroup) mProgressBar.getParent()).removeView(mProgressBar);
             setupAdapter();
             if(mParkList.size() == 0){
                 Toast.makeText(getActivity(), "There are no Parks that meet the search criteria. " +
