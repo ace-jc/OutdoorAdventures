@@ -1,5 +1,6 @@
 package casaubon.outdooradventures;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -24,13 +25,16 @@ import java.util.ArrayList;
  */
 public class OutdoorCoreData {
     private static final String TAG = "OutdoorCoreData";
+    private Context context;
     private static String baseUrl = "http://api.amp.active.com/camping/campgrounds/";
     private static final String apiKey = "&api_key=72fhbjk366qjzk5y5seuxyzv";
     private static ArrayList<OutdoorDetails> parkList = new ArrayList<OutdoorDetails>(50);
     private static String queryUrl = "";
     private final static String imageBaseUrl = "http://www.reserveamerica.com/webphotos/";
+    private final int REQUIRED_SIZE = 256;
 
-    public OutdoorCoreData(String urlString) {
+    public OutdoorCoreData(Context context, String urlString) {
+        this.context = context;
         this.queryUrl = urlString;
     }
 
@@ -40,50 +44,17 @@ public class OutdoorCoreData {
     }
 
     //Clear saved parklist
-    public static void clearParkList() {
+    public void clearParkList() {
         parkList = new ArrayList<OutdoorDetails>(50);
     }
 
     // Method called to start search on current set queryUrl
     // return: arraylist of parks
-    public ArrayList<OutdoorDetails> searchQuery() {
+    public ArrayList<OutdoorDetails> searchQuery(boolean includePictures) {
         clearParkList();
         try {
             URL url = new URL(queryUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            //conn.setReadTimeout(10000);
-            //conn.setConnectTimeout(15000);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.connect();
-
-            InputStream inputStream = conn.getInputStream();
-            XmlPullParserFactory xmlFactoryObject = XmlPullParserFactory.newInstance();
-            XmlPullParser mParser = xmlFactoryObject.newPullParser();
-
-            mParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            mParser.setInput(inputStream, null);
-
-            parseXML(mParser);
-            inputStream.close();
-        }
-
-        catch (Exception e) {
-            Log.e(TAG, e.toString());
-            e.printStackTrace();
-        }
-        return parkList;
-    }
-
-    // Method called to start search on provided urlString
-    // return: arraylist of parks
-    public static ArrayList<OutdoorDetails> searchQuery(final String urlString) {
-        clearParkList();
-        try {
-            URL url = new URL(urlString);
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            //conn.setReadTimeout(10000);
-            //conn.setConnectTimeout(15000);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             conn.connect();
@@ -99,13 +70,13 @@ public class OutdoorCoreData {
                 mParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
                 mParser.setInput(inputStream, null);
 
-                parseXML(mParser);
+
+                parseXML(mParser, includePictures);
+
+
                 inputStream.close();
             }
-            else {
-                Log.d(TAG, "BAD URL");
-                //handle bad url here
-            }
+            conn.disconnect();
         }
 
         catch (Exception e) {
@@ -115,8 +86,49 @@ public class OutdoorCoreData {
         return parkList;
     }
 
+//    // Method called to start search on provided urlString
+//    // return: arraylist of parks
+//    public static ArrayList<OutdoorDetails> searchQuery(final String urlString) {
+//        clearParkList();
+//        try {
+//            URL url = new URL(urlString);
+//            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+//            //conn.setReadTimeout(10000);
+//            //conn.setConnectTimeout(15000);
+//            conn.setRequestMethod("GET");
+//            conn.setDoInput(true);
+//            conn.connect();
+//
+//            int responseCode = conn.getResponseCode();
+//            Log.d(TAG, "response code: " + responseCode);
+//
+//            if (responseCode == 200) {
+//                InputStream inputStream = conn.getInputStream();
+//                XmlPullParserFactory xmlFactoryObject = XmlPullParserFactory.newInstance();
+//                XmlPullParser mParser = xmlFactoryObject.newPullParser();
+//
+//                mParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+//                mParser.setInput(inputStream, null);
+//
+//                parseXML(mParser);
+//                inputStream.close();
+//                conn.disconnect();
+//            }
+//            else {
+//                Log.d(TAG, "BAD URL");
+//                //handle bad url here
+//            }
+//        }
+//
+//        catch (Exception e) {
+//            Log.e(TAG, e.toString());
+//            e.printStackTrace();
+//        }
+//        return parkList;
+//    }
+
     // Parses and builds the park list
-    private static void parseXML(XmlPullParser parser) {
+    private void parseXML(XmlPullParser parser, boolean includePic) {
         int event;
         int id;
         String idString;
@@ -164,9 +176,13 @@ public class OutdoorCoreData {
                             waterFront = !((parser.getAttributeValue(null, "sitesWithWaterfront")).equals(""));
                             imageURL = imageBaseUrl + parser.getAttributeValue(null, "contractID") + "/pid" + idString + "/0/540x360.jpg";
 
-                            Bitmap ThmbBitmap = getBitmap(imageURL);
-                            if (ThmbBitmap == null) {
-                                Log.d(TAG, parkName + " has no image");
+
+                            Bitmap ThmbBitmap = null;
+                            if (includePic) {
+                                ThmbBitmap = getBitmap(imageURL);
+                                if (ThmbBitmap == null) {
+                                    Log.d(TAG, parkName + " has no image");
+                                }
                             }
                             curObject = new OutdoorDetails(id, parkName, state, lat, lngt, ampOutlet, petsAllowed, sewerHookup,
                                     waterHookup, waterFront, ThmbBitmap);
@@ -184,11 +200,11 @@ public class OutdoorCoreData {
         Log.d(TAG, "Size: " + parkList.size());
     }
 
-    private static Bitmap getBitmap(String url)
+    private Bitmap getBitmap(String url)
     {
         //from web
         try {
-            Bitmap bitmap;
+            Bitmap bitmap = null;
             URL imageUrl = new URL(url);
             HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
             conn.setRequestMethod("GET");
@@ -198,29 +214,34 @@ public class OutdoorCoreData {
             if (conn.getResponseCode() == 200) {
                 Log.d(TAG, "successful connection");
                 InputStream is = conn.getInputStream();
-                bitmap = BitmapFactory.decodeStream(is);
-                return bitmap;
+                bitmap = resizeImage(is);
+                is.close();
             }
             else {
-                Log.e(TAG, "response code: " + conn.getResponseCode());
-                return null;
+                Log.e(TAG, "no photo");
+                Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.nophoto);
+                bitmap = Bitmap.createScaledBitmap(
+                        originalBitmap, REQUIRED_SIZE, REQUIRED_SIZE, false);
+
             }
+            conn.disconnect();
+            return bitmap;
         }
-        catch (Exception ex){
+        catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
     }
 
     //decodes image and scales it to reduce memory consumption
-    private static Bitmap decodeFile(InputStream is){
+    private Bitmap resizeImage(InputStream is){
         try {
             //decode image size
             //BitmapFactory.Options o = new BitmapFactory.Options();
             Bitmap originalBitmap = BitmapFactory.decodeStream(is);
 
             //Find the correct scale value. It should be the power of 2.
-            final int REQUIRED_SIZE = 512;
+
             int newWidth = originalBitmap.getWidth(), newHeight = originalBitmap.getHeight();
             int scale = 1;
             while(true){
@@ -233,10 +254,11 @@ public class OutdoorCoreData {
 
             //decode with inSampleSize
             Bitmap resizedBitmap = Bitmap.createScaledBitmap(
-                    originalBitmap, newWidth, newHeight, false);
+                    originalBitmap, REQUIRED_SIZE, REQUIRED_SIZE, false);
 
             return resizedBitmap;
         } catch (Exception e) {}
         return null;
     }
+
 }

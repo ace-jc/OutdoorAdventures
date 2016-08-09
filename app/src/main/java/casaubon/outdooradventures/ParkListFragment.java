@@ -116,8 +116,8 @@ public class ParkListFragment extends Fragment {
     private class QuerySearch extends AsyncTask<Void, Void, ArrayList<OutdoorDetails>> {
         @Override
         protected ArrayList<OutdoorDetails> doInBackground(Void... params) {
-            OutdoorCoreData coreData = new OutdoorCoreData(queryURL);
-            return coreData.searchQuery();
+            OutdoorCoreData coreData = new OutdoorCoreData(getActivity(), queryURL);
+            return coreData.searchQuery(true);
         }
 
         @Override
@@ -187,7 +187,8 @@ public class ParkListFragment extends Fragment {
             mGridView.setAdapter(new BaseAdapter() {
                 @Override
                 public int getCount() {
-                    return mUtilIcons.size();
+                    int size = mUtilIcons.size();
+                    return (size != 0) ? size : 1;
                 }
 
                 @Override
@@ -206,21 +207,30 @@ public class ParkListFragment extends Fragment {
                     if (convertView == null) {
                         imageView = new ImageView(getActivity());
                         //imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-                        //imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         imageView.setPadding(8, 8, 8, 8);
                     }
                     else {
                         imageView = (ImageView) convertView;
                     }
-                    imageView.setImageResource(mUtilIcons.get(position));
-                    imageView.setTag(mUtilIcons.get(position));
+                    if (mUtilIcons.size() != 0) {
+                        imageView.setImageResource(mUtilIcons.get(position));
+                        imageView.setTag(mUtilIcons.get(position));
+                    }
+                    else {
+                        imageView.setImageResource(R.drawable.sewer_hookup);
+                        imageView.setAlpha(0);
+                        imageView.setEnabled(false);
+                    }
                     return imageView;
                 }
             });
             mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Snackbar.make(getView(), mUtilPrompts.get(position), Snackbar.LENGTH_SHORT).show();
+                    if (mUtilIcons.size() != 0) {
+                        Snackbar.make(getView(), mUtilPrompts.get(position), Snackbar.LENGTH_SHORT).show();
+                    }
                 }
             });
         }

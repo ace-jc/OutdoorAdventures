@@ -16,7 +16,9 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/park_image"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"

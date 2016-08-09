@@ -197,8 +197,8 @@ public class ParkMapFragment extends Fragment {
     private class QuerySearch extends AsyncTask<Void, Void, ArrayList<OutdoorDetails>> {
         @Override
         protected ArrayList<OutdoorDetails> doInBackground(Void... params) {
-            OutdoorCoreData coreData = new OutdoorCoreData(queryURL);
-            return coreData.searchQuery();
+            OutdoorCoreData coreData = new OutdoorCoreData(getActivity(), queryURL);
+            return coreData.searchQuery(false);
         }
 
         @Override
