@@ -23,7 +23,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 
-
 public class ParkMapFragment extends Fragment {
     private static final String EXTRA_URL = "casaubon.outdooradventures.url";
     private static final String TAG = "ParkMapFragment";

@@ -69,10 +69,8 @@ public class ParkListFragment extends Fragment {
                     Toast.makeText(getActivity(), "There are no Parks that meet the search criteria. " +
                         "Please check your location settings for any added filters.", Toast.LENGTH_LONG).show();
                 }
-                else {
-                    mProgressBar.setVisibility(View.GONE);
-                    ((ViewGroup) mProgressBar.getParent()).removeView(mProgressBar);
-                }
+                mProgressBar.setVisibility(View.GONE);
+                ((ViewGroup) mProgressBar.getParent()).removeView(mProgressBar);
             }
         };
         coreData.startSearch();
