@@ -108,6 +108,13 @@
                 android:text="@string/step_seven"
                 android:textSize="15sp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/step7"
+                android:paddingTop="32dp"
+                android:text="@string/attribute"
+                android:textSize="15sp"/>
         </RelativeLayout>
 
     </ScrollView>
