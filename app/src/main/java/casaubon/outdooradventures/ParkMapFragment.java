@@ -57,17 +57,18 @@ public class ParkMapFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_park_map, container, false);
         queryURL = getArguments().getString(EXTRA_URL);
         sharedPref = getActivity().getSharedPreferences("LocationPreferences", Context.MODE_PRIVATE);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mMapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.map);
         return view;
     }
 
+    // Setup Map Fragment
     public void setMapFragment(@Nullable SupportMapFragment mapFragment) {
         final FragmentManager fragmentManager = getFragmentManager();
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (mMapFragment == null) {
-            //Toast.makeText(getActivity(), "new map fragment", Toast.LENGTH_SHORT).show();
             mMapFragment = SupportMapFragment.newInstance();
             fragmentTransaction
                     .add(R.id.map, mMapFragment)
@@ -75,7 +76,6 @@ public class ParkMapFragment extends Fragment {
         }
 
         else {
-            //Toast.makeText(getActivity(), "existing map fragment", Toast.LENGTH_SHORT).show();
             fragmentTransaction
                     .replace(R.id.map, mMapFragment)
                     .commit();
@@ -162,6 +162,7 @@ public class ParkMapFragment extends Fragment {
         setMapFragment(mMapFragment);
     }
 
+    //Get marker position
     public int getMarkerPos(Marker marker) {
         Log.d(TAG, "Marker selected id= " + marker.getId());
         for (int index = 0; index < mParkList.size(); index++) {
@@ -173,6 +174,7 @@ public class ParkMapFragment extends Fragment {
         return -1;
     }
 
+    //setup pins in maps
     public void setupPins(ArrayList<OutdoorDetails> parks) {
         for (int i = 0; i < parks.size(); i++) {
             OutdoorDetails curPark = parks.get(i);

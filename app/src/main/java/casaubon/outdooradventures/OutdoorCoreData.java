@@ -134,8 +134,12 @@ public abstract class OutdoorCoreData {
             catch (Exception e) {
                 e.printStackTrace();
             }
+            finally {
+                cleanUp();
+            }
 
             Log.d(TAG, "Size: " + mParks.size());
+
 
             return mParks;
         }
@@ -148,9 +152,9 @@ public abstract class OutdoorCoreData {
             ensureInRadius();
             Log.d(TAG, "list size AFTER radius applied: " + parkList.size());
             updateView(parkList);
-            cleanUp();
         }
 
+        //set connection and GET request
         public XmlPullParser setConnection() {
 
             XmlPullParser mParser = null;
@@ -182,6 +186,7 @@ public abstract class OutdoorCoreData {
             return mParser;
         }
 
+        // Release resources
         public void cleanUp() {
             Log.d(TAG, "cleanUp");
             if (connParser != null) {
@@ -207,8 +212,7 @@ public abstract class OutdoorCoreData {
             }
         }
 
-
-
+        // Get picture from url
         private Bitmap getBitmap(String url)
         {
             //from web
@@ -270,6 +274,7 @@ public abstract class OutdoorCoreData {
             return null;
         }
 
+        // Filter based on radius
         private void ensureInRadius(){
             int sizeOfRadius = sharedPref.getInt("radius", -1);
             Log.d(TAG, "Size of radius: " + sizeOfRadius);
@@ -290,18 +295,18 @@ public abstract class OutdoorCoreData {
 
         // The following distance equation is from http://stackoverflow.com/questions/15890081/calculate-distance-in-x-y-between-two-gps-points
         private double distanceMeasure(double lat1, double long1, double lat2, double long2) {
-            lat1 *=Math.PI/180;
-            lat2 *=Math.PI/180;
-            long1*=Math.PI/180;
-            long2*=Math.PI/180;
+            lat1 *= Math.PI / 180;
+            lat2 *= Math.PI / 180;
+            long1 *= Math.PI / 180;
+            long2 *= Math.PI / 180;
 
             double dlong = (long2 - long1);
             double dlat  = (lat2 - lat1);
 
             // Haversine formula:
             double R = 6371;
-            double a = Math.sin(dlat/2)*Math.sin(dlat/2) + Math.cos(lat1)*Math.cos(lat2)*Math.sin(dlong/2)*Math.sin(dlong/2);
-            double c = 2 * Math.atan2( Math.sqrt(a), Math.sqrt(1-a) );
+            double a = Math.sin(dlat / 2) * Math.sin(dlat / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlong / 2) * Math.sin(dlong / 2);
+            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
             return R * c;
         }
     }
