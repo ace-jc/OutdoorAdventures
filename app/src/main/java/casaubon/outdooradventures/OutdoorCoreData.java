@@ -250,22 +250,7 @@ public abstract class OutdoorCoreData {
         private Bitmap resizeImage(InputStream is){
             try {
                 //decode image size
-                //BitmapFactory.Options o = new BitmapFactory.Options();
                 Bitmap originalBitmap = BitmapFactory.decodeStream(is);
-
-                //Find the correct scale value. It should be the power of 2.
-
-                int newWidth = originalBitmap.getWidth(), newHeight = originalBitmap.getHeight();
-                int scale = 1;
-                while(true){
-                    if (newWidth / 2 < REQUIRED_SIZE || newHeight / 2 < REQUIRED_SIZE)
-                        break;
-                    newWidth/=2;
-                    newHeight/=2;
-                    scale*=2;
-                }
-
-                //decode with inSampleSize
                 Bitmap resizedBitmap = Bitmap.createScaledBitmap(
                         originalBitmap, REQUIRED_SIZE, REQUIRED_SIZE, false);
 
