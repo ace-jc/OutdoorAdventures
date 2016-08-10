@@ -4,9 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by alepena01 on 7/12/16.
- */
+
 public class OutdoorDetails implements Parcelable{
     private int mID;
     private String mName;

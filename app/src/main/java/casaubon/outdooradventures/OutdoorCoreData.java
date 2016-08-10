@@ -5,12 +5,9 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -18,9 +15,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/**
- * Created by alepena01 on 8/9/16.
- */
 public abstract class OutdoorCoreData {
 
     private Context context;

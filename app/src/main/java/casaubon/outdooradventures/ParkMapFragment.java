@@ -3,7 +3,6 @@ package casaubon.outdooradventures;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,13 +21,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 
-/**
- * Created by alepena01 on 7/27/16.
- */
+
 public class ParkMapFragment extends Fragment {
     private static final String EXTRA_URL = "casaubon.outdooradventures.url";
     private static final String TAG = "ParkMapFragment";

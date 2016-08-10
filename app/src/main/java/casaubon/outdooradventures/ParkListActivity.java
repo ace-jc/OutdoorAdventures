@@ -3,7 +3,6 @@ package casaubon.outdooradventures;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ShareCompat;
 
 /**
  * Created by alepena01 on 7/19/16.

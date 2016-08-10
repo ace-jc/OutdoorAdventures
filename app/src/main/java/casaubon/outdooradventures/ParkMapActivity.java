@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
-/**
- * Created by alepena01 on 7/28/16.
- */
 public class ParkMapActivity extends SingleFragmentActivity {
     private final static String EXTRA_URL = "casaubon.outdooradventures.park_list.extra_url";
 

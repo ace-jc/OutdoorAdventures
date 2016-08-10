@@ -15,8 +15,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
 
 public class ResultPagerActivity extends AppCompatActivity {
 

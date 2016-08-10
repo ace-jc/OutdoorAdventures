@@ -1,7 +1,5 @@
 package casaubon.outdooradventures;
 
-//import android.app.FragmentManager;
-//import android.support.v7.widget.Toolbar;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

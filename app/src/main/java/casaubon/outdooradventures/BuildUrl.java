@@ -6,7 +6,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import java.lang.Integer;
 
 /**
  * Created by j on 7/12/16.
