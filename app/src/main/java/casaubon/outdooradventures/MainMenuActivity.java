@@ -15,12 +15,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
+
+import com.crashlytics.android.Crashlytics;
 
 public class MainMenuActivity extends AppCompatActivity {
 
     // private variables
-    private static final String TAG = "Outdoor Adventures";
+    private static final String TAG = "MainMenuActivity";
     private BuildUrl url;
     private double lati = 0.0;
     private double longi = 0.0;
@@ -33,6 +36,7 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
     }
 
     public void nearMeCall(View view) {
