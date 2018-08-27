@@ -16,8 +16,9 @@ public class BuildUrl extends AppCompatActivity implements Parcelable {
     private static final String TAG = "Outdoor Adventures";
 
     // to build url
-    private static final String urlStart = "http://api.amp.active.com/camping/campgrounds/?";
-    private static final String apiKey = "api_key=a67c926wtb9qtwu4vnhyev53";
+    private static final String urlStart = "https://www.reserveamerica.com/campgroundSearch.do?"; // http://api.amp.active.com/camping/campgrounds/?";
+    private static final String apiKey = "api_key=72fhbjk366qjzk5y5seuxyzv"; //"api_key=a67c926wtb9qtwu4vnhyev53";
+    private static final String outputType = "xml=true&expwith=1&expfits=1";
 
     // building URL here
     private String actualURL;
@@ -112,7 +113,9 @@ public class BuildUrl extends AppCompatActivity implements Parcelable {
         }
         actualURL += sharedPreferences;
         // adding apikey to the end of the URL
-        actualURL += apiKey;
+//        actualURL += apiKey;
+        // adding output type to the end of the URL
+        actualURL += outputType;
     }
 
 

@@ -15,6 +15,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public abstract class OutdoorCoreData {
 
     private Context context;
@@ -23,7 +25,7 @@ public abstract class OutdoorCoreData {
     private final static String imageBaseUrl = "http://www.reserveamerica.com/webphotos/";
     private ArrayList<OutdoorDetails> parkList = new ArrayList<OutdoorDetails>(50);
     SharedPreferences sharedPref;
-    private final static String TAG = "OutdoorData";
+    private final static String TAG = "OutdoorCoreData";
     private final int REQUIRED_SIZE = 256;
     protected abstract void updateView(ArrayList<OutdoorDetails> parks);
     private QuerySearch task;
@@ -50,7 +52,7 @@ public abstract class OutdoorCoreData {
     private class QuerySearch extends AsyncTask<Void, Void, ArrayList<OutdoorDetails>> {
 
         XmlPullParser mParser;
-        private HttpURLConnection connParser;
+        private HttpsURLConnection connParser;
         private HttpURLConnection connImage;
         private InputStream parserInputStream;
         private InputStream imageInputStream;
@@ -154,7 +156,8 @@ public abstract class OutdoorCoreData {
             XmlPullParser mParser = null;
             try {
                 URL url = new URL(queryUrl);
-                connParser = (HttpURLConnection) url.openConnection();
+                Log.d(TAG, "url: " + queryUrl);
+                connParser = (HttpsURLConnection) url.openConnection();
                 connParser.setRequestMethod("GET");
                 connParser.setDoInput(true);
                 connParser.connect();
@@ -174,7 +177,7 @@ public abstract class OutdoorCoreData {
 
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
-                e.printStackTrace();
+//                e.printStackTrace();
             }
 
             return mParser;
